@@ -7,6 +7,8 @@ public class Boss1Controller : Singleton<Boss1Controller>
 {
     [Header("정보")]
     [SerializeField] float hp = 100;
+    [SerializeField] int nowPhase = 0;
+
     Slider hpGauge;
 
     [Header("상태 머신")]
@@ -14,6 +16,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
     [Header("패턴")]
     [SerializeField] List<Boss1State> phase1 = new List<Boss1State>();
+    [SerializeField] List<Boss1State> phase2 = new List<Boss1State>();
 
     [Header("턴")]
     Vector2 forceDirection;
@@ -46,7 +49,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
     void Start()
     {
-        ChangeState();
+        // ChangeState();
     }
 
     void Update()
@@ -81,7 +84,8 @@ public class Boss1Controller : Singleton<Boss1Controller>
     void ChangeState()
     {
         Debug.Log("Change State");
-        Boss1State inputState = phase1[Random.Range(0, phase1.Count)];
+        // Boss1State inputState = phase1[Random.Range(0, phase1.Count)];
+        Boss1State inputState = phase2[Random.Range(0, phase2.Count)];
         // Boss1State inputState = phase1[1];
 
         switch (inputState)
@@ -165,7 +169,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
     {
         Debug.Log("Delay");
 
-        yield return new WaitForSeconds(Random.Range(1, 2));
+        yield return new WaitForSeconds(Random.Range(2, 4));
 
         ChangeState();
     }
@@ -186,5 +190,20 @@ public class Boss1Controller : Singleton<Boss1Controller>
         {
             OnDamaged(10f);
         }
+    }
+
+    void OnTurn()
+    {
+        // if (transform.rotation != Quaternion.Euler(0f, 180f, 0f))
+        // {
+        //     transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+        // }
+        // else
+        // {
+        //     transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        // }
+
+        transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+
     }
 }

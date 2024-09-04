@@ -10,4 +10,9 @@ public enum Boss1State
     Jump,
     Pattern1,
     Pattern2,
+    NormalAttack,
+    ComboAttack,
+    WaveAttack,
+    SequenceAttack,
+    Roll
 }

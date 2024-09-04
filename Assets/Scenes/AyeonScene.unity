@@ -2966,6 +2966,22 @@ PrefabInstance:
       propertyPath: m_Offset.x
       value: 0.037810802
       objectReference: {fileID: 0}
+    - target: {fileID: 2528779607296902285, guid: aa774c78b1d009e4e9106a8efb2f3e32, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652227353084686912, guid: aa774c78b1d009e4e9106a8efb2f3e32, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: aa56aff1498d5564eb55b9db5fbdb61d, type: 2}
+    - target: {fileID: 3907059058587877265, guid: aa774c78b1d009e4e9106a8efb2f3e32, type: 3}
+      propertyPath: m_TagString
+      value: EnemyAttack
+      objectReference: {fileID: 0}
+    - target: {fileID: 5238424372043922886, guid: aa774c78b1d009e4e9106a8efb2f3e32, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.09500039
+      objectReference: {fileID: 0}
     - target: {fileID: 7815281390825326893, guid: aa774c78b1d009e4e9106a8efb2f3e32, type: 3}
       propertyPath: m_Name
       value: Boss1
