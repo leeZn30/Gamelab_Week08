@@ -47,7 +47,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
     void Start()
     {
-        ChangeState();
+        DoDelay();
     }
 
     void Update()
