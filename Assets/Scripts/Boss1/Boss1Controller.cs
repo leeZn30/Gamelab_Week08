@@ -73,8 +73,8 @@ public class Boss1Controller : Singleton<Boss1Controller>
     void ChangeState()
     {
         Debug.Log("Change State");
-        // Boss1State inputState = phase1[Random.Range(0, phase1.Count)];
-        Boss1State inputState = phase1[1];
+        Boss1State inputState = phase1[Random.Range(0, phase1.Count)];
+        // Boss1State inputState = phase1[1];
 
         switch (inputState)
         {
