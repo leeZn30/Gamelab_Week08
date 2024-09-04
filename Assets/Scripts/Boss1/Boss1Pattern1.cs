@@ -18,6 +18,11 @@ public class Boss1Pattern1 : MonoBehaviour, Boss1Control
 
     public void Stop()
     {
-        Boss.Instance.PostCompleion(this);
+        // Boss.Instance.PostCompleion(this);
+    }
+
+    public void OnPatternEndEvent()
+    {
+        Stop();
     }
 }

@@ -9,5 +9,5 @@ public enum Boss1State
     Walk,
     Jump,
     Pattern1,
-    Patter2,
+    Pattern2,
 }

@@ -37,14 +37,15 @@ public class Boss1Walk : MonoBehaviour, Boss1Control
 
     void Update()
     {
-        if (Vector3.Distance(transform.position, player.position) > distance)
-        {
-            Boss.Instance.AskPermission(this);
-        }
-        else
-        {
-            Boss.Instance.PostCompleion(this);
-        }
+        // if (Vector3.Distance(transform.position, player.position) > distance)
+        // {
+        //     Boss.Instance.AskPermission(this);
+        // }
+        // else
+        // {
+        //     Stop();
+        //     Boss.Instance.PostCompleion(this);
+        // }
     }
 
     void FixedUpdate()
