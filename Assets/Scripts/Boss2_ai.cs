@@ -12,6 +12,14 @@ public class Boss2_ai : MonoBehaviour
     [SerializeField] private PatternProbabilityScriptableObj[] phase1_PatternProbabilities;
     [SerializeField] private PatternProbabilityScriptableObj[] phase2_PatternProbabilities;
 
+    private Coroutine PatternCoroutine;
+    private Animator objAnimator;
+
+    private void Awake()
+    {
+        objAnimator = GetComponent<Animator>();
+    }
+
     private void PlayRandomPattern(int phase)
     {
         PatternProbabilityScriptableObj _patternPool;
@@ -82,9 +90,10 @@ public class Boss2_ai : MonoBehaviour
         }
     }
 
+    #region Pattern Method
     private void PlayPattern_1()
     {
-
+        PatternCoroutine = StartCoroutine(IE_Pattern1());
     }
 
     private void PlayPattern_2()
@@ -131,6 +140,28 @@ public class Boss2_ai : MonoBehaviour
     {
 
     }
+    #endregion
+
+    #region Pattern Coroutine
+
+    private IEnumerator IE_Pattern1()
+    {
+        objAnimator.Play("Boss2_Pattern1");
+
+        yield return new WaitForSecondsRealtime(1.27f);
+
+        if (currentPatternConditionState == PatternConditionState.Close)
+        {
+            if (UnityEngine.Random.Range(0, 2) == 0)
+            {
+
+            }
+        }
+
+        yield return null;
+    }
+
+    #endregion
 
     private enum PatternState
     {
