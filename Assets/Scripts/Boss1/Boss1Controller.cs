@@ -1,9 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Boss1Controller : Singleton<Boss1Controller>
 {
+    [Header("정보")]
+    [SerializeField] float hp = 100;
+    Slider hpGauge;
+
     [Header("상태 머신")]
     public Boss1State nowState = Boss1State.Idle;
 
@@ -34,6 +39,9 @@ public class Boss1Controller : Singleton<Boss1Controller>
         anim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody2D>();
         player = GameObject.FindWithTag("Player").transform;
+        hpGauge = GameObject.Find("BossHp").GetComponent<Slider>();
+        hpGauge.maxValue = hp;
+        hpGauge.value = hp;
     }
 
     void Start()
@@ -160,5 +168,23 @@ public class Boss1Controller : Singleton<Boss1Controller>
         yield return new WaitForSeconds(Random.Range(1, 2));
 
         ChangeState();
+    }
+
+    void OnDamaged(float damage)
+    {
+        if (hp > 0)
+        {
+            hp -= damage;
+        }
+
+        hpGauge.value = hp;
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("PlayerAttack"))
+        {
+            OnDamaged(10f);
+        }
     }
 }
