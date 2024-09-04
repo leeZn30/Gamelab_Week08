@@ -53,7 +53,6 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
             rigid.velocity = new Vector2(forceDirection.x * moveSpeed, 0);
         }
-
     }
 
     void turn()
@@ -74,8 +73,8 @@ public class Boss1Controller : Singleton<Boss1Controller>
     void ChangeState()
     {
         Debug.Log("Change State");
-        Boss1State inputState = phase1[Random.Range(0, phase1.Count)];
-        // Boss1State inputState = phase1[1];
+        // Boss1State inputState = phase1[Random.Range(0, phase1.Count)];
+        Boss1State inputState = phase1[1];
 
         switch (inputState)
         {
@@ -97,7 +96,8 @@ public class Boss1Controller : Singleton<Boss1Controller>
             case Boss1State.Pattern2:
                 turn();
                 nowState = Boss1State.Pattern2;
-                anim.Play("PrePattern2");
+                // anim.Play("PrePattern2");
+                StartCoroutine(Pattern2());
                 break;
         }
     }
@@ -105,13 +105,42 @@ public class Boss1Controller : Singleton<Boss1Controller>
     IEnumerator Pattern1()
     {
         isWalk = true;
-
         anim.Play("Walk");
 
         yield return new WaitUntil(() => Vector2.Distance(player.position, transform.position) <= minDistance);
 
         isWalk = false;
         anim.SetTrigger("Pattern1");
+    }
+    IEnumerator Pattern2()
+    {
+        // 플레이어가 패턴2 distance안에 있으며 minDistance보다 멀리 있다면 그냥 실행
+        if (Vector2.Distance(player.position, transform.position) > 4f && Vector2.Distance(player.position, transform.position) < 8f)
+        {
+            anim.Play("PrePattern2");
+        }
+        else
+        {
+            if (Vector2.Distance(player.position, transform.position) < 4f)
+            {
+                Vector2 directionToPlayer = player.position - transform.position;
+                forceDirection = -new Vector2(directionToPlayer.x, 0).normalized;
+
+                if (forceDirection.x >= 0 && transform.rotation != Quaternion.Euler(0f, 180f, 0f))
+                {
+                    transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+                }
+                else
+                {
+                    transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+                }
+            }
+
+            anim.Play("Roll");
+
+            yield return null;
+
+        }
     }
 
     void CreateSlash()
