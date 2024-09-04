@@ -119,7 +119,7 @@ public class Boss2_ai : MonoBehaviour
 
     private void PlayWalk()
     {
-        UnityEngine.Random.Range(1, 0);
+        UnityEngine.Random.Range(0.5f, 1.5f);
     }
 
     private void PlayIdle()
