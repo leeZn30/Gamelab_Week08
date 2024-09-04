@@ -33,7 +33,7 @@ public class Dodge : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(buttonBuffer)
+        if (buttonBuffer)
         {
             _dodgeBuffer += Time.deltaTime;
             if (_dodgeBuffer > _dodgeBufferLimit)
@@ -64,7 +64,7 @@ public class Dodge : MonoBehaviour
                 StartCoroutine(PlayerDodge());
                 
             }
-        }   
+        }
     }
 
     IEnumerator PlayerDodge()
@@ -75,8 +75,8 @@ public class Dodge : MonoBehaviour
         _animator.SetBool("walkToDodge", true);
         _animator.SetBool("isMoving", false);
         float positiveDirection = (_body.velocity.x == 0 ? _move.lastLookDirection : Mathf.Sign(_body.velocity.x));
-        Vector2 destination = new Vector2((positiveDirection > 0f? _body.position.x + DodgeDistance : _body.position.x - DodgeDistance), _body.position.y);
-        _body.velocity = Vector2.zero; // ±âÁ¸ ¼Óµµ ÃÊ±âÈ­
+        Vector2 destination = new Vector2((positiveDirection > 0f ? _body.position.x + DodgeDistance : _body.position.x - DodgeDistance), _body.position.y);
+        _body.velocity = Vector2.zero; // ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½ ï¿½Ê±ï¿½È­
         Vector2 pos = _body.position;
 
         _dodgeTimer = 0f;
