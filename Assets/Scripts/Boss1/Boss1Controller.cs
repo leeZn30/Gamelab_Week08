@@ -20,7 +20,8 @@ public class Boss1Controller : Singleton<Boss1Controller>
     bool isWalk;
 
     [Header("패턴2")]
-    bool isGround;
+    [SerializeField] bool isPattern2 = false;
+    [SerializeField] bool isGround;
 
     Transform player;
     [SerializeField] Rigidbody2D rigid;
@@ -41,18 +42,17 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
     void Update()
     {
-        Debug.DrawLine(transform.position, transform.position + Vector3.down * 3f, Color.red);
-
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 3f);
-        if (hit.collider != null && hit.collider.CompareTag("Ground"))
-        {
-            isGround = true;
-        }
-        else
-        {
-            anim.Play("Jump");
-            isGround = false;
-        }
+        // Debug.DrawLine(transform.position, transform.position + Vector3.down * 3f, Color.red);
+        // RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 3f);
+        // if (hit.collider != null && hit.collider.CompareTag("Ground"))
+        // {
+        //     isGround = true;
+        // }
+        // else
+        // {
+        //     anim.Play("Jump");
+        //     isGround = false;
+        // }
     }
 
     void FixedUpdate()
@@ -75,9 +75,6 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
             rigid.velocity = new Vector2(forceDirection.x * moveSpeed, 0);
         }
-
-
-        if (isGround && ispattern1)
 
     }
 
@@ -102,7 +99,8 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
             case Boss1State.Pattern2:
                 nowState = Boss1State.Pattern2;
-                StartCoroutine(Pattern2());
+                // StartCoroutine(Pattern2());
+                anim.Play("PrePattern2");
                 break;
         }
     }
@@ -120,14 +118,10 @@ public class Boss1Controller : Singleton<Boss1Controller>
     }
 
 
-    IEnumerator Pattern2()
-    {
-        rigid.AddForce(Vector2.up * 5f, ForceMode2D.Impulse);
-
-        yield return new WaitUntil(() => isGround);
-
-        anim.SetTrigger("Pattern2");
-    }
+    // IEnumerator Pattern2()
+    // {
+    //     anim.SetTrigger("Pattern2");
+    // }
 
 
     void DoDelay()
