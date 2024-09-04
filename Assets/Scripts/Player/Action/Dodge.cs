@@ -7,6 +7,7 @@ public class Dodge : MonoBehaviour
 {
     public float DodgeDistance = 3f;
     public float dodgeTimerLimit = 0.8f;
+    public float dodgeStamina = 20f;
 
     private bool pressButton = false;
     private bool buttonBuffer = false;
@@ -49,10 +50,19 @@ public class Dodge : MonoBehaviour
         {
             if (pressButton || buttonBuffer)
             {
-                alreadyDodging = true;
-                StartCoroutine(PlayerDodge());
                 pressButton = false;
                 buttonBuffer = false;
+
+                if (_playerController.currentStamina < dodgeStamina)
+                {
+                    _playerController.playerContext.ChangeState(IdleState.getInstance());
+                    return;
+                }
+
+                alreadyDodging = true;
+                _playerController.currentStamina -= dodgeStamina;
+                StartCoroutine(PlayerDodge());
+                
             }
         }   
     }
@@ -70,7 +80,7 @@ public class Dodge : MonoBehaviour
         Vector2 pos = _body.position;
 
         _dodgeTimer = 0f;
-        while (Mathf.Abs(pos.x - destination.x) > 0.01f && _dodgeTimer < _dodgeTimerLimit)
+        while (Mathf.Abs(pos.x - destination.x) > 0.01f && _dodgeTimer < dodgeTimerLimit)
         {
             pos = _body.position;
             _body.position = new Vector2(Mathf.MoveTowards(pos.x, destination.x, Time.deltaTime * DodgeDistance), pos.y);

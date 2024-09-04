@@ -9,7 +9,13 @@ public class PlayerController : MonoBehaviour
     public int currentHP = 2;
     private Vector3 pos;
 
+    public float maxStamina = 100f;
+    public float currentStamina = 100f;
+    public float staminaConstant = 10f;
+
     private Animator _animator;
+    [SerializeField]
+    private GameObject _hammerCollider;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +28,17 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void FixedUpdate()
+    {
+        if (currentStamina < maxStamina)
+            currentStamina += Time.fixedDeltaTime * staminaConstant;
+    }
+
+    public void TurnOffHammerCollider()
+    {
+        _hammerCollider.SetActive(false);
     }
 
     public void OnRespawn(InputAction.CallbackContext context)
@@ -42,11 +59,10 @@ public class PlayerController : MonoBehaviour
                 _animator.SetBool("Corpse", false);
 
                 currentHP = 2;
+                currentStamina = maxStamina;
                 transform.position = pos;
                 _animator.Play("idle");
                 playerContext.ChangeState(IdleState.getInstance());
-
-
             }
         }
     }
