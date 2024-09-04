@@ -6,9 +6,7 @@ using UnityEngine.UI;
 public class Boss1Controller : Singleton<Boss1Controller>
 {
     [Header("정보")]
-    [SerializeField] float hp = 100;
-    [SerializeField] int nowPhase = 0;
-
+    [SerializeField] float hp = 200;
     Slider hpGauge;
 
     [Header("상태 머신")]
@@ -49,7 +47,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
     void Start()
     {
-        // ChangeState();
+        ChangeState();
     }
 
     void Update()
@@ -84,10 +82,16 @@ public class Boss1Controller : Singleton<Boss1Controller>
     void ChangeState()
     {
         Debug.Log("Change State");
-        // Boss1State inputState = phase1[Random.Range(0, phase1.Count)];
-        Boss1State inputState = phase2[Random.Range(0, phase2.Count)];
-        // Boss1State inputState = phase1[1];
+        Boss1State inputState;
 
+        if (hp >= 110)
+        {
+            inputState = phase1[Random.Range(0, phase1.Count)];
+        }
+        else
+        {
+            inputState = phase2[Random.Range(0, phase2.Count)];
+        }
         switch (inputState)
         {
             case Boss1State.Idle:
@@ -111,6 +115,16 @@ public class Boss1Controller : Singleton<Boss1Controller>
                 // anim.Play("PrePattern2");
                 StartCoroutine(Pattern2());
                 break;
+
+            case Boss1State.NormalAttack:
+                nowState = Boss1State.NormalAttack;
+                StartCoroutine(NormalAttack());
+                break;
+
+            case Boss1State.SequenceAttack:
+                nowState = Boss1State.SequenceAttack;
+                StartCoroutine(SequenceAttack());
+                break;
         }
     }
 
@@ -124,6 +138,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
         isWalk = false;
         anim.SetTrigger("Pattern1");
     }
+
     IEnumerator Pattern2()
     {
         // 플레이어가 패턴2 distance안에 있으며 minDistance보다 멀리 있다면 그냥 실행
@@ -153,6 +168,29 @@ public class Boss1Controller : Singleton<Boss1Controller>
             yield return null;
 
         }
+    }
+
+    IEnumerator NormalAttack()
+    {
+        isWalk = true;
+        anim.Play("Walk");
+
+        yield return new WaitUntil(() => Vector2.Distance(player.position, transform.position) <= minDistance);
+
+        isWalk = false;
+        anim.SetTrigger("NormalAttack");
+    }
+
+
+    IEnumerator SequenceAttack()
+    {
+        isWalk = true;
+        anim.Play("Walk");
+
+        yield return new WaitUntil(() => Vector2.Distance(player.position, transform.position) <= minDistance);
+
+        isWalk = false;
+        anim.SetTrigger("SequenceAttack");
     }
 
     void CreateSlash()
