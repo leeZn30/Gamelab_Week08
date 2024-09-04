@@ -6,10 +6,12 @@ using UnityEngine.InputSystem;
 public class Dodge : MonoBehaviour
 {
     public float DodgeDistance = 3f;
+    public float dodgeTimerLimit = 0.8f;
 
     private bool pressButton = false;
     private bool buttonBuffer = false;
     private bool alreadyDodging = false;
+    private float _dodgeTimer = 0f;
     private float _dodgeBuffer = 0f;
     private float _dodgeBufferLimit = 0.15f;
 
@@ -58,6 +60,7 @@ public class Dodge : MonoBehaviour
     IEnumerator PlayerDodge()
     {
         Debug.Log("Dodge Start");
+        GetComponent<CapsuleCollider2D>().excludeLayers = (int)Mathf.Pow(2, LayerMask.NameToLayer("Boss"));
         _animator.SetBool("dodging", true);
         _animator.SetBool("walkToDodge", true);
         _animator.SetBool("isMoving", false);
@@ -66,17 +69,20 @@ public class Dodge : MonoBehaviour
         _body.velocity = Vector2.zero; // 기존 속도 초기화
         Vector2 pos = _body.position;
 
-        while (Mathf.Abs(pos.x - destination.x) > 0.01f)
+        _dodgeTimer = 0f;
+        while (Mathf.Abs(pos.x - destination.x) > 0.01f && _dodgeTimer < _dodgeTimerLimit)
         {
             pos = _body.position;
             _body.position = new Vector2(Mathf.MoveTowards(pos.x, destination.x, Time.deltaTime * DodgeDistance), pos.y);
             yield return null;
+            _dodgeTimer += Time.deltaTime;
         }
 
         Debug.Log("Dodge End");
         _animator.SetBool("dodging", false);
         _animator.SetBool("walkToDodge", false);
         _playerController.playerContext.CanPlayerIdle();
+        GetComponent<CapsuleCollider2D>().excludeLayers = (int)Mathf.Pow(2, LayerMask.NameToLayer("Nothing"));
         alreadyDodging = false;
     }
 
