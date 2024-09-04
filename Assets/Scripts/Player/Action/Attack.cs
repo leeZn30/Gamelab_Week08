@@ -13,6 +13,11 @@ public class Attack : MonoBehaviour
     private float _attackBuffer = 0f;
     private float _attackBufferLimit = 0.15f;
 
+    public float attackReadyStamina = 10f;
+    public float normalAttackStamina = 10f;
+    public float chargeAttackStamina = 15f;
+    public float fullChargeAttackStamina = 20f;
+
     private Animator _animator;
     private Rigidbody2D _body;
     private PlayerController _playerController;
@@ -53,6 +58,26 @@ public class Attack : MonoBehaviour
             if (pressingButton || buttonBuffer)
             {
                 buttonBuffer = false;
+
+                if (_playerController.currentStamina < attackReadyStamina + normalAttackStamina)
+                {
+                    _playerController.playerContext.ChangeState(IdleState.getInstance());
+                    return;
+                }
+                else if(_playerController.currentStamina > attackReadyStamina + normalAttackStamina && _playerController.currentStamina < attackReadyStamina + chargeAttackStamina
+                    && pressingTime > 1f)
+                {
+                    pressingButton = false;
+                    pressingTime = 1f;
+                }
+                else if(_playerController.currentStamina > attackReadyStamina + chargeAttackStamina && _playerController.currentStamina < attackReadyStamina + fullChargeAttackStamina
+                    && pressingTime > 2.5f)
+                {
+                    pressingButton = false;
+                    pressingTime = 2.5f;
+                }
+                    
+
                 _body.velocity = Vector2.zero;
                 pressingTime += Time.deltaTime;
                 _animator.SetBool("doAttack", true);
@@ -66,16 +91,19 @@ public class Attack : MonoBehaviour
                 if (pressingTime > 0f && pressingTime <= 1f)
                 {
                     pressingTime = 0f;
+                    _playerController.currentStamina -= attackReadyStamina + normalAttackStamina;
                     StartCoroutine(DoBasicAttack());
                 }
                 else if (pressingTime > 1f && pressingTime <= 2.5f)
                 {
                     pressingTime = 0f;
+                    _playerController.currentStamina -= attackReadyStamina + chargeAttackStamina;
                     StartCoroutine(DoChargeAttack());
                 }
                 else if (pressingTime > 2.5f)
                 {
                     pressingTime = 0f;
+                    _playerController.currentStamina -= attackReadyStamina + fullChargeAttackStamina;
                     StartCoroutine(DoFullChargeAttack());
                 }
                 else
@@ -95,10 +123,11 @@ public class Attack : MonoBehaviour
         _animator.SetBool("doNormalAttack", true);
         _animator.SetBool("doAttack", false);
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.4f);
         _perlin.m_AmplitudeGain = 0.3f;
         _perlin.m_FrequencyGain = 1f;
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.2f);
+        _playerController.TurnOffHammerCollider();
         _perlin.m_AmplitudeGain = 0f;
         _perlin.m_FrequencyGain = 0f;
 
@@ -118,10 +147,11 @@ public class Attack : MonoBehaviour
         _animator.SetBool("doChargeAttack", true);
         _animator.SetBool("doAttack", false);
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.4f);
         _perlin.m_AmplitudeGain = 0.6f;
         _perlin.m_FrequencyGain = 1f;
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.2f);
+        _playerController.TurnOffHammerCollider();
         _perlin.m_AmplitudeGain = 0f;
         _perlin.m_FrequencyGain = 0f;
 
@@ -141,10 +171,11 @@ public class Attack : MonoBehaviour
         _animator.SetBool("doFullChargeAttack", true);
         _animator.SetBool("doAttack", false);
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.4f);
         _perlin.m_AmplitudeGain = 0.9f;
         _perlin.m_FrequencyGain = 1f;
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.2f);
+        _playerController.TurnOffHammerCollider();
         _perlin.m_AmplitudeGain = 0f;
         _perlin.m_FrequencyGain = 0f;
 

@@ -1746,6 +1746,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DodgeDistance: 6
+  dodgeTimerLimit: 0.8
+  dodgeStamina: 20
 --- !u!114 &1958589559843349577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1770,6 +1772,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fe9c4a510c81cd4595cadcb7cb158f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackReadyStamina: 10
+  normalAttackStamina: 10
+  chargeAttackStamina: 15
+  fullChargeAttackStamina: 20
   _hammerCollider: {fileID: 1899741175}
 --- !u!114 &1958589559843349579
 MonoBehaviour:
@@ -1784,6 +1790,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHP: 2
+  maxStamina: 100
+  currentStamina: 100
+  staminaConstant: 10
+  _hammerCollider: {fileID: 1899741175}
 --- !u!114 &1958589559843349580
 MonoBehaviour:
   m_ObjectHideFlags: 0
