@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-
 
 public class Boss1Controller : Singleton<Boss1Controller>
 {
@@ -11,6 +9,9 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
     [Header("패턴")]
     [SerializeField] List<Boss1State> phase1 = new List<Boss1State>();
+
+    [Header("턴")]
+    Vector2 forceDirection;
 
     [Header("이동")]
     [SerializeField] float minDistance = 3f;
@@ -21,7 +22,8 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
     [Header("패턴2")]
     [SerializeField] bool isPattern2 = false;
-    [SerializeField] bool isGround;
+    [SerializeField] Slash slash;
+    [SerializeField] Transform slashPosition;
 
     Transform player;
     [SerializeField] Rigidbody2D rigid;
@@ -36,50 +38,45 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
     void Start()
     {
-        // ChangeState(Boss1State.Pattern1);
-        ChangeState(Boss1State.Pattern2);
+        ChangeState();
     }
 
     void Update()
     {
-        // Debug.DrawLine(transform.position, transform.position + Vector3.down * 3f, Color.red);
-        // RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 3f);
-        // if (hit.collider != null && hit.collider.CompareTag("Ground"))
-        // {
-        //     isGround = true;
-        // }
-        // else
-        // {
-        //     anim.Play("Jump");
-        //     isGround = false;
-        // }
     }
 
     void FixedUpdate()
     {
         if (isWalk)
         {
-            Vector2 directionToPlayer = player.position - transform.position;
-            Vector2 forceDirection = new Vector2(directionToPlayer.x, 0).normalized;
-
-            Debug.Log(forceDirection);
-
-            if (forceDirection.x >= 0 && transform.rotation != Quaternion.Euler(0f, 180f, 0f))
-            {
-                transform.rotation = Quaternion.Euler(0f, 180f, 0f);
-            }
-            else
-            {
-                transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-            }
+            turn();
 
             rigid.velocity = new Vector2(forceDirection.x * moveSpeed, 0);
         }
 
     }
 
-    void ChangeState(Boss1State inputState)
+    void turn()
     {
+        Vector2 directionToPlayer = player.position - transform.position;
+        forceDirection = new Vector2(directionToPlayer.x, 0).normalized;
+
+        if (forceDirection.x >= 0 && transform.rotation != Quaternion.Euler(0f, 180f, 0f))
+        {
+            transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        }
+    }
+
+    void ChangeState()
+    {
+        Debug.Log("Change State");
+        Boss1State inputState = phase1[Random.Range(0, phase1.Count)];
+        // Boss1State inputState = phase1[1];
+
         switch (inputState)
         {
             case Boss1State.Idle:
@@ -98,8 +95,8 @@ public class Boss1Controller : Singleton<Boss1Controller>
                 break;
 
             case Boss1State.Pattern2:
+                turn();
                 nowState = Boss1State.Pattern2;
-                // StartCoroutine(Pattern2());
                 anim.Play("PrePattern2");
                 break;
         }
@@ -117,12 +114,10 @@ public class Boss1Controller : Singleton<Boss1Controller>
         anim.SetTrigger("Pattern1");
     }
 
-
-    // IEnumerator Pattern2()
-    // {
-    //     anim.SetTrigger("Pattern2");
-    // }
-
+    void CreateSlash()
+    {
+        Instantiate(slash, slashPosition);
+    }
 
     void DoDelay()
     {
@@ -131,6 +126,10 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
     IEnumerator Delay()
     {
-        yield return new WaitForSeconds(Random.Range(1, 4));
+        Debug.Log("Delay");
+
+        yield return new WaitForSeconds(Random.Range(1, 2));
+
+        ChangeState();
     }
 }
