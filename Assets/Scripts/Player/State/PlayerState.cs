@@ -89,7 +89,8 @@ class IdleState : PlayerState
 
     public void PlayerDamaged(PlayerContext pc)
     {
-        pc.ChangeState(DamagedState.getInstance());
+        //pc.ChangeState(DamagedState.getInstance());
+        pc.SetEffect(false, true);
     }
 
     public void PlayerDied(PlayerContext pc)
@@ -153,7 +154,7 @@ class AttackState:PlayerState
     public void PlayerDamaged(PlayerContext pc)
     {
         // no behaviour canceling, but damaged
-
+        pc.SetEffect(false, false);
     }
 
     public void PlayerDied(PlayerContext pc)
@@ -217,9 +218,9 @@ class MoveState : PlayerState
 
     public void PlayerDamaged(PlayerContext pc)
     {
-        pc.ChangeState(DamagedState.getInstance());
+        //pc.ChangeState(DamagedState.getInstance());
         // get hurt animation
-
+        pc.SetEffect(false, true);
     }
 
     public void PlayerDied(PlayerContext pc)
@@ -283,6 +284,7 @@ class DodgeState : PlayerState
     public void PlayerDamaged(PlayerContext pc)
     {
         // invincible while dodging
+        pc.SetEffect(true, false);
     }
 
     public void PlayerDied(PlayerContext pc)
@@ -347,6 +349,7 @@ class ChargeState : PlayerState
     public void PlayerDamaged(PlayerContext pc)
     {
         // no behaviour canceling, but damaged
+        pc.SetEffect(false, false);
     }
 
     public void PlayerDied(PlayerContext pc)
@@ -410,6 +413,7 @@ class FullChargeState : PlayerState
     public void PlayerDamaged(PlayerContext pc)
     {
         // no behaviour canceling, but damaged
+        pc.SetEffect(false, false);
     }
 
     public void PlayerDied(PlayerContext pc)

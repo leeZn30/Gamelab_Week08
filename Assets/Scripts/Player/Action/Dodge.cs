@@ -8,7 +8,10 @@ public class Dodge : MonoBehaviour
     public float DodgeDistance = 3f;
 
     private bool pressButton = false;
+    private bool buttonBuffer = false;
     private bool alreadyDodging = false;
+    private float _dodgeBuffer = 0f;
+    private float _dodgeBufferLimit = 0.15f;
 
     private Animator _animator;
     private Rigidbody2D _body;
@@ -27,18 +30,27 @@ public class Dodge : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(buttonBuffer)
+        {
+            _dodgeBuffer += Time.deltaTime;
+            if (_dodgeBuffer > _dodgeBufferLimit)
+            {
+                buttonBuffer = false;
+                _dodgeBuffer = 0f;
+            }
+        }
     }
 
     private void FixedUpdate()
     {
         if (_playerController.playerContext.GetState().GetType() == typeof(DodgeState))
         {
-            if (pressButton)
+            if (pressButton || buttonBuffer)
             {
                 alreadyDodging = true;
                 StartCoroutine(PlayerDodge());
                 pressButton = false;
+                buttonBuffer = false;
             }
         }   
     }
@@ -46,7 +58,8 @@ public class Dodge : MonoBehaviour
     IEnumerator PlayerDodge()
     {
         Debug.Log("Dodge Start");
-        _animator.SetBool("Dodge", true);
+        _animator.SetBool("dodging", true);
+        _animator.SetBool("walkToDodge", true);
         _animator.SetBool("isMoving", false);
         float positiveDirection = (_body.velocity.x == 0 ? _move.lastLookDirection : Mathf.Sign(_body.velocity.x));
         Vector2 destination = new Vector2((positiveDirection > 0f? _body.position.x + DodgeDistance : _body.position.x - DodgeDistance), _body.position.y);
@@ -56,14 +69,15 @@ public class Dodge : MonoBehaviour
         while (Mathf.Abs(pos.x - destination.x) > 0.01f)
         {
             pos = _body.position;
-            _body.position = new Vector2(Mathf.MoveTowards(pos.x, destination.x, Time.deltaTime * 15), pos.y);
+            _body.position = new Vector2(Mathf.MoveTowards(pos.x, destination.x, Time.deltaTime * DodgeDistance), pos.y);
             yield return null;
         }
 
-        alreadyDodging = false;
         Debug.Log("Dodge End");
-        _animator.SetBool("Dodge", false);
+        _animator.SetBool("dodging", false);
+        _animator.SetBool("walkToDodge", false);
         _playerController.playerContext.CanPlayerIdle();
+        alreadyDodging = false;
     }
 
     public void OnDodge(InputAction.CallbackContext context)
@@ -72,6 +86,9 @@ public class Dodge : MonoBehaviour
         if (!alreadyDodging)
         {
             pressButton = context.ReadValueAsButton();
+
+            buttonBuffer = true;
+            _dodgeBuffer = 0f;
         }
     }
 }

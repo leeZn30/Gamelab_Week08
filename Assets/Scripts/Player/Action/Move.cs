@@ -49,12 +49,15 @@ public class Move : MonoBehaviour
         if (_playerController.playerContext.GetState().GetType() == typeof(MoveState)
             || _playerController.playerContext.GetState().GetType() == typeof(IdleState))
         {
+            if(direction != 0f) // input이 있는 상태라면
+                _playerController.playerContext.CanPlayerMove(); // MoveState로 변경 가능한지 한번 더 확인
+
             if (_playerController.playerContext.GetState().GetType() == typeof(MoveState))
                 _animator.SetBool("isMoving", true);
             else if(_playerController.playerContext.GetState().GetType() == typeof(IdleState))
                 _animator.SetBool("isMoving", false);
 
-            transform.localScale = new Vector3(direction > 0f ? 0.5f : -0.5f, 0.5f, 0.5f);
+            transform.localScale = new Vector3(lastLookDirection > 0f ? -0.5f : 0.5f, 0.5f, 0.5f);
 
             if (pressingKey)
             {
@@ -67,6 +70,7 @@ public class Move : MonoBehaviour
                 maxSpeedChange = maxDecceleration * 0.02f;
 
             velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange);
+            //velocity.y = -9.81f;
             _body.velocity = velocity;
         }
         else
