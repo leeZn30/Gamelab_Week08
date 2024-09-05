@@ -128,7 +128,10 @@ public class Boss2_ai : MonoBehaviour
 
         hpGauge.value = bossHp;
 
-        if (bossHp < 0) 
+        if (bossHp < phaseSwapHp)
+            currentPhase = 1;
+
+        if (bossHp <= 0) 
         {
             PlayDeath();
         }
@@ -137,8 +140,8 @@ public class Boss2_ai : MonoBehaviour
     private void PlayDeath()
     {
         StopAllCoroutines();
-        objAnimator.Play("Boss2_Dead");
-        StartCoroutine(waitForDeath());
+        objAnimator.Play("Boss2_Die");
+        patternCoroutine = StartCoroutine(waitForDeath());
     }
 
     IEnumerator waitForDeath()
@@ -187,7 +190,7 @@ public class Boss2_ai : MonoBehaviour
 
     private void PlayIntro()
     {
-        PlayIdle(5);
+        PlayIdle(3);
     }
 
     private void PlayPattern(string patternName)
