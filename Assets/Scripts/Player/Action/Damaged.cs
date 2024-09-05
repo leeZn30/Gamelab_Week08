@@ -92,4 +92,10 @@ public class Damaged : MonoBehaviour
         if (_animator.GetCurrentAnimatorStateInfo(0).IsName("die"))
             _animator.SetBool("Corpse", true);
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("EnemyAttack"))
+            OnDamaged();
+    }
 }
