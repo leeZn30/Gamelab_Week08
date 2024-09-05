@@ -10,11 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ee1118b16c4144440a31402bb768d78b, type: 3}
-  m_Name: Boss2_Normal_Phase2
+  m_Name: Boss2_Behind_Phase2
   m_EditorClassIdentifier: 
   PatternName:
-  - walk
-  - pattern2
-  - pattern3
-  - pattern6
-  Probability: 19000000190000001900000019000000
+  - turn
+  Probability: 64000000

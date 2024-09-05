@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 118382300}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -155,7 +155,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -872,16 +872,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 230b08a1e1b9bd045b33eed4062d7735, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bossHp: 100
+  phaseSwapHp: 50
+  walkSpeed: 3
+  runSpeed: 6
+  backStepSpeed: 8
+  lookingDir: -1
+  currentPhase: 0
+  currentPatternConditionState: 0
+  currentPatternName: 
   phase1_PatternProbabilities:
   - {fileID: 11400000, guid: c92e225a498c6444a9b256f135107a8c, type: 2}
   - {fileID: 11400000, guid: a9c9084439fcec64fb3a106754ecf32f, type: 2}
   - {fileID: 11400000, guid: 05acb9709d3f8b94cb88a447f3fc1e8f, type: 2}
   - {fileID: 11400000, guid: 9474b7b380df2a148869b1c19f595030, type: 2}
+  - {fileID: 11400000, guid: ac62ae97ed1e50d42ac1c5bcd8deb59c, type: 2}
   phase2_PatternProbabilities:
   - {fileID: 11400000, guid: 05b71ea227dd0c64fbad35a9741082d7, type: 2}
   - {fileID: 11400000, guid: e6fb9134163d3944b887efc88f586480, type: 2}
   - {fileID: 11400000, guid: 46ac85676bcbd3640886b485da9d4140, type: 2}
   - {fileID: 11400000, guid: 6ddd4ef9a6cf4ac48b0186df326706a8, type: 2}
+  - {fileID: 11400000, guid: c071d1f3c7ca6ee41a241c2067d4f97e, type: 2}
+  rightBehindDistCheckFactor: -3
+  closeDistCheckFactor: 4
+  normalDistCheckFactor: 9
+  speedLerpFactor: 1
 --- !u!95 &1874129143901187094
 Animator:
   serializedVersion: 5

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PatternName:
   - pattern1
-  - pattern2_1
+  - pattern2
   - pattern3
   - pattern6
   Probability: 19000000190000001900000019000000
