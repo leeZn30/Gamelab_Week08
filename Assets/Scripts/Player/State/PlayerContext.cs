@@ -5,11 +5,14 @@ using UnityEngine;
 public class PlayerContext
 {
     PlayerState myState;
-    bool hurtEffect;
+    bool _hurtEffect;
+    bool _invincible;
+
     public PlayerContext()
     {
         myState = new IdleState();
-        hurtEffect = false;
+        _hurtEffect = false;
+        _invincible = false;
     }
 
     public void ChangeState(PlayerState state)
@@ -22,14 +25,20 @@ public class PlayerContext
         return myState;
     }
 
-    public void SetHurtEffect(bool effect) 
+    public void SetEffect(bool invincible, bool effect) 
     {
-        hurtEffect = effect;
+        _invincible = invincible;
+        _hurtEffect = effect;
     }
 
     public bool GetHurtEffect()
     {
-        return hurtEffect;
+        return _hurtEffect;
+    }
+
+    public bool GetInvincible()
+    {
+        return _invincible;
     }
 
     public void CanPlayerAttack()

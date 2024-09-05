@@ -6,10 +6,10 @@ using UnityEngine.InputSystem;
 public class Move : MonoBehaviour
 {
     [Header("Movement Stats")]
-    [SerializeField][Tooltip("Maximum movement speed")]                     public float maxSpeed = 10f;
-    [SerializeField][Tooltip("How fast to reach max speed")]                public float maxAcceleration = 52f;
-    [SerializeField][Tooltip("How fast to stop after letting go")]          public float maxDecceleration = 52f;
-    [SerializeField][Tooltip("How fast to stop when changing direction")]   public float maxTurnSpeed = 80f;
+    [SerializeField][Tooltip("Maximum movement speed")] public float maxSpeed = 10f;
+    [SerializeField][Tooltip("How fast to reach max speed")] public float maxAcceleration = 52f;
+    [SerializeField][Tooltip("How fast to stop after letting go")] public float maxDecceleration = 52f;
+    [SerializeField][Tooltip("How fast to stop when changing direction")] public float maxTurnSpeed = 80f;
     [SerializeField][Tooltip("Friction to apply against movement on stick")] private float friction = 0f;
 
     [Header("Calculations")]
@@ -36,7 +36,7 @@ public class Move : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (direction != 0f) 
+        if (direction != 0f)
             pressingKey = true;
         else
             pressingKey = false;
@@ -49,12 +49,16 @@ public class Move : MonoBehaviour
         if (_playerController.playerContext.GetState().GetType() == typeof(MoveState)
             || _playerController.playerContext.GetState().GetType() == typeof(IdleState))
         {
+            if (direction != 0f) // inputï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½Â¶ï¿½ï¿½
+                _playerController.playerContext.CanPlayerMove(); // MoveStateï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¹ï¿½ ï¿½ï¿½ È®ï¿½ï¿½
+
             if (_playerController.playerContext.GetState().GetType() == typeof(MoveState))
                 _animator.SetBool("isMoving", true);
-            else if(_playerController.playerContext.GetState().GetType() == typeof(IdleState))
+            else if (_playerController.playerContext.GetState().GetType() == typeof(IdleState))
                 _animator.SetBool("isMoving", false);
 
-            transform.localScale = new Vector3(direction > 0f ? 0.5f : -0.5f, 0.5f, 0.5f);
+            // transform.localScale = new Vector3(lastLookDirection > 0f ? -0.5f : 0.5f, 0.5f, 0.5f);
+            transform.localScale = new Vector3(lastLookDirection > 0f ? -2f : 2, 2, 2f);
 
             if (pressingKey)
             {
@@ -67,6 +71,7 @@ public class Move : MonoBehaviour
                 maxSpeedChange = maxDecceleration * 0.02f;
 
             velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange);
+            //velocity.y = -9.81f;
             _body.velocity = velocity;
         }
         else
@@ -77,7 +82,7 @@ public class Move : MonoBehaviour
     {
         if (!context.canceled)
         {
-            _playerController.playerContext.CanPlayerMove(); // MoveState·Î º¯°æ °¡´ÉÇÑÁö È®ÀÎ
+            _playerController.playerContext.CanPlayerMove(); // MoveStateï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
             direction = context.ReadValue<float>();
             lastLookDirection = Mathf.Sign(direction);
         }
