@@ -25,6 +25,7 @@ public class Boss2_ai : MonoBehaviour
 
     [SerializeField] private float speedLerpFactor = 1;
     [SerializeField] private Slider hpGauge;
+    [SerializeField] private PlayerController pc;
     private float speedLerpValue = 1;
     private Vector3 playerCalcualtePosition = Vector3.zero;
     private Coroutine patternCoroutine;
@@ -35,6 +36,8 @@ public class Boss2_ai : MonoBehaviour
     {
         objAnimator = GetComponent<Animator>();
         playerTf = GameObject.FindWithTag("Player").GetComponent<Transform>();
+        if (pc == null )
+            pc = GetComponent<PlayerController>();
         hpGauge.maxValue = bossHp;
         hpGauge.value = bossHp;
     }
@@ -48,7 +51,6 @@ public class Boss2_ai : MonoBehaviour
     {
         if (other.CompareTag("PlayerAttack"))
         {
-            PlayerController pc = GetComponent<PlayerController>();
             if (pc.GetAttackVariable() == "Normal")
             {
                 OnDamaged(pc.normalAttackDamage);
@@ -134,7 +136,25 @@ public class Boss2_ai : MonoBehaviour
 
     private void PlayDeath()
     {
+        StopAllCoroutines();
+        objAnimator.Play("Boss2_Dead");
+        StartCoroutine(waitForDeath());
+    }
 
+    IEnumerator waitForDeath()
+    {
+        yield return new WaitForSeconds(2f);
+
+        GameManager.Instance.showBossInfo("Game Cleared! \n Congratulations!");
+
+        yield return new WaitForSeconds(2f);
+
+        GameManager.Instance.hideBossInfo();
+
+        // 게임매니저에 알리기
+        GameManager.Instance.OnBoss2Cleared();
+
+        Destroy(gameObject);
     }
 
     private void PlayRandomPattern(int phase)
