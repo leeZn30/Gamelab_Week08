@@ -19700,6 +19700,13 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
+  - time: 0.8666667
+    functionName: CreateUpSlash
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 1.9
     functionName: OnTurn
     data: 
@@ -19709,6 +19716,13 @@ AnimationClip:
     messageOptions: 0
   - time: 2.35
     functionName: ShakeCamera
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 2.35
+    functionName: CreateUpSlash
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -19728,6 +19742,13 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
+  - time: 3.85
+    functionName: CreateUpSlash
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 4.483333
     functionName: OnTurn
     data: 
@@ -19737,6 +19758,13 @@ AnimationClip:
     messageOptions: 0
   - time: 4.85
     functionName: ShakeCamera
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 4.85
+    functionName: CreateUpSlash
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -19756,8 +19784,22 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
+  - time: 5.8166666
+    functionName: CreateUpSlash
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 6.2166667
     functionName: OnTurn
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 6.5333333
+    functionName: CreateUpSlash
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

@@ -32,6 +32,10 @@ public class Boss1Controller : Singleton<Boss1Controller>
     [SerializeField] Slash slash;
     [SerializeField] Transform slashPosition;
 
+    [Header("시퀀스 패턴")]
+    [SerializeField] UpSlash upSlash;
+    [SerializeField] Transform upSlashPosition;
+
     Transform player;
     [SerializeField] Rigidbody2D rigid;
     public Animator anim;
@@ -54,7 +58,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
     void Start()
     {
-        DoDelay();
+        // DoDelay();
     }
 
     void Update()
@@ -205,6 +209,10 @@ public class Boss1Controller : Singleton<Boss1Controller>
     {
         Instantiate(slash, slashPosition);
     }
+    void CreateUpSlash()
+    {
+        Instantiate(upSlash, upSlashPosition);
+    }
 
     void DoDelay()
     {
@@ -235,6 +243,8 @@ public class Boss1Controller : Singleton<Boss1Controller>
         if (other.CompareTag("PlayerAttack"))
         {
             OnDamaged(10f);
+
+            other.gameObject.SetActive(false);
         }
     }
 
@@ -260,7 +270,6 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
     void OnTurn()
     {
-
         transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
 
     }
