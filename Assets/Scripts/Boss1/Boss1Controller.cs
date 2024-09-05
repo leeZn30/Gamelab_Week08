@@ -40,6 +40,8 @@ public class Boss1Controller : Singleton<Boss1Controller>
     [SerializeField] Rigidbody2D rigid;
     public Animator anim;
 
+    [SerializeField] Collider2D weaponCollider;
+
 
     private CinemachineVirtualCamera _virtualCamera;
     CinemachineBasicMultiChannelPerlin _perlin;
@@ -58,7 +60,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
     void Start()
     {
-        // DoDelay();
+        DoDelay();
     }
 
     void Update()
@@ -160,7 +162,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
         }
         else
         {
-            if (Vector2.Distance(player.position, transform.position) < 4f)
+            if (Vector2.Distance(player.position, transform.position) < 5f)
             {
                 Vector2 directionToPlayer = player.position - transform.position;
                 forceDirection = -new Vector2(directionToPlayer.x, 0).normalized;
@@ -221,6 +223,9 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
     IEnumerator Delay()
     {
+        weaponCollider.enabled = true;
+
+
         Debug.Log("Delay");
 
         yield return new WaitForSeconds(Random.Range(2, 4));

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 424919270041560546}
   m_Layer: 0
   m_Name: UpSlash
-  m_TagString: Untagged
+  m_TagString: EnemyAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 3927880711015749141}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.3949, y: -2.6, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 8.4295, y: 0.019221952, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -144,4 +144,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetHeight: 2
-  duration: 1
+  duration: 0.4
