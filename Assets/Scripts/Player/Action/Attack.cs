@@ -121,8 +121,10 @@ public class Attack : MonoBehaviour
         Debug.Log("State : Basic Attack");
         _animator.SetBool("doNormalAttack", true);
         _animator.SetBool("doAttack", false);
+
+        yield return new WaitForSeconds(0.1f);
         _hammerCollider.SetActive(true);
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.3f);
         _perlin.m_AmplitudeGain = 0.3f;
         _perlin.m_FrequencyGain = 1f;
         yield return new WaitForSeconds(0.2f);
