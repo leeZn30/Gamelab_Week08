@@ -14,6 +14,10 @@ public class PlayerController : MonoBehaviour
     public float currentStamina = 100f;
     public float staminaConstant = 10f;
 
+    public float normalAttackDamage = 10f;
+    public float chargeAttackDamage = 20f;
+    public float fullChargeAttackDamage = 30f;
+
     private Animator _animator;
     private GameObject _canvas;
     private Vector3 _hpIconInitPos = new Vector3(-900f, 480f, 0f);
@@ -41,6 +45,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public string GetAttackVariable()
+    {
+        // None, Normal, Charge, FullCharge
+        return GetComponent<Attack>().attackVariable.ToString();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -53,6 +63,8 @@ public class PlayerController : MonoBehaviour
                 Destroy(_HpContainer.Pop());
             }
         }
+
+        Debug.Log(GetComponent<Attack>().attackVariable.ToString());
     }
 
     private void FixedUpdate()
