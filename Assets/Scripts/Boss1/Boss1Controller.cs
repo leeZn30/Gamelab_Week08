@@ -97,7 +97,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
         Debug.Log("Change State");
         Boss1State inputState;
 
-        if (hp >= 80)
+        if (hp >= 100)
         {
             inputState = phase1[Random.Range(0, phase1.Count)];
         }
