@@ -86,7 +86,6 @@ public class Attack : MonoBehaviour
             }
             else
             {
-                _hammerCollider.SetActive(true);
                 _animator.SetBool("isMoving", false);
                 if (pressingTime > 0f && pressingTime <= 1f)
                 {
@@ -122,7 +121,7 @@ public class Attack : MonoBehaviour
         Debug.Log("State : Basic Attack");
         _animator.SetBool("doNormalAttack", true);
         _animator.SetBool("doAttack", false);
-
+        _hammerCollider.SetActive(true);
         yield return new WaitForSeconds(0.4f);
         _perlin.m_AmplitudeGain = 0.3f;
         _perlin.m_FrequencyGain = 1f;
@@ -134,8 +133,6 @@ public class Attack : MonoBehaviour
         yield return new WaitForSeconds(0.9f);
         _playerController.playerContext.CanPlayerIdle();
         _animator.SetBool("doNormalAttack", false);
-
-        _hammerCollider.SetActive(false);
         alreadyAttacking = false;
     }
 
@@ -146,7 +143,7 @@ public class Attack : MonoBehaviour
         Debug.Log("State : Charge Attack");
         _animator.SetBool("doChargeAttack", true);
         _animator.SetBool("doAttack", false);
-
+        _hammerCollider.SetActive(true);
         yield return new WaitForSeconds(0.4f);
         _perlin.m_AmplitudeGain = 0.6f;
         _perlin.m_FrequencyGain = 1f;
@@ -158,8 +155,6 @@ public class Attack : MonoBehaviour
         yield return new WaitForSeconds(0.9f);
         _playerController.playerContext.CanPlayerIdle();
         _animator.SetBool("doChargeAttack", false);
-
-        _hammerCollider.SetActive(false);
         alreadyAttacking = false;
     }
 
@@ -170,7 +165,7 @@ public class Attack : MonoBehaviour
         Debug.Log("State : Full Charge Attack");
         _animator.SetBool("doFullChargeAttack", true);
         _animator.SetBool("doAttack", false);
-
+        _hammerCollider.SetActive(true);
         yield return new WaitForSeconds(0.4f);
         _perlin.m_AmplitudeGain = 0.9f;
         _perlin.m_FrequencyGain = 1f;
@@ -182,8 +177,6 @@ public class Attack : MonoBehaviour
         yield return new WaitForSeconds(0.9f);
         _playerController.playerContext.CanPlayerIdle();
         _animator.SetBool("doFullChargeAttack", false);
-
-        _hammerCollider.SetActive(false);
         alreadyAttacking = false;
     }
 
