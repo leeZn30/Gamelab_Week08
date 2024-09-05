@@ -2,11 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Boss2_ai : MonoBehaviour
 {
-    [SerializeField] private int bossHp = 100;
-    [SerializeField] private int phaseSwapHp = 50;
+    [SerializeField] private float bossHp = 250;
+    [SerializeField] private float phaseSwapHp = 100;
     [SerializeField] private float walkSpeed = 3;
     [SerializeField] private float runSpeed = 6;
     [SerializeField] private float backStepSpeed = 8;
@@ -23,6 +24,7 @@ public class Boss2_ai : MonoBehaviour
     [SerializeField] private float normalDistCheckFactor;
 
     [SerializeField] private float speedLerpFactor = 1;
+    [SerializeField] private Slider hpGauge;
     private float speedLerpValue = 1;
     private Vector3 playerCalcualtePosition = Vector3.zero;
     private Coroutine patternCoroutine;
@@ -33,11 +35,34 @@ public class Boss2_ai : MonoBehaviour
     {
         objAnimator = GetComponent<Animator>();
         playerTf = GameObject.FindWithTag("Player").GetComponent<Transform>();
+        hpGauge.maxValue = bossHp;
+        hpGauge.value = bossHp;
     }
 
     private void Start()
     {
         PlayIntro();
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("PlayerAttack"))
+        {
+            PlayerController pc = GetComponent<PlayerController>();
+            if (pc.GetAttackVariable() == "Normal")
+            {
+                OnDamaged(pc.normalAttackDamage);
+            }
+            else if (pc.GetAttackVariable() == "Charge")
+            {
+                OnDamaged(pc.chargeAttackDamage);
+            }
+            else if (pc.GetAttackVariable() == "FullCharge")
+            {
+                OnDamaged(pc.fullChargeAttackDamage);
+            }
+            other.gameObject.SetActive(false);
+        }
     }
 
     private void Update()
@@ -90,6 +115,26 @@ public class Boss2_ai : MonoBehaviour
                 transform.position.y,
                 transform.position.z);
         }
+    }
+
+    void OnDamaged(float damage)
+    {
+        if (bossHp > 0)
+        {
+            bossHp -= damage;
+        }
+
+        hpGauge.value = bossHp;
+
+        if (bossHp < 0) 
+        {
+            PlayDeath();
+        }
+    }
+
+    private void PlayDeath()
+    {
+
     }
 
     private void PlayRandomPattern(int phase)
