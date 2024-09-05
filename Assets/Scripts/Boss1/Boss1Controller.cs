@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,9 +32,19 @@ public class Boss1Controller : Singleton<Boss1Controller>
     [SerializeField] Slash slash;
     [SerializeField] Transform slashPosition;
 
+    [Header("시퀀스 패턴")]
+    [SerializeField] UpSlash upSlash;
+    [SerializeField] Transform upSlashPosition;
+
     Transform player;
     [SerializeField] Rigidbody2D rigid;
     public Animator anim;
+
+    [SerializeField] Collider2D weaponCollider;
+
+
+    private CinemachineVirtualCamera _virtualCamera;
+    CinemachineBasicMultiChannelPerlin _perlin;
 
     void Awake()
     {
@@ -43,6 +54,8 @@ public class Boss1Controller : Singleton<Boss1Controller>
         hpGauge = GameObject.Find("BossHp").GetComponent<Slider>();
         hpGauge.maxValue = hp;
         hpGauge.value = hp;
+        _virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+        _perlin = _virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
     }
 
     void Start()
@@ -84,7 +97,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
         Debug.Log("Change State");
         Boss1State inputState;
 
-        if (hp >= 110)
+        if (hp >= 80)
         {
             inputState = phase1[Random.Range(0, phase1.Count)];
         }
@@ -144,11 +157,12 @@ public class Boss1Controller : Singleton<Boss1Controller>
         // 플레이어가 패턴2 distance안에 있으며 minDistance보다 멀리 있다면 그냥 실행
         if (Vector2.Distance(player.position, transform.position) > 4f && Vector2.Distance(player.position, transform.position) < 8f)
         {
+            turn();
             anim.Play("PrePattern2");
         }
         else
         {
-            if (Vector2.Distance(player.position, transform.position) < 4f)
+            if (Vector2.Distance(player.position, transform.position) < 5f)
             {
                 Vector2 directionToPlayer = player.position - transform.position;
                 forceDirection = -new Vector2(directionToPlayer.x, 0).normalized;
@@ -197,6 +211,10 @@ public class Boss1Controller : Singleton<Boss1Controller>
     {
         Instantiate(slash, slashPosition);
     }
+    void CreateUpSlash()
+    {
+        Instantiate(upSlash, upSlashPosition);
+    }
 
     void DoDelay()
     {
@@ -205,6 +223,9 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
     IEnumerator Delay()
     {
+        weaponCollider.enabled = true;
+
+
         Debug.Log("Delay");
 
         yield return new WaitForSeconds(Random.Range(2, 4));
@@ -217,30 +238,81 @@ public class Boss1Controller : Singleton<Boss1Controller>
         if (hp > 0)
         {
             hp -= damage;
+            hpGauge.value = hp;
         }
 
-        hpGauge.value = hp;
+        if (hp <= 0)
+        {
+            anim.Play("Dead");
+        }
+
+    }
+
+    void OnDead()
+    {
+        StartCoroutine(waitForDeath());
+    }
+
+    IEnumerator waitForDeath()
+    {
+        yield return new WaitForSeconds(2f);
+
+        GameManager.Instance.showBossInfo("Boss1 Cleared! \n Let's Go to Next Boss");
+
+        yield return new WaitForSeconds(2f);
+
+        GameManager.Instance.hideBossInfo();
+
+        // 게임매니저에 알리기
+        GameManager.Instance.OnBoss1Cleared();
+
+        Destroy(gameObject);
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("PlayerAttack"))
         {
-            OnDamaged(10f);
+            PlayerController pc = FindObjectOfType<PlayerController>();
+            if (pc.GetAttackVariable() == "Normal")
+            {
+                OnDamaged(pc.normalAttackDamage);
+            }
+            else if (pc.GetAttackVariable() == "Charge")
+            {
+                OnDamaged(pc.chargeAttackDamage);
+            }
+            else if (pc.GetAttackVariable() == "FullCharge")
+            {
+                OnDamaged(pc.fullChargeAttackDamage);
+            }
+
+            other.gameObject.SetActive(false);
         }
+    }
+
+    void OnCameraShake()
+    {
+        StartCoroutine(ShakeCamera());
+    }
+
+    void OnCameraShakeEnd()
+    {
+    }
+
+    IEnumerator ShakeCamera()
+    {
+        _perlin.m_AmplitudeGain = 0.3f;
+        _perlin.m_FrequencyGain = 1f;
+
+        yield return new WaitForSeconds(1f);
+
+        _perlin.m_AmplitudeGain = 0f;
+        _perlin.m_FrequencyGain = 0f;
     }
 
     void OnTurn()
     {
-        // if (transform.rotation != Quaternion.Euler(0f, 180f, 0f))
-        // {
-        //     transform.rotation = Quaternion.Euler(0f, 180f, 0f);
-        // }
-        // else
-        // {
-        //     transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-        // }
-
         transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
 
     }
