@@ -15,39 +15,43 @@ public class PlayerController : MonoBehaviour
     public float staminaConstant = 10f;
 
     private Animator _animator;
+    private GameObject _canvas;
+    private Vector3 _hpIconInitPos = new Vector3(-900f, 480f, 0f);
     [SerializeField] private GameObject _hammerCollider;
     [SerializeField] private GameObject _StaminaSlider;
-    [SerializeField] private GameObject _HpSprite1;
-    [SerializeField] private GameObject _HpSprite2;
+    [SerializeField] private GameObject _HpPrefab;
+    Stack<GameObject> _HpContainer = new Stack<GameObject>();
     // Start is called before the first frame update
     void Start()
     {
+        _canvas = GameObject.Find("Canvas");
         _animator = GetComponent<Animator>();
         playerContext = new PlayerContext();
         pos = transform.position;
+        ResetPlayerHp();
+    }
+
+    public void ResetPlayerHp()
+    {
+        for(int i=0; i<currentHP; i++)
+        {
+            GameObject instance = Instantiate(_HpPrefab, _canvas.transform);
+            _HpContainer.Push(instance);
+            instance.transform.localPosition = _hpIconInitPos + new Vector3(100f * i, 0f, 0f);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        switch(currentHP)
+        if(_HpContainer.Count != currentHP)
         {
-            case 2:
-                _HpSprite1.SetActive(true);
-                _HpSprite2.SetActive(true);
-                break;
-            case 1:
-                _HpSprite1.SetActive(true);
-                _HpSprite2.SetActive(false);
-                break;
-            case 0:
-                _HpSprite1.SetActive(false);
-                _HpSprite2.SetActive(false);
-                break;
-            default:
-                _HpSprite1.SetActive(false);
-                _HpSprite2.SetActive(false);
-                break;
+            while(currentHP < _HpContainer.Count)
+            {
+                if (_HpContainer.Count == 0)
+                    break;
+                Destroy(_HpContainer.Pop());
+            }
         }
     }
 
