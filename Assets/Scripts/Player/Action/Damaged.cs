@@ -95,7 +95,7 @@ public class Damaged : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("EnemyAttack"))
+        if (collision.CompareTag("EnemyAttack") && _playerController.playerContext.GetState().GetType() != typeof(DeadState))
             OnDamaged();
     }
 }

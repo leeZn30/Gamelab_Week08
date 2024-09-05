@@ -764,14 +764,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0605f1fdbe3ebe4287633cdf3bd3111, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHP: 2
+  currentHP: 4
   maxStamina: 100
   currentStamina: 100
   staminaConstant: 10
   _hammerCollider: {fileID: 1593777574002791125}
   _StaminaSlider: {fileID: 0}
-  _HpSprite1: {fileID: 0}
-  _HpSprite2: {fileID: 0}
+  _HpPrefab: {fileID: 9201929418238652806, guid: 9094a618ef88bef4097e030e75808a8c, type: 3}
 --- !u!114 &13467684890913852
 MonoBehaviour:
   m_ObjectHideFlags: 0
