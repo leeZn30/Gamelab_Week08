@@ -97,7 +97,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
         Debug.Log("Change State");
         Boss1State inputState;
 
-        if (hp >= 110)
+        if (hp >= 80)
         {
             inputState = phase1[Random.Range(0, phase1.Count)];
         }
@@ -238,16 +238,54 @@ public class Boss1Controller : Singleton<Boss1Controller>
         if (hp > 0)
         {
             hp -= damage;
+            hpGauge.value = hp;
         }
 
-        hpGauge.value = hp;
+        if (hp <= 0)
+        {
+            anim.Play("Dead");
+        }
+
+    }
+
+    void OnDead()
+    {
+        StartCoroutine(waitForDeath());
+    }
+
+    IEnumerator waitForDeath()
+    {
+        yield return new WaitForSeconds(2f);
+
+        GameManager.Instance.showBossInfo("Boss1 Cleared! \n Let's Go to Next Boss");
+
+        yield return new WaitForSeconds(2f);
+
+        GameManager.Instance.hideBossInfo();
+
+        // 게임매니저에 알리기
+        GameManager.Instance.OnBoss1Cleared();
+
+        Destroy(gameObject);
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("PlayerAttack"))
         {
-            OnDamaged(10f);
+            PlayerController pc = FindObjectOfType<PlayerController>();
+            if (pc.GetAttackVariable() == "Normal")
+            {
+                OnDamaged(pc.normalAttackDamage);
+            }
+            else if (pc.GetAttackVariable() == "Charge")
+            {
+                OnDamaged(pc.chargeAttackDamage);
+            }
+            else if (pc.GetAttackVariable() == "FullCharge")
+            {
+                OnDamaged(pc.fullChargeAttackDamage);
+            }
 
             other.gameObject.SetActive(false);
         }

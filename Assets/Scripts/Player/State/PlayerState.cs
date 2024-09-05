@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Build;
 using UnityEngine;
 
 // reference
@@ -14,7 +13,7 @@ public enum State
 }
 
 public interface PlayerState
-{ 
+{
     void PlayerIdle(PlayerContext pc);
 
     void PlayerMove(PlayerContext pc);
@@ -42,7 +41,7 @@ class IdleState : PlayerState
         {
             get
             {
-                if(_instance == null)
+                if (_instance == null)
                     _instance = new IdleState();
 
                 return _instance;
@@ -99,7 +98,7 @@ class IdleState : PlayerState
     }
 }
 
-class AttackState:PlayerState
+class AttackState : PlayerState
 {
     private static class SingleInstanceHolder
     {
@@ -108,8 +107,8 @@ class AttackState:PlayerState
         {
             get
             {
-                if(_instance == null)
-                    _instance= new AttackState();
+                if (_instance == null)
+                    _instance = new AttackState();
 
                 return _instance;
             }
@@ -143,7 +142,7 @@ class AttackState:PlayerState
 
     public void PlayerChargeAttack(PlayerContext pc)
     {
-        
+
     }
 
     public void PlayerFullChargeAttack(PlayerContext pc)
@@ -172,8 +171,8 @@ class MoveState : PlayerState
         {
             get
             {
-                if(_instance == null)
-                    _instance= new MoveState();
+                if (_instance == null)
+                    _instance = new MoveState();
 
                 return _instance;
             }
@@ -317,7 +316,7 @@ class ChargeState : PlayerState
 
     public void PlayerIdle(PlayerContext pc)
     {
-       // pc.ChangeState(IdleState.getInstance());
+        // pc.ChangeState(IdleState.getInstance());
     }
 
     public void PlayerMove(PlayerContext pc)
@@ -514,36 +513,36 @@ class DeadState : PlayerState
 
     public void PlayerMove(PlayerContext pc)
     {
-        
+
     }
 
     public void PlayerDodge(PlayerContext pc)
     {
-        
+
     }
 
     public void PlayerAttack(PlayerContext pc)
     {
-        
+
     }
 
     public void PlayerChargeAttack(PlayerContext pc)
     {
-        
+
     }
 
     public void PlayerFullChargeAttack(PlayerContext pc)
     {
-        
+
     }
 
     public void PlayerDamaged(PlayerContext pc)
     {
-        
+
     }
 
     public void PlayerDied(PlayerContext pc)
     {
-        
+
     }
 }

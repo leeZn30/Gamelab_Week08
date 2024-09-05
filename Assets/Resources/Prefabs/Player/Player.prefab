@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 4739714874513425991}
   m_Layer: 0
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: PlayerAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -556,7 +556,7 @@ GameObject:
   - component: {fileID: 6241356505581540738}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -764,7 +764,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0605f1fdbe3ebe4287633cdf3bd3111, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHP: 4
+  currentHP: 5
   maxStamina: 100
   currentStamina: 100
   staminaConstant: 10

@@ -56,5 +56,7 @@ public class UpSlash : MonoBehaviour
         // 애니메이션이 끝난 후 최종 상태로 설정
         transform.localScale = new Vector3(initialScale.x, targetHeight, initialScale.z);
         objectRenderer.color = targetColor;
+
+        Destroy(gameObject);
     }
 }

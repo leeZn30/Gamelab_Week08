@@ -430,7 +430,7 @@ PolygonCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3907059058587877265}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -438,7 +438,7 @@ PolygonCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 1024
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -452,7 +452,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -1019,7 +1019,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 10
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
@@ -1106,7 +1106,7 @@ MonoBehaviour:
   nowState: 0
   phase1: 0300000004000000
   phase2: 05000000080000000300000004000000
-  minDistance: 3
+  minDistance: 4
   moveSpeed: 10
   isPattern2: 0
   slash: {fileID: -5757514235750938193, guid: b3516e2c819f3c94794d86f76a473174, type: 3}
@@ -1115,7 +1115,7 @@ MonoBehaviour:
   upSlashPosition: {fileID: 1091385857026689087}
   rigid: {fileID: 0}
   anim: {fileID: 0}
-  weaponCollider: {fileID: 0}
+  weaponCollider: {fileID: 7905093595428779239}
 --- !u!1 &8485720074676286114
 GameObject:
   m_ObjectHideFlags: 0
