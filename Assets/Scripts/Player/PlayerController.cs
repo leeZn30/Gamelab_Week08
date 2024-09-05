@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
 {
     public PlayerContext playerContext;
     public int currentHP = 2;
+    private int MaxHp;
     private Vector3 pos;
 
     public float maxStamina = 100f;
@@ -32,6 +33,7 @@ public class PlayerController : MonoBehaviour
         _animator = GetComponent<Animator>();
         playerContext = new PlayerContext();
         pos = transform.position;
+        MaxHp = currentHP;
         ResetPlayerHp();
     }
 
@@ -97,9 +99,10 @@ public class PlayerController : MonoBehaviour
                 _animator.SetBool("isDead", false);
                 _animator.SetBool("Corpse", false);
 
-                currentHP = 2;
+                currentHP = MaxHp;
                 currentStamina = maxStamina;
                 transform.position = pos;
+                ResetPlayerHp();
                 _animator.Play("idle");
                 playerContext.ChangeState(IdleState.getInstance());
             }
