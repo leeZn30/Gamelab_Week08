@@ -34,55 +34,51 @@ public class Damaged : MonoBehaviour
         _playerController.playerContext.CanPlayerIdle();
     }
 
-    // Test 코드 : 강제로 Damage를 입히는 코드, 추후 아래 Trigger나 ColliderEnter로 변경할 것 
-    public void OnSelfDamage(InputAction.CallbackContext context)
+    public void OnDamaged()
     {
         if (hurtDelay < hurtDelayLimit)
             return; // 피격 쿨타임
+        
+        _playerController.playerContext.CanPlayerDamaged();
 
-        if(context.started)
+        if (_playerController.playerContext.GetInvincible()) 
+            return;
+        else // 무적이 아니면 일단 맞는다.
         {
-            _playerController.playerContext.CanPlayerDamaged();
-
-            if (_playerController.playerContext.GetInvincible()) 
-                return;
-            else // 무적이 아니면 일단 맞는다.
+            _playerController.currentHP -= 1;
+            if (_playerController.currentHP <= 0)
             {
-                _playerController.currentHP -= 1;
-                if (_playerController.currentHP <= 0)
-                {
-                    _playerController.playerContext.CanPlayerDied();
-                    // 죽는 애니메이션
-                    _animator.SetBool("isMoving", false);
-                    _animator.SetBool("dodging", false);
-                    _animator.SetBool("walkToDodge", false);
-                    _animator.SetBool("doAttack", false);
-                    _animator.SetBool("doNormalAttack", false);
-                    _animator.SetBool("doChargeAttack", false);
-                    _animator.SetBool("doFullChargeAttack", false);
-                    _animator.SetBool("beDamaged", false);
+                _playerController.playerContext.CanPlayerDied();
+                // 죽는 애니메이션
+                _animator.SetBool("isMoving", false);
+                _animator.SetBool("dodging", false);
+                _animator.SetBool("walkToDodge", false);
+                _animator.SetBool("doAttack", false);
+                _animator.SetBool("doNormalAttack", false);
+                _animator.SetBool("doChargeAttack", false);
+                _animator.SetBool("doFullChargeAttack", false);
+                _animator.SetBool("beDamaged", false);
 
-                    _animator.SetBool("isDead", true);
-                    StartCoroutine(StateChangeforDeath());
-                    // 일정 시간 후 리스폰
+                _animator.SetBool("isDead", true);
+                StartCoroutine(StateChangeforDeath());
+                // 일정 시간 후 리스폰
 
-                    return;
-                }
+                return;
+            }
 
-                if (_playerController.playerContext.GetHurtEffect()) // 피격 이펙트가 있어야 한다.
-                {
-                    _animator.SetBool("isMoving", false);
-                    _animator.SetBool("dodging", false);
-                    _animator.SetBool("walkToDodge", false);
-                    _animator.SetBool("doAttack", false);
-                    _animator.SetBool("doNormalAttack", false);
-                    _animator.SetBool("doChargeAttack", false);
-                    _animator.SetBool("doFullChargeAttack", false);
+            if (_playerController.playerContext.GetHurtEffect()) // 피격 이펙트가 있어야 한다.
+            {
+                _animator.SetBool("isMoving", false);
+                _animator.SetBool("dodging", false);
+                _animator.SetBool("walkToDodge", false);
+                _animator.SetBool("doAttack", false);
+                _animator.SetBool("doNormalAttack", false);
+                _animator.SetBool("doChargeAttack", false);
+                _animator.SetBool("doFullChargeAttack", false);
 
-                    _animator.SetBool("beDamaged", true);
-                    // 타격 당하는 애니메이션 필요
-                    StartCoroutine(DamageDelay());
-                }
+                _animator.SetBool("beDamaged", true);
+                // 타격 당하는 애니메이션 필요
+                StartCoroutine(DamageDelay());
             }
         }
     }
@@ -95,10 +91,5 @@ public class Damaged : MonoBehaviour
         _animator.SetBool("isDead", false);
         if (_animator.GetCurrentAnimatorStateInfo(0).IsName("die"))
             _animator.SetBool("Corpse", true);
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        
     }
 }
