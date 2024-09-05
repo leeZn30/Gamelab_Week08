@@ -1360,10 +1360,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1588757934191394853, guid: b6a41d4fb5ee6be428193aaa1aff8daa, type: 3}
-      propertyPath: _StaminaSlider
-      value: 
-      objectReference: {fileID: 1882554034}
     - target: {fileID: 5556207499356548342, guid: b6a41d4fb5ee6be428193aaa1aff8daa, type: 3}
       propertyPath: m_Name
       value: Player
