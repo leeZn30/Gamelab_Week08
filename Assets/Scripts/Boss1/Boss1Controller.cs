@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -35,6 +36,10 @@ public class Boss1Controller : Singleton<Boss1Controller>
     [SerializeField] Rigidbody2D rigid;
     public Animator anim;
 
+
+    private CinemachineVirtualCamera _virtualCamera;
+    CinemachineBasicMultiChannelPerlin _perlin;
+
     void Awake()
     {
         anim = GetComponent<Animator>();
@@ -43,6 +48,8 @@ public class Boss1Controller : Singleton<Boss1Controller>
         hpGauge = GameObject.Find("BossHp").GetComponent<Slider>();
         hpGauge.maxValue = hp;
         hpGauge.value = hp;
+        _virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+        _perlin = _virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
     }
 
     void Start()
@@ -144,6 +151,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
         // 플레이어가 패턴2 distance안에 있으며 minDistance보다 멀리 있다면 그냥 실행
         if (Vector2.Distance(player.position, transform.position) > 4f && Vector2.Distance(player.position, transform.position) < 8f)
         {
+            turn();
             anim.Play("PrePattern2");
         }
         else
@@ -230,16 +238,28 @@ public class Boss1Controller : Singleton<Boss1Controller>
         }
     }
 
+    void OnCameraShake()
+    {
+        StartCoroutine(ShakeCamera());
+    }
+
+    void OnCameraShakeEnd()
+    {
+    }
+
+    IEnumerator ShakeCamera()
+    {
+        _perlin.m_AmplitudeGain = 0.3f;
+        _perlin.m_FrequencyGain = 1f;
+
+        yield return new WaitForSeconds(1f);
+
+        _perlin.m_AmplitudeGain = 0f;
+        _perlin.m_FrequencyGain = 0f;
+    }
+
     void OnTurn()
     {
-        // if (transform.rotation != Quaternion.Euler(0f, 180f, 0f))
-        // {
-        //     transform.rotation = Quaternion.Euler(0f, 180f, 0f);
-        // }
-        // else
-        // {
-        //     transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-        // }
 
         transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
 
