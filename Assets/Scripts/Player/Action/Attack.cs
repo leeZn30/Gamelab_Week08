@@ -27,6 +27,13 @@ public class Attack : MonoBehaviour
     [SerializeField]
     private GameObject _hammerCollider;
 
+    public enum AttackVariable
+    {
+        None, Normal, Charge, FullCharge
+    }
+
+    public AttackVariable attackVariable { get; set; }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -116,6 +123,8 @@ public class Attack : MonoBehaviour
 
     IEnumerator DoBasicAttack()
     {
+        attackVariable = AttackVariable.Normal;
+
         _body.velocity = Vector3.zero;
         alreadyAttacking = true;
         Debug.Log("State : Basic Attack");
@@ -136,10 +145,14 @@ public class Attack : MonoBehaviour
         _playerController.playerContext.CanPlayerIdle();
         _animator.SetBool("doNormalAttack", false);
         alreadyAttacking = false;
+
+        attackVariable = AttackVariable.None;
     }
 
     IEnumerator DoChargeAttack()
     {
+        attackVariable = AttackVariable.Charge;
+
         _body.velocity = Vector3.zero;
         alreadyAttacking = true;
         Debug.Log("State : Charge Attack");
@@ -158,10 +171,14 @@ public class Attack : MonoBehaviour
         _playerController.playerContext.CanPlayerIdle();
         _animator.SetBool("doChargeAttack", false);
         alreadyAttacking = false;
+
+        attackVariable = AttackVariable.None;
     }
 
     IEnumerator DoFullChargeAttack()
     {
+        attackVariable = AttackVariable.FullCharge;
+
         _body.velocity = Vector3.zero;
         alreadyAttacking = true;
         Debug.Log("State : Full Charge Attack");
@@ -180,6 +197,8 @@ public class Attack : MonoBehaviour
         _playerController.playerContext.CanPlayerIdle();
         _animator.SetBool("doFullChargeAttack", false);
         alreadyAttacking = false;
+
+        attackVariable = AttackVariable.None;
     }
 
     public void OnAttack(InputAction.CallbackContext context)
