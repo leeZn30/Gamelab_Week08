@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -14,8 +15,10 @@ public class PlayerController : MonoBehaviour
     public float staminaConstant = 10f;
 
     private Animator _animator;
-    [SerializeField]
-    private GameObject _hammerCollider;
+    [SerializeField] private GameObject _hammerCollider;
+    [SerializeField] private GameObject _StaminaSlider;
+    [SerializeField] private GameObject _HpSprite1;
+    [SerializeField] private GameObject _HpSprite2;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,13 +30,33 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        switch(currentHP)
+        {
+            case 2:
+                _HpSprite1.SetActive(true);
+                _HpSprite2.SetActive(true);
+                break;
+            case 1:
+                _HpSprite1.SetActive(true);
+                _HpSprite2.SetActive(false);
+                break;
+            case 0:
+                _HpSprite1.SetActive(false);
+                _HpSprite2.SetActive(false);
+                break;
+            default:
+                _HpSprite1.SetActive(false);
+                _HpSprite2.SetActive(false);
+                break;
+        }
     }
 
     private void FixedUpdate()
     {
         if (currentStamina < maxStamina)
             currentStamina += Time.fixedDeltaTime * staminaConstant;
+
+        _StaminaSlider.GetComponent<Slider>().value = currentStamina;
     }
 
     public void TurnOffHammerCollider()
