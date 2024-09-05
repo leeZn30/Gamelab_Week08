@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Three Guardian Kings.sln"
+    "dotnet.defaultSolution": "Gamelab_Week08.sln"
 }
