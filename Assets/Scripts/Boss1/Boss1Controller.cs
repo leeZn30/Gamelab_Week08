@@ -61,11 +61,8 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
     void Start()
     {
-        DoDelay();
-    }
-
-    void Update()
-    {
+        // DoDelay();
+        StartCoroutine(startDelay());
     }
 
     void FixedUpdate()
@@ -97,15 +94,16 @@ public class Boss1Controller : Singleton<Boss1Controller>
     {
         Debug.Log("Change State");
         Boss1State inputState;
+        inputState = Boss1State.NormalAttack;
 
-        if (hp >= 100)
-        {
-            inputState = phase1[Random.Range(0, phase1.Count)];
-        }
-        else
-        {
-            inputState = phase2[Random.Range(0, phase2.Count)];
-        }
+        // if (hp >= 100)
+        // {
+        //     inputState = phase1[Random.Range(0, phase1.Count)];
+        // }
+        // else
+        // {
+        //     inputState = phase2[Random.Range(0, phase2.Count)];
+        // }
         switch (inputState)
         {
             case Boss1State.Idle:
@@ -232,6 +230,13 @@ public class Boss1Controller : Singleton<Boss1Controller>
         ChangeState();
     }
 
+    IEnumerator startDelay()
+    {
+        yield return new WaitForSeconds(3f);
+
+        ChangeState();
+    }
+
     void OnDamaged(float damage)
     {
         if (hp > 0)
@@ -317,6 +322,5 @@ public class Boss1Controller : Singleton<Boss1Controller>
     void OnTurn()
     {
         transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-
     }
 }
