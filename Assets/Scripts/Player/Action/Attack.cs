@@ -136,17 +136,17 @@ public class Attack : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         _perlin.m_AmplitudeGain = 0.3f;
         _perlin.m_FrequencyGain = 1f;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
         _playerController.TurnOffHammerCollider();
         _perlin.m_AmplitudeGain = 0f;
         _perlin.m_FrequencyGain = 0f;
+        yield return new WaitForSeconds(0.1f);
 
-        yield return new WaitForSeconds(0.9f);
-        _playerController.playerContext.CanPlayerIdle();
         _animator.SetBool("doNormalAttack", false);
         alreadyAttacking = false;
-
         attackVariable = AttackVariable.None;
+
+        _playerController.playerContext.CanPlayerIdle();
     }
 
     IEnumerator DoChargeAttack()
@@ -162,17 +162,17 @@ public class Attack : MonoBehaviour
         yield return new WaitForSeconds(0.4f);
         _perlin.m_AmplitudeGain = 0.6f;
         _perlin.m_FrequencyGain = 1f;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
         _playerController.TurnOffHammerCollider();
         _perlin.m_AmplitudeGain = 0f;
         _perlin.m_FrequencyGain = 0f;
 
-        yield return new WaitForSeconds(0.9f);
-        _playerController.playerContext.CanPlayerIdle();
+        yield return new WaitForSeconds(0.5f);
         _animator.SetBool("doChargeAttack", false);
         alreadyAttacking = false;
-
         attackVariable = AttackVariable.None;
+
+        _playerController.playerContext.CanPlayerIdle();
     }
 
     IEnumerator DoFullChargeAttack()
@@ -188,17 +188,17 @@ public class Attack : MonoBehaviour
         yield return new WaitForSeconds(0.4f);
         _perlin.m_AmplitudeGain = 0.9f;
         _perlin.m_FrequencyGain = 1f;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
         _playerController.TurnOffHammerCollider();
         _perlin.m_AmplitudeGain = 0f;
         _perlin.m_FrequencyGain = 0f;
 
-        yield return new WaitForSeconds(0.9f);
-        _playerController.playerContext.CanPlayerIdle();
+        yield return new WaitForSeconds(0.85f);
         _animator.SetBool("doFullChargeAttack", false);
         alreadyAttacking = false;
-
         attackVariable = AttackVariable.None;
+
+        _playerController.playerContext.CanPlayerIdle();
     }
 
     public void OnAttack(InputAction.CallbackContext context)

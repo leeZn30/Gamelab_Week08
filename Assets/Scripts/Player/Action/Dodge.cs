@@ -69,6 +69,7 @@ public class Dodge : MonoBehaviour
 
     IEnumerator PlayerDodge()
     {
+        yield return null;
         Debug.Log("Dodge Start");
         GetComponent<CapsuleCollider2D>().excludeLayers = (int)Mathf.Pow(2, LayerMask.NameToLayer("Boss"));
         _animator.SetBool("dodging", true);

@@ -9,7 +9,7 @@ public class Damaged : MonoBehaviour
     private Animator _animator;
 
     private float hurtDelay = 0f;
-    private float hurtDelayLimit = 0.55f;
+    private float hurtDelayLimit = 0.6f;
 
     // Start is called before the first frame update
     void Start()
@@ -27,7 +27,6 @@ public class Damaged : MonoBehaviour
 
     IEnumerator DamageDelay()
     {
-        hurtDelay = 0f;
         _playerController.playerContext.ChangeState(DamagedState.getInstance()); // 강제 데미지 상태로 변경
         yield return new WaitForSeconds(0.5f);
         _animator.SetBool("beDamaged", false);
@@ -38,7 +37,8 @@ public class Damaged : MonoBehaviour
     {
         if (hurtDelay < hurtDelayLimit)
             return; // 피격 쿨타임
-        
+        hurtDelay = 0f;
+
         _playerController.playerContext.CanPlayerDamaged();
 
         if (_playerController.playerContext.GetInvincible()) 

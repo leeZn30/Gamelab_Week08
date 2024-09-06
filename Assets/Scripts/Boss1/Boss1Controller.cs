@@ -9,6 +9,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
     [Header("정보")]
     [SerializeField] float hp = 200;
     Slider hpGauge;
+    bool isAlive = true;
 
     [Header("상태 머신")]
     public Boss1State nowState = Boss1State.Idle;
@@ -209,11 +210,11 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
     void CreateSlash()
     {
-        Instantiate(slash, slashPosition);
+        Instantiate(slash, slashPosition.position, Quaternion.identity, null);
     }
     void CreateUpSlash()
     {
-        Instantiate(upSlash, upSlashPosition);
+        Instantiate(upSlash, upSlashPosition.position, Quaternion.identity, null);
     }
 
     void DoDelay()
@@ -225,10 +226,8 @@ public class Boss1Controller : Singleton<Boss1Controller>
     {
         weaponCollider.enabled = true;
 
-
-        Debug.Log("Delay");
-
-        yield return new WaitForSeconds(Random.Range(2, 4));
+        yield return null;
+        // yield return new WaitForSeconds(Random.Range(2, 4));
 
         ChangeState();
     }
@@ -243,6 +242,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
         if (hp <= 0)
         {
+            StopAllCoroutines();
             anim.Play("Dead");
         }
 
@@ -257,14 +257,17 @@ public class Boss1Controller : Singleton<Boss1Controller>
     {
         yield return new WaitForSeconds(2f);
 
-        GameManager.Instance.showBossInfo("Boss1 Cleared! \n Let's Go to Next Boss");
+        if (GameManager.Instance != null)
+            GameManager.Instance.showBossInfo("Boss1 Cleared! \n Let's Go to Next Boss");
 
         yield return new WaitForSeconds(2f);
 
-        GameManager.Instance.hideBossInfo();
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.hideBossInfo();
 
-        // 게임매니저에 알리기
-        GameManager.Instance.OnBoss1Cleared();
+            GameManager.Instance.OnBoss1Cleared();
+        }
 
         Destroy(gameObject);
     }
