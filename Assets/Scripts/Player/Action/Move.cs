@@ -57,9 +57,6 @@ public class Move : MonoBehaviour
             else if (_playerController.playerContext.GetState().GetType() == typeof(IdleState))
                 _animator.SetBool("isMoving", false);
 
-            // transform.localScale = new Vector3(lastLookDirection > 0f ? -0.5f : 0.5f, 0.5f, 0.5f);
-            transform.localScale = new Vector3(lastLookDirection > 0f ? -2f : 2, 2, 2f);
-
             if (pressingKey)
             {
                 if (Mathf.Sign(direction) != Mathf.Sign(velocity.x))
@@ -76,17 +73,21 @@ public class Move : MonoBehaviour
         }
         else
             _body.velocity = Vector2.zero;
+
+        if(_body.velocity.x != 0f) // moving right now
+            transform.localScale = new Vector3(lastLookDirection > 0f ? -2f : 2, 2, 2f);
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if (!context.canceled)
+        if (context.started || context.performed)
         {
+            Debug.Log("Move Input");
             _playerController.playerContext.CanPlayerMove(); // MoveState�� ���� �������� Ȯ��
             direction = context.ReadValue<float>();
             lastLookDirection = Mathf.Sign(direction);
         }
-        else
+        else if (context.canceled)
         {
             direction = 0f;
             if (_playerController.playerContext.GetState().GetType() == typeof(MoveState))

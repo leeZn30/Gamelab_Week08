@@ -284,6 +284,38 @@ Transform:
   - {fileID: 927102788}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &621183357 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1593777574002791125, guid: b6a41d4fb5ee6be428193aaa1aff8daa, type: 3}
+  m_PrefabInstance: {fileID: 1496620939909121507}
+  m_PrefabAsset: {fileID: 0}
+--- !u!50 &621183360
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621183357}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &927102787
 GameObject:
   m_ObjectHideFlags: 3
@@ -295,8 +327,8 @@ GameObject:
   - component: {fileID: 927102788}
   - component: {fileID: 927102791}
   - component: {fileID: 927102790}
-  - component: {fileID: 927102789}
   - component: {fileID: 927102792}
+  - component: {fileID: 927102793}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -319,28 +351,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 372331287}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &927102789
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 927102787}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa7155796051b734daa718462081dc5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_BindingMode: 1
-  m_FollowOffset: {x: 0, y: 0, z: -10}
-  m_XDamping: 1
-  m_YDamping: 1
-  m_ZDamping: 1
-  m_AngularDampingMode: 0
-  m_PitchDamping: 0
-  m_YawDamping: 0
-  m_RollDamping: 0
-  m_AngularDamping: 0
 --- !u!114 &927102790
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -409,6 +419,28 @@ MonoBehaviour:
   m_AmplitudeGain: 0
   m_FrequencyGain: 0
   mNoiseOffsets: {x: 0, y: 0, z: 0}
+--- !u!114 &927102793
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 927102787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa7155796051b734daa718462081dc5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BindingMode: 4
+  m_FollowOffset: {x: 0, y: 0, z: -10}
+  m_XDamping: 0
+  m_YDamping: 0
+  m_ZDamping: 0
+  m_AngularDampingMode: 0
+  m_PitchDamping: 0
+  m_YawDamping: 0
+  m_RollDamping: 0
+  m_AngularDamping: 0
 --- !u!1 &1243695990
 GameObject:
   m_ObjectHideFlags: 0
@@ -1360,6 +1392,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1588757934191394853, guid: b6a41d4fb5ee6be428193aaa1aff8daa, type: 3}
+      propertyPath: _StaminaSlider
+      value: 
+      objectReference: {fileID: 1882554034}
     - target: {fileID: 5556207499356548342, guid: b6a41d4fb5ee6be428193aaa1aff8daa, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1407,7 +1443,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1593777574002791125, guid: b6a41d4fb5ee6be428193aaa1aff8daa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 621183360}
   m_SourcePrefab: {fileID: 100100000, guid: b6a41d4fb5ee6be428193aaa1aff8daa, type: 3}
 --- !u!4 &1955677896617829924 stripped
 Transform:
