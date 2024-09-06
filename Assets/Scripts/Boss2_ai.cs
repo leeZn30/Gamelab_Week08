@@ -6,11 +6,18 @@ using UnityEngine.UI;
 
 public class Boss2_ai : MonoBehaviour
 {
+    [Header("HP")]
     [SerializeField] private float bossHp = 250;
     [SerializeField] private float phaseSwapHp = 100;
+
+    [Header("Speed")]
     [SerializeField] private float walkSpeed = 3;
     [SerializeField] private float runSpeed = 6;
     [SerializeField] private float backStepSpeed = 8;
+    [SerializeField] private float rushPatternSpeed = 15;
+    [SerializeField] private float speedLerpFactor = 1;
+
+    [Header("Pattern")]
     [SerializeField] private int lookingDir;
     [SerializeField] private int currentPhase;
     [SerializeField] private PatternConditionState currentPatternConditionState;
@@ -19,11 +26,13 @@ public class Boss2_ai : MonoBehaviour
     [SerializeField] private PatternProbabilityScriptableObj[] phase1_PatternProbabilities;
     [SerializeField] private PatternProbabilityScriptableObj[] phase2_PatternProbabilities;
 
+    [Header("Pattern Check Area")]
     [SerializeField] private float rightBehindDistCheckFactor;
     [SerializeField] private float closeDistCheckFactor;
     [SerializeField] private float normalDistCheckFactor;
 
-    [SerializeField] private float speedLerpFactor = 1;
+    [Header("ETC")]
+    [SerializeField] private float yPos;
     [SerializeField] private Slider hpGauge;
     [SerializeField] private PlayerController pc;
     private float speedLerpValue = 1;
@@ -45,6 +54,7 @@ public class Boss2_ai : MonoBehaviour
     private void Start()
     {
         PlayIntro();
+        yPos = transform.position.y;
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -103,12 +113,12 @@ public class Boss2_ai : MonoBehaviour
         else if (currentPatternName == "P3")
         {
             speedLerpValue = Mathf.Lerp(speedLerpValue, 1, Time.fixedDeltaTime * speedLerpFactor * 2.5f);
-            transform.position += Vector3.right * runSpeed * speedLerpValue * -lookingDir * Time.fixedDeltaTime;
+            transform.position += Vector3.right * backStepSpeed * speedLerpValue * -lookingDir * Time.fixedDeltaTime;
         }
         else if (currentPatternName == "P3_1")
         {
             speedLerpValue = Mathf.Lerp(speedLerpValue, 0, Time.fixedDeltaTime * speedLerpFactor * 1.5f);
-            transform.position += Vector3.right * backStepSpeed * speedLerpValue * lookingDir * Time.fixedDeltaTime;
+            transform.position += Vector3.right * rushPatternSpeed * speedLerpValue * lookingDir * Time.fixedDeltaTime;
         }
         else if (currentPatternName == "P3_2")
         {
@@ -388,6 +398,7 @@ public class Boss2_ai : MonoBehaviour
         objAnimator.Play("Boss2_Pattern3");
         speedLerpValue = 0;
 
+
         yield return new WaitForSecondsRealtime(1.817f);
 
         if (UnityEngine.Random.Range(0, 2)  == 0)
@@ -438,7 +449,7 @@ public class Boss2_ai : MonoBehaviour
     {
         objAnimator.Play("Boss2_Pattern5");
 
-        yield return null;
+        yield return new WaitForSecondsRealtime(1.017f);
 
         lookingDir *= -1;
         transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
@@ -456,11 +467,12 @@ public class Boss2_ai : MonoBehaviour
 
     private IEnumerator IE_Idle(float waitSec)
     {
+        transform.position = new Vector3(transform.position.x, yPos, transform.position.z);
         objAnimator.Play("Boss2_Idle");
 
         if (waitSec == 0)
         {
-            float randSec = UnityEngine.Random.Range(0.3f, 1f);
+            float randSec = UnityEngine.Random.Range(0.2f, 0.3f);
             Debug.Log($"Wait For {randSec}Sec");
             yield return new WaitForSecondsRealtime(randSec);
         }
@@ -479,7 +491,7 @@ public class Boss2_ai : MonoBehaviour
 
         if (walkSec == 0)
         {
-            float randSec = UnityEngine.Random.Range(1.5f, 2.5f);
+            float randSec = UnityEngine.Random.Range(1f, 2f);
             Debug.Log($"Walk For {randSec}Sec");
             yield return new WaitForSecondsRealtime(randSec);
         }
