@@ -210,11 +210,11 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
     void CreateSlash()
     {
-        Instantiate(slash, slashPosition);
+        Instantiate(slash, slashPosition.position, Quaternion.identity, null);
     }
     void CreateUpSlash()
     {
-        Instantiate(upSlash, upSlashPosition);
+        Instantiate(upSlash, upSlashPosition.position, Quaternion.identity, null);
     }
 
     void DoDelay()
@@ -226,10 +226,8 @@ public class Boss1Controller : Singleton<Boss1Controller>
     {
         weaponCollider.enabled = true;
 
-
-        Debug.Log("Delay");
-
-        yield return new WaitForSeconds(Random.Range(2, 4));
+        yield return null;
+        // yield return new WaitForSeconds(Random.Range(2, 4));
 
         ChangeState();
     }
