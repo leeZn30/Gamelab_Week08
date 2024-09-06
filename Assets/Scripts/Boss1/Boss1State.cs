@@ -11,7 +11,7 @@ public enum Boss1State
     Pattern1,
     Pattern2,
     NormalAttack,
-    ComboAttack,
+    RollComboAttack,
     WaveAttack,
     SequenceAttack,
     Roll

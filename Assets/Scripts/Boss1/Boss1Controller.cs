@@ -67,7 +67,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
     void FixedUpdate()
     {
-        if (isWalk)
+        if (isAlive && isWalk)
         {
             turn();
 
@@ -206,6 +206,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
         anim.SetTrigger("SequenceAttack");
     }
 
+
     void CreateSlash()
     {
         Instantiate(slash, slashPosition.position, Quaternion.identity, null);
@@ -247,6 +248,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
         if (hp <= 0)
         {
+            isAlive = false;
             StopAllCoroutines();
             anim.Play("Dead");
         }
