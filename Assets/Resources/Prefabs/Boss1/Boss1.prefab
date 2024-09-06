@@ -1102,12 +1102,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00156404b9a336b43adcc61b6a871bc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 200
+  hp: 150
   nowState: 0
   phase1: 0300000004000000
-  phase2: 05000000080000000300000004000000
+  phase2: 050000000800000004000000
   minDistance: 4
-  moveSpeed: 10
+  moveSpeed: 7
   isPattern2: 0
   slash: {fileID: -5757514235750938193, guid: b3516e2c819f3c94794d86f76a473174, type: 3}
   slashPosition: {fileID: 7768145809575455634}
