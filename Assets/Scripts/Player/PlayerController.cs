@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     public int currentHP = 2;
     private int MaxHp;
     private Vector3 pos;
+    public bool usingStamina = false;
+    private bool staminaRegain = true;
 
     public float maxStamina = 100f;
     public float currentStamina = 100f;
@@ -35,15 +37,36 @@ public class PlayerController : MonoBehaviour
         pos = transform.position;
         MaxHp = currentHP;
         ResetPlayerHp();
+        StartCoroutine(StaminaRegainCheck());
+    }
+
+    IEnumerator StaminaRegainCheck()
+    {
+        while (true)
+        {
+            if(usingStamina)
+            {
+                staminaRegain = false;
+            }
+            else
+            {
+                if(!staminaRegain) // regain false -> using stamina right before this frame
+                {
+                    yield return new WaitForSeconds(1f);
+                    staminaRegain = true;
+                }
+            }
+            yield return null;
+        }
     }
 
     public void ResetPlayerHp()
     {
         for(int i=0; i<currentHP; i++)
         {
-            GameObject instance = Instantiate(_HpPrefab, _canvas.transform);
-            _HpContainer.Push(instance);
-            instance.transform.localPosition = _hpIconInitPos + new Vector3(100f * i, 0f, 0f);
+            //GameObject instance = Instantiate(_HpPrefab, _canvas.transform);
+            //_HpContainer.Push(instance);
+            //instance.transform.localPosition = _hpIconInitPos + new Vector3(100f * i, 0f, 0f);
         }
     }
 
@@ -71,7 +94,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (currentStamina < maxStamina)
+        if (currentStamina < maxStamina && staminaRegain)
             currentStamina += Time.fixedDeltaTime * staminaConstant;
 
         _StaminaSlider.GetComponent<Slider>().value = currentStamina;
