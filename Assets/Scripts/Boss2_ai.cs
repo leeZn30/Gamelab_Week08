@@ -32,19 +32,18 @@ public class Boss2_ai : MonoBehaviour
     [SerializeField] private float normalDistCheckFactor;
 
     [Header("ETC")]
-    [SerializeField] private float yPos;
     [SerializeField] private Slider hpGauge;
     [SerializeField] private PlayerController pc;
     private float speedLerpValue = 1;
     private Vector3 playerCalcualtePosition = Vector3.zero;
     private Coroutine patternCoroutine;
-    private Animator objAnimator;
+    [SerializeField] private Animator objAnimator;
     private Transform playerTf;
-    [SerializeField] private Transform pivot;
 
     private void Awake()
     {
-        objAnimator = GetComponent<Animator>();
+        if (objAnimator == null)
+            objAnimator = GetComponent<Animator>();
         playerTf = GameObject.FindWithTag("Player").GetComponent<Transform>();
         if (pc == null )
             pc = GetComponent<PlayerController>();
@@ -55,7 +54,6 @@ public class Boss2_ai : MonoBehaviour
     private void Start()
     {
         PlayIntro();
-        yPos = transform.position.y;
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -468,7 +466,6 @@ public class Boss2_ai : MonoBehaviour
 
     private IEnumerator IE_Idle(float waitSec)
     {
-        transform.position = new Vector3(transform.position.x, pivot.position.y, transform.position.z);
         objAnimator.Play("Boss2_Idle");
 
         if (waitSec == 0)
