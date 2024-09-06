@@ -154,7 +154,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
     IEnumerator Pattern2()
     {
         // 플레이어가 패턴2 distance안에 있으며 minDistance보다 멀리 있다면 그냥 실행
-        if (Vector2.Distance(player.position, transform.position) > 4f && Vector2.Distance(player.position, transform.position) < 8f)
+        if (Vector2.Distance(player.position, transform.position) > 5f && Vector2.Distance(player.position, transform.position) < 8f)
         {
             turn();
             anim.Play("PrePattern2");
