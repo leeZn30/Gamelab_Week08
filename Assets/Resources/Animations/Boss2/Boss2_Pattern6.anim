@@ -417,15 +417,6 @@ AnimationClip:
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
-        time: 2.8666666
-        value: {x: 0, y: 0, z: 54.294}
-        inSlope: {x: 0, y: 0, z: 0}
-        outSlope: {x: 0, y: 0, z: 0}
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-      - serializedVersion: 3
         time: 4.1666665
         value: {x: 0, y: 0, z: 54.294}
         inSlope: {x: 0, y: 0, z: 0}
@@ -7098,15 +7089,6 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 2.8666666
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
         time: 4.1666665
         value: 0
         inSlope: 0
@@ -7183,15 +7165,6 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 2.4333334
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 2.8666666
         value: 0
         inSlope: 0
         outSlope: 0
@@ -7277,15 +7250,6 @@ AnimationClip:
       - serializedVersion: 3
         time: 2.4333334
         value: 89.082
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 2.8666666
-        value: 54.294
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -16489,7 +16453,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Neck
+    path: R_UpperArm/R_ForeArm/R_Hand/Boss_Sword_White
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -16501,7 +16465,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Neck
+    path: R_UpperArm/R_ForeArm/R_Hand/Boss_Sword_White
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -16513,7 +16477,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Neck
+    path: R_UpperArm/R_ForeArm/R_Hand/Boss_Sword_White
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -16849,7 +16813,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: R_UpperArm/R_ForeArm/R_Hand/Boss_Sword_White
+    path: Neck
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -16861,7 +16825,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: R_UpperArm/R_ForeArm/R_Hand/Boss_Sword_White
+    path: Neck
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -16873,7 +16837,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: R_UpperArm/R_ForeArm/R_Hand/Boss_Sword_White
+    path: Neck
     classID: 4
     script: {fileID: 0}
     flags: 0

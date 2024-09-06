@@ -265,7 +265,7 @@ GameObject:
   - component: {fileID: 2166213687912385741}
   m_Layer: 0
   m_Name: collider
-  m_TagString: Untagged
+  m_TagString: EnemyAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -387,7 +387,7 @@ GameObject:
   - component: {fileID: 445791200256156291}
   m_Layer: 0
   m_Name: collider
-  m_TagString: Untagged
+  m_TagString: EnemyAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -758,7 +758,7 @@ GameObject:
   - component: {fileID: 3374056798661327430}
   m_Layer: 0
   m_Name: collider
-  m_TagString: Untagged
+  m_TagString: EnemyAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1240,7 +1240,7 @@ GameObject:
   - component: {fileID: 7778824154567786570}
   m_Layer: 0
   m_Name: collider
-  m_TagString: Untagged
+  m_TagString: EnemyAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1472,7 +1472,7 @@ GameObject:
   - component: {fileID: 3737107861064529952}
   m_Layer: 0
   m_Name: collider
-  m_TagString: Untagged
+  m_TagString: EnemyAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1671,12 +1671,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 46ac85676bcbd3640886b485da9d4140, type: 2}
   - {fileID: 11400000, guid: 6ddd4ef9a6cf4ac48b0186df326706a8, type: 2}
   - {fileID: 11400000, guid: c071d1f3c7ca6ee41a241c2067d4f97e, type: 2}
-  rightBehindDistCheckFactor: -3
+  rightBehindDistCheckFactor: -4
   closeDistCheckFactor: 4
   normalDistCheckFactor: 9
   yPos: 0
   hpGauge: {fileID: 0}
   pc: {fileID: 0}
+  pivot: {fileID: 0}
 --- !u!95 &2326123932521163887
 Animator:
   serializedVersion: 5
@@ -1755,7 +1756,7 @@ GameObject:
   - component: {fileID: 3464743772158547271}
   m_Layer: 0
   m_Name: collider
-  m_TagString: Untagged
+  m_TagString: EnemyAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2078,7 +2079,7 @@ GameObject:
   - component: {fileID: 7480807747858443360}
   m_Layer: 0
   m_Name: collider
-  m_TagString: Untagged
+  m_TagString: EnemyAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3026,7 +3027,7 @@ GameObject:
   - component: {fileID: 2436406492740931834}
   m_Layer: 0
   m_Name: collider
-  m_TagString: Untagged
+  m_TagString: EnemyAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3139,7 +3140,7 @@ GameObject:
   - component: {fileID: 8244025197319381921}
   m_Layer: 0
   m_Name: collider
-  m_TagString: Untagged
+  m_TagString: EnemyAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

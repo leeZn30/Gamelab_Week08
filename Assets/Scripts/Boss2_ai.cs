@@ -40,6 +40,7 @@ public class Boss2_ai : MonoBehaviour
     private Coroutine patternCoroutine;
     private Animator objAnimator;
     private Transform playerTf;
+    [SerializeField] private Transform pivot;
 
     private void Awake()
     {
@@ -467,7 +468,7 @@ public class Boss2_ai : MonoBehaviour
 
     private IEnumerator IE_Idle(float waitSec)
     {
-        transform.position = new Vector3(transform.position.x, yPos, transform.position.z);
+        transform.position = new Vector3(transform.position.x, pivot.position.y, transform.position.z);
         objAnimator.Play("Boss2_Idle");
 
         if (waitSec == 0)
