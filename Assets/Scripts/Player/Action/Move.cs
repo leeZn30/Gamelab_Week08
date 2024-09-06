@@ -18,6 +18,8 @@ public class Move : MonoBehaviour
     public Vector2 velocity;
     private float maxSpeedChange;
 
+    private float playerScale;
+
     private Animator _animator;
     private Rigidbody2D _body;
     private PlayerController _playerController;
@@ -31,6 +33,7 @@ public class Move : MonoBehaviour
         _animator = GetComponent<Animator>();
         _body = GetComponent<Rigidbody2D>();
         _playerController = GetComponent<PlayerController>();
+        playerScale = transform.localScale.x;
     }
 
     // Update is called once per frame
@@ -75,7 +78,7 @@ public class Move : MonoBehaviour
             _body.velocity = Vector2.zero;
 
         if(_body.velocity.x != 0f) // moving right now
-            transform.localScale = new Vector3(lastLookDirection > 0f ? -2f : 2, 2, 2f);
+            transform.localScale = new Vector3(lastLookDirection > 0f ? -playerScale : playerScale, playerScale, playerScale);
     }
 
     public void OnMove(InputAction.CallbackContext context)
