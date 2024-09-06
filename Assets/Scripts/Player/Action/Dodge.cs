@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class Dodge : MonoBehaviour
 {
     public float DodgeDistance = 3f;
-    public float dodgeTimerLimit = 0.8f;
+    public float dodgeTimerLimit = 0.5f;
     public float dodgeStamina = 20f;
 
     private bool pressButton = false;
@@ -15,6 +15,8 @@ public class Dodge : MonoBehaviour
     private float _dodgeTimer = 0f;
     private float _dodgeBuffer = 0f;
     private float _dodgeBufferLimit = 0.15f;
+
+    private bool pressStart = false;
 
     private Animator _animator;
     private Rigidbody2D _body;
@@ -61,6 +63,7 @@ public class Dodge : MonoBehaviour
 
                 alreadyDodging = true;
                 _playerController.currentStamina -= dodgeStamina;
+                _playerController.usingStamina = true;
                 StartCoroutine(PlayerDodge());
                 
             }
@@ -76,6 +79,7 @@ public class Dodge : MonoBehaviour
         _animator.SetBool("walkToDodge", true);
         _animator.SetBool("isMoving", false);
         float positiveDirection = (_body.velocity.x == 0 ? _move.lastLookDirection : Mathf.Sign(_body.velocity.x));
+        transform.localScale = new Vector3(positiveDirection > 0f ? -_move.playerScale : _move.playerScale, _move.playerScale, _move.playerScale);
         Vector2 destination = new Vector2((positiveDirection > 0f ? _body.position.x + DodgeDistance : _body.position.x - DodgeDistance), _body.position.y);
         _body.velocity = Vector2.zero; // ���� �ӵ� �ʱ�ȭ
         Vector2 pos = _body.position;
@@ -86,6 +90,10 @@ public class Dodge : MonoBehaviour
             pos = _body.position;
             _body.position = new Vector2(Mathf.MoveTowards(pos.x, destination.x, Time.deltaTime * DodgeDistance), pos.y);
             yield return null;
+            if(_playerController.usingStamina)
+            {
+                _playerController.usingStamina = false;
+            }
             _dodgeTimer += Time.deltaTime;
         }
 
@@ -99,9 +107,15 @@ public class Dodge : MonoBehaviour
 
     public void OnDodge(InputAction.CallbackContext context)
     {
-        _playerController.playerContext.CanPlayerDodge();
         if (!alreadyDodging)
         {
+            if (context.started || context.performed)
+                pressStart = true;
+            if (context.canceled && !pressStart)
+                return;
+
+            pressStart = false;
+            _playerController.playerContext.CanPlayerDodge();
             pressButton = context.ReadValueAsButton();
 
             buttonBuffer = true;
