@@ -15,7 +15,10 @@ public class Boss2_ai : MonoBehaviour
     [SerializeField] private float runSpeed = 6;
     [SerializeField] private float backStepSpeed = 8;
     [SerializeField] private float rushPatternSpeed = 15;
-    [SerializeField] private float speedLerpFactor = 1;
+    [SerializeField] private float speedLerpFactor_P3;
+    [SerializeField] private float speedLerpFactor_P3_1;
+    [SerializeField] private float speedLerpFactor_P3_2;
+    [SerializeField] private float speedLerpFactor_P4_1 = 1;
 
     [Header("Pattern")]
     [SerializeField] private int lookingDir;
@@ -34,16 +37,23 @@ public class Boss2_ai : MonoBehaviour
     [Header("ETC")]
     [SerializeField] private Slider hpGauge;
     [SerializeField] private PlayerController pc;
+    [SerializeField] private Rigidbody2D rb;
     private float speedLerpValue = 1;
     private Vector3 playerCalcualtePosition = Vector3.zero;
     private Coroutine patternCoroutine;
     [SerializeField] private Animator objAnimator;
     private Transform playerTf;
 
+    [Header("Boolean")]
+    [SerializeField] private bool isDead = false;
+    [SerializeField] private bool isSliding = false; 
+
     private void Awake()
     {
         if (objAnimator == null)
             objAnimator = GetComponent<Animator>();
+        if (rb == null)
+            rb = GetComponent<Rigidbody2D>();
         playerTf = GameObject.FindWithTag("Player").GetComponent<Transform>();
         if (pc == null )
             pc = GetComponent<PlayerController>();
@@ -106,23 +116,23 @@ public class Boss2_ai : MonoBehaviour
         }
         else if (currentPatternName == "P4_1")
         {
-            speedLerpValue = Mathf.Lerp(speedLerpValue, 0, Time.fixedDeltaTime * speedLerpFactor);
+            speedLerpValue = Mathf.Lerp(speedLerpValue, 0, Time.fixedDeltaTime * speedLerpFactor_P4_1);
             transform.position += Vector3.right * runSpeed * speedLerpValue * lookingDir * Time.fixedDeltaTime;
         }
         else if (currentPatternName == "P3")
         {
-            speedLerpValue = Mathf.Lerp(speedLerpValue, 1, Time.fixedDeltaTime * speedLerpFactor * 2.5f);
+            speedLerpValue = Mathf.Lerp(speedLerpValue, 1, Time.fixedDeltaTime * speedLerpFactor_P3);
             transform.position += Vector3.right * backStepSpeed * speedLerpValue * -lookingDir * Time.fixedDeltaTime;
         }
         else if (currentPatternName == "P3_1")
         {
-            speedLerpValue = Mathf.Lerp(speedLerpValue, 0, Time.fixedDeltaTime * speedLerpFactor * 1.5f);
+            speedLerpValue = Mathf.Lerp(speedLerpValue, 0, Time.fixedDeltaTime * speedLerpFactor_P3_1);
             transform.position += Vector3.right * rushPatternSpeed * speedLerpValue * lookingDir * Time.fixedDeltaTime;
         }
         else if (currentPatternName == "P3_2")
         {
             transform.position = new Vector3(
-                Mathf.Lerp(transform.position.x, playerCalcualtePosition.x, Time.fixedDeltaTime * speedLerpFactor * 1.2f),
+                Mathf.Lerp(transform.position.x, playerCalcualtePosition.x, Time.fixedDeltaTime * speedLerpFactor_P3_2),
                 transform.position.y,
                 transform.position.z);
         }
@@ -140,8 +150,9 @@ public class Boss2_ai : MonoBehaviour
         if (bossHp < phaseSwapHp)
             currentPhase = 1;
 
-        if (bossHp <= 0) 
+        if (bossHp <= 0 && !isDead) 
         {
+            isDead = true;
             PlayDeath();
         }
     }
@@ -149,6 +160,8 @@ public class Boss2_ai : MonoBehaviour
     private void PlayDeath()
     {
         StopAllCoroutines();
+        currentPatternName = "None";
+        rb.gravityScale = 1;
         objAnimator.Play("Boss2_Die");
         patternCoroutine = StartCoroutine(waitForDeath());
     }
@@ -164,7 +177,7 @@ public class Boss2_ai : MonoBehaviour
         GameManager.Instance.hideBossInfo();
 
         // 게임매니저에 알리기
-        GameManager.Instance.OnBoss2Cleared();
+        //GameManager.Instance.OnBoss2Cleared();
 
         Destroy(gameObject);
     }
@@ -396,9 +409,11 @@ public class Boss2_ai : MonoBehaviour
     {
         objAnimator.Play("Boss2_Pattern3");
         speedLerpValue = 0;
-
+        rb.gravityScale = 0;
 
         yield return new WaitForSecondsRealtime(1.817f);
+
+        rb.gravityScale = 1;
 
         if (UnityEngine.Random.Range(0, 2)  == 0)
         {
@@ -413,7 +428,7 @@ public class Boss2_ai : MonoBehaviour
     private IEnumerator IE_Pattern3_1()
     {
         objAnimator.Play("Boss2_Pattern3_1");
-        speedLerpValue = 2;
+        speedLerpValue = 3.5f;
 
         yield return new WaitForSecondsRealtime(3.6f);
 
@@ -422,11 +437,13 @@ public class Boss2_ai : MonoBehaviour
 
     private IEnumerator IE_Pattern3_2()
     {
+        rb.gravityScale = 0;
         objAnimator.Play("Boss2_Pattern3_2");
         playerCalcualtePosition = playerTf.position;
 
         yield return new WaitForSecondsRealtime(2.083f);
 
+        rb.gravityScale = 1;
         PlayIdle(0);
     }
 
@@ -435,6 +452,7 @@ public class Boss2_ai : MonoBehaviour
         objAnimator.Play("Boss2_Pattern4");
         yield break;
     }
+
     private IEnumerator IE_Pattern4_1()
     {
         objAnimator.Play("Boss2_Pattern4_1");
@@ -471,12 +489,12 @@ public class Boss2_ai : MonoBehaviour
         if (waitSec == 0)
         {
             float randSec = UnityEngine.Random.Range(0.2f, 0.3f);
-            Debug.Log($"Wait For {randSec}Sec");
+            Debug.Log($"Wait For {randSec}sec");
             yield return new WaitForSecondsRealtime(randSec);
         }
         else
         {
-            Debug.Log($"Wait For {waitSec}Sec");
+            Debug.Log($"Wait For {waitSec}sec");
             yield return new WaitForSecondsRealtime(waitSec);
         }
 
@@ -490,12 +508,12 @@ public class Boss2_ai : MonoBehaviour
         if (walkSec == 0)
         {
             float randSec = UnityEngine.Random.Range(1f, 2f);
-            Debug.Log($"Walk For {randSec}Sec");
+            Debug.Log($"Walk For {randSec}sec");
             yield return new WaitForSecondsRealtime(randSec);
         }
         else
         {
-            Debug.Log($"Walk For {walkSec}Sec");
+            Debug.Log($"Walk For {walkSec}sec");
             yield return new WaitForSecondsRealtime(walkSec);
         }
 
