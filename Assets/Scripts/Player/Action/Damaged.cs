@@ -7,6 +7,7 @@ public class Damaged : MonoBehaviour
 {
     private PlayerController _playerController;
     private Animator _animator;
+    private Attack _attack;
 
     private float hurtDelay = 0f;
     private float hurtDelayLimit = 0.6f;
@@ -16,6 +17,7 @@ public class Damaged : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _playerController = GetComponent<PlayerController>();
+        _attack = GetComponent<Attack>();
     }
 
     // Update is called once per frame
@@ -97,5 +99,27 @@ public class Damaged : MonoBehaviour
     {
         if (collision.CompareTag("EnemyAttack") && _playerController.playerContext.GetState().GetType() != typeof(DeadState))
             OnDamaged();
+
+        /* // remove rigidbody2d in hammer
+        if(collision.CompareTag("Enemy"))
+        {
+            string attack = _attack.attackVariable.ToString();
+            float damage = 0;
+            switch(attack)
+            {
+                case "Normal":
+                    damage = 10f;
+                    break;
+                case "Charge":
+                    damage = 20f;
+                    break;
+                case "FullCharge":
+                    damage = 40f;
+                    break;
+            }
+            GameObject.Find("Boss").GetComponent<HpManager>().TakeDamage(damage);
+        
+        }
+        */
     }
 }

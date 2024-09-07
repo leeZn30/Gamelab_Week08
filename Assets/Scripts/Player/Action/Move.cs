@@ -18,7 +18,7 @@ public class Move : MonoBehaviour
     public Vector2 velocity;
     private float maxSpeedChange;
 
-    private float playerScale;
+    public float playerScale;
 
     private Animator _animator;
     private Rigidbody2D _body;
@@ -26,6 +26,10 @@ public class Move : MonoBehaviour
 
     bool pressingKey = false;
     public float lastLookDirection;
+    float sprintVariable = 1f;
+    public float sprintConstant = 2f;
+    bool shiftPress = false;
+    float sprintStaminaPerFrame = 0.4f; // 20 stamina per second
 
     // Start is called before the first frame update
     void Start()
@@ -44,7 +48,7 @@ public class Move : MonoBehaviour
         else
             pressingKey = false;
 
-        desiredVelocity = new Vector2(direction, 0f) * Mathf.Max(maxSpeed - friction, 0f);
+        desiredVelocity = new Vector2(direction, 0f) * Mathf.Max(maxSpeed * sprintVariable - friction, 0f);
     }
 
     private void FixedUpdate()
@@ -79,6 +83,22 @@ public class Move : MonoBehaviour
 
         if(_body.velocity.x != 0f) // moving right now
             transform.localScale = new Vector3(lastLookDirection > 0f ? -playerScale : playerScale, playerScale, playerScale);
+
+        if (shiftPress) // sprint state
+        {
+            if (_playerController.currentStamina > sprintStaminaPerFrame && _playerController.usingStamina)
+            {
+                _playerController.currentStamina -= sprintStaminaPerFrame;
+                sprintVariable = sprintConstant;
+            }
+            else
+            {
+                _playerController.usingStamina = false;
+                sprintVariable = 1f;
+            }
+        }
+        else
+            sprintVariable = 1f;
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -95,6 +115,20 @@ public class Move : MonoBehaviour
             direction = 0f;
             if (_playerController.playerContext.GetState().GetType() == typeof(MoveState))
                 _playerController.playerContext.CanPlayerIdle();
+        }
+    }
+
+    public void OnSprint(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            shiftPress = true;
+            _playerController.usingStamina = true;
+        }
+        else if (context.canceled)
+        {
+            shiftPress = false;
+            _playerController.usingStamina = false;
         }
     }
 }

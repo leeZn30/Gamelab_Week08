@@ -1,6 +1,7 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,8 +16,10 @@ public class Attack : MonoBehaviour
 
     public float attackReadyStamina = 10f;
     public float normalAttackStamina = 10f;
-    public float chargeAttackStamina = 15f;
-    public float fullChargeAttackStamina = 20f;
+    public float chargeAttackStamina = 20f;
+    public float fullChargeAttackStamina = 40f;
+
+    private bool pressStart = false;
 
     private Animator _animator;
     private Rigidbody2D _body;
@@ -88,28 +91,34 @@ public class Attack : MonoBehaviour
                 _body.velocity = Vector2.zero;
                 pressingTime += Time.deltaTime;
                 _animator.SetBool("doAttack", true);
-                if (pressingTime >= 3f)
+                if (pressingTime >= 5f)
                     pressingButton = false;
             }
             else
             {
+                if (!pressStart)
+                    return;
+
                 _animator.SetBool("isMoving", false);
                 if (pressingTime > 0f && pressingTime <= 1f)
                 {
                     pressingTime = 0f;
                     _playerController.currentStamina -= attackReadyStamina + normalAttackStamina;
+                    _playerController.usingStamina = true;
                     StartCoroutine(DoBasicAttack());
                 }
                 else if (pressingTime > 1f && pressingTime <= 2.5f)
                 {
                     pressingTime = 0f;
                     _playerController.currentStamina -= attackReadyStamina + chargeAttackStamina;
+                    _playerController.usingStamina = true;
                     StartCoroutine(DoChargeAttack());
                 }
                 else if (pressingTime > 2.5f)
                 {
                     pressingTime = 0f;
                     _playerController.currentStamina -= attackReadyStamina + fullChargeAttackStamina;
+                    _playerController.usingStamina = true;
                     StartCoroutine(DoFullChargeAttack());
                 }
                 else
@@ -132,20 +141,22 @@ public class Attack : MonoBehaviour
         _animator.SetBool("doAttack", false);
 
         yield return new WaitForSeconds(0.1f);
+        _playerController.usingStamina = false;
         _hammerCollider.SetActive(true);
         yield return new WaitForSeconds(0.3f);
-        _perlin.m_AmplitudeGain = 0.3f;
+        _perlin.m_AmplitudeGain = 0.25f;
         _perlin.m_FrequencyGain = 1f;
         yield return new WaitForSeconds(0.1f);
         _playerController.TurnOffHammerCollider();
+        yield return new WaitForSeconds(0.1f);
         _perlin.m_AmplitudeGain = 0f;
         _perlin.m_FrequencyGain = 0f;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.3f);
 
         _animator.SetBool("doNormalAttack", false);
         alreadyAttacking = false;
         attackVariable = AttackVariable.None;
-
+        pressStart = false;
         _playerController.playerContext.CanPlayerIdle();
     }
 
@@ -159,19 +170,22 @@ public class Attack : MonoBehaviour
         _animator.SetBool("doChargeAttack", true);
         _animator.SetBool("doAttack", false);
         _hammerCollider.SetActive(true);
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.1f);
+        _playerController.usingStamina = false;
+        yield return new WaitForSeconds(0.3f);
         _perlin.m_AmplitudeGain = 0.6f;
         _perlin.m_FrequencyGain = 1f;
         yield return new WaitForSeconds(0.1f);
         _playerController.TurnOffHammerCollider();
+        yield return new WaitForSeconds(0.1f);
         _perlin.m_AmplitudeGain = 0f;
         _perlin.m_FrequencyGain = 0f;
-
         yield return new WaitForSeconds(0.5f);
+
         _animator.SetBool("doChargeAttack", false);
         alreadyAttacking = false;
         attackVariable = AttackVariable.None;
-
+        pressStart = false;
         _playerController.playerContext.CanPlayerIdle();
     }
 
@@ -185,27 +199,35 @@ public class Attack : MonoBehaviour
         _animator.SetBool("doFullChargeAttack", true);
         _animator.SetBool("doAttack", false);
         _hammerCollider.SetActive(true);
-        yield return new WaitForSeconds(0.4f);
-        _perlin.m_AmplitudeGain = 0.9f;
+        yield return new WaitForSeconds(0.1f);
+        _playerController.usingStamina = false;
+        yield return new WaitForSeconds(0.3f);
+        _perlin.m_AmplitudeGain = 1f;
         _perlin.m_FrequencyGain = 1f;
         yield return new WaitForSeconds(0.1f);
         _playerController.TurnOffHammerCollider();
+        yield return new WaitForSeconds(0.1f);
         _perlin.m_AmplitudeGain = 0f;
         _perlin.m_FrequencyGain = 0f;
 
-        yield return new WaitForSeconds(0.85f);
+        yield return new WaitForSeconds(0.7f);
         _animator.SetBool("doFullChargeAttack", false);
         alreadyAttacking = false;
         attackVariable = AttackVariable.None;
-
+        pressStart = false;
         _playerController.playerContext.CanPlayerIdle();
     }
 
     public void OnAttack(InputAction.CallbackContext context)
     {
-        _playerController.playerContext.CanPlayerAttack();
         if(!alreadyAttacking)
-        {
+        { 
+            if(context.started || context.performed)
+                pressStart = true;
+            if (context.canceled && !pressStart)
+                return;
+
+            _playerController.playerContext.CanPlayerAttack();
             pressingButton = context.ReadValueAsButton();
 
             buttonBuffer = true;
