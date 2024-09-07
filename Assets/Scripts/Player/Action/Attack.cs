@@ -8,9 +8,9 @@ using static Attack;
 
 public class Attack : MonoBehaviour
 {
-    private float pressingTime = 0f;
-    private bool pressingButton = false;
-    private bool buttonBuffer = false;
+    public float pressingTime = 0f;
+    public bool pressingButton = false;
+    public bool buttonBuffer = false;
     private bool alreadyAttacking = false;
     private float _attackBuffer = 0f;
     private float _attackBufferLimit = 0.15f;
@@ -20,7 +20,7 @@ public class Attack : MonoBehaviour
     public float chargeAttackStamina = 15f;
     public float fullChargeAttackStamina = 20f;
 
-    private bool pressStart = false;
+    public bool pressStart = false;
     private bool doNextComboAttack = false;
 
     private Animator _animator;
@@ -129,7 +129,7 @@ public class Attack : MonoBehaviour
                         _playerController.playerContext.CanPlayerIdle();
                 }
             }
-        } 
+        }
     }
 
     IEnumerator DoBasicAttack()
