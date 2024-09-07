@@ -37,6 +37,9 @@ public class Damaged : MonoBehaviour
 
     public void OnDamaged(float damage)
     {
+        if (_playerController.playerContext.GetState().GetType() == typeof(DeadState))
+            return;
+
         if (hurtDelay < hurtDelayLimit)
             return; // ÇÇ°Ý ÄðÅ¸ÀÓ
         hurtDelay = 0f;

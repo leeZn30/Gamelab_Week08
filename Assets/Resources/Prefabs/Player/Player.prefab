@@ -775,6 +775,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 299372bf-79e7-42b0-b888-84d47261091a
     m_ActionName: Player/Sprint[/Keyboard/shift]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1588757934191394853}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnRespawn
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 6a1a9c75-18d1-415f-94c8-aac08db88100
+    m_ActionName: Player/Reload[/Keyboard/r]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -802,7 +818,7 @@ MonoBehaviour:
   fullChargeAttackDamage: 30
   _hammerCollider: {fileID: 1593777574002791125}
   _StaminaSlider: {fileID: 0}
-  _HpPrefab: {fileID: 9201929418238652806, guid: 9094a618ef88bef4097e030e75808a8c, type: 3}
+  _HpSlider: {fileID: 0}
 --- !u!114 &13467684890913852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -815,10 +831,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fe9c4a510c81cd4595cadcb7cb158f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pressingTime: 0
+  pressingButton: 0
+  buttonBuffer: 0
   attackReadyStamina: 10
   normalAttackStamina: 10
   chargeAttackStamina: 15
   fullChargeAttackStamina: 20
+  pressStart: 0
   _hammerCollider: {fileID: 1593777574002791125}
 --- !u!114 &5192798174603766178
 MonoBehaviour:
