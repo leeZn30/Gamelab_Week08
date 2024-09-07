@@ -70,6 +70,7 @@ public class Damaged : MonoBehaviour
 
             if (_playerController.playerContext.GetHurtEffect()) // 피격 이펙트가 있어야 한다.
             {
+                StopAllCoroutines();
                 _animator.SetBool("isMoving", false);
                 _animator.SetBool("dodging", false);
                 _animator.SetBool("walkToDodge", false);

@@ -122,4 +122,9 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    public void OnDamaged(float damage)
+    {
+        GetComponent<Damaged>().OnDamaged(damage);
+    }
 }

@@ -141,6 +141,7 @@ public class Attack : MonoBehaviour
         Debug.Log("State : Basic Attack");
         _animator.SetBool("doNormalAttack", true);
         _animator.SetBool("doAttack", false);
+        _playerController.playerContext.CanPlayerHit();
 
         yield return new WaitForSeconds(0.1f);
         _playerController.usingStamina = false;
@@ -188,6 +189,7 @@ public class Attack : MonoBehaviour
         //_animator.SetBool("doNormalAttack", true); // must change to "doComboNormalAttack" animation trigger
         //_animator.SetBool("doAttack", false); //  must change from "doAttack" to "doNormalAttack"
         _animator.Play("normalAttack", 0, 0f);
+        _playerController.playerContext.CanPlayerHit();
 
         yield return new WaitForSeconds(0.1f);
         _playerController.usingStamina = false;
@@ -234,6 +236,7 @@ public class Attack : MonoBehaviour
         //_animator.SetBool("doNormalAttack", true); // must change to "doLastNormalAttack" animation trigger
         //_animator.SetBool("doAttack", false); //  must change from "doAttack" to "doComboNormalAttack"
         _animator.Play("normalAttack", 0, 0f);
+        _playerController.playerContext.CanPlayerHit();
 
         yield return new WaitForSeconds(0.1f);
         _playerController.usingStamina = false;
@@ -264,6 +267,8 @@ public class Attack : MonoBehaviour
         Debug.Log("State : Charge Attack");
         _animator.SetBool("doChargeAttack", true);
         _animator.SetBool("doAttack", false);
+        _playerController.playerContext.CanPlayerHit();
+
         _hammerCollider.SetActive(true);
         yield return new WaitForSeconds(0.1f);
         _playerController.usingStamina = false;
@@ -293,6 +298,8 @@ public class Attack : MonoBehaviour
         Debug.Log("State : Full Charge Attack");
         _animator.SetBool("doFullChargeAttack", true);
         _animator.SetBool("doAttack", false);
+        _playerController.playerContext.CanPlayerHit();
+
         _hammerCollider.SetActive(true);
         yield return new WaitForSeconds(0.1f);
         _playerController.usingStamina = false;
