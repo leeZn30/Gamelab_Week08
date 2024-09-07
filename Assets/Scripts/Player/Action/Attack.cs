@@ -21,6 +21,7 @@ public class Attack : MonoBehaviour
     public float fullChargeAttackStamina = 20f;
 
     public bool pressStart = false;
+    private bool canDoNextComboAttack = false;
     private bool doNextComboAttack = false;
 
     private Animator _animator;
@@ -156,24 +157,26 @@ public class Attack : MonoBehaviour
         _perlin.m_FrequencyGain = 0f;
 
         // combo attack 
-        float deltaTime = 0f;
-        while(deltaTime < 0.5f)
-        {
-            if (doNextComboAttack)
-            {
-                if (_playerController.currentStamina >= normalAttackStamina)
-                {
-                    doNextComboAttack = false; // if you want to remove combo attack buffer, take this code in front of the this "if" code;
-                    _playerController.currentStamina -= normalAttackStamina * 1.2f;
-                    _playerController.usingStamina = true;
-                    StartCoroutine(DoBasicAttack_Combo());
-                    yield break;
-                }
-            }
-            deltaTime += Time.deltaTime;
-            yield return null;
-        }
-        //yield return new WaitForSeconds(0.5f);
+        //float deltaTime = 0f;
+        //canDoNextComboAttack = true;
+        //while(deltaTime < 0.5f)
+        //{
+        //    if (doNextComboAttack)
+        //    {
+        //        if (_playerController.currentStamina >= normalAttackStamina)
+        //        {
+        //            doNextComboAttack = false; // if you want to remove combo attack buffer, take this code in front of the this "if" code;
+        //            _playerController.currentStamina -= normalAttackStamina * 1.2f;
+        //            _playerController.usingStamina = true;
+        //            StartCoroutine(DoBasicAttack_Combo());
+        //            yield break;
+        //        }
+        //    }
+        //    deltaTime += Time.deltaTime;
+        //    yield return null;
+        //}
+        //canDoNextComboAttack = false;
+        yield return new WaitForSeconds(0.5f);
         
         doNextComboAttack = false;
         _animator.SetBool("doNormalAttack", false);
@@ -185,6 +188,7 @@ public class Attack : MonoBehaviour
     
     IEnumerator DoBasicAttack_Combo()
     {
+        canDoNextComboAttack = false;
         Debug.Log("State : Basic Attack Combo");
         //_animator.SetBool("doNormalAttack", true); // must change to "doComboNormalAttack" animation trigger
         //_animator.SetBool("doAttack", false); //  must change from "doAttack" to "doNormalAttack"
@@ -204,6 +208,7 @@ public class Attack : MonoBehaviour
         _perlin.m_FrequencyGain = 0f;
 
         float deltaTime = 0f;
+        canDoNextComboAttack = true;
         while (deltaTime < 0.5f)
         {
             if (doNextComboAttack)
@@ -220,6 +225,7 @@ public class Attack : MonoBehaviour
             deltaTime += Time.deltaTime;
             yield return null;
         }
+        canDoNextComboAttack = false;
         //yield return new WaitForSeconds(0.5f);
 
         doNextComboAttack = false;
@@ -232,6 +238,7 @@ public class Attack : MonoBehaviour
 
     IEnumerator DoBasicAttack_LastCombo()
     {
+        canDoNextComboAttack = false;
         Debug.Log("State : Basic Attack Last");
         //_animator.SetBool("doNormalAttack", true); // must change to "doLastNormalAttack" animation trigger
         //_animator.SetBool("doAttack", false); //  must change from "doAttack" to "doComboNormalAttack"
@@ -338,7 +345,7 @@ public class Attack : MonoBehaviour
         }
         else // already attacking
         {
-            if(attackVariable == AttackVariable.Normal && context.started) // do normal attack
+            if(attackVariable == AttackVariable.Normal && context.started && canDoNextComboAttack) // do normal attack
             {
                 doNextComboAttack = true;
             }
