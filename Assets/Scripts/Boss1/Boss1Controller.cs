@@ -353,27 +353,27 @@ public class Boss1Controller : Boss
         Destroy(gameObject);
     }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("PlayerAttack"))
-        {
-            PlayerController pc = FindObjectOfType<PlayerController>();
-            if (pc.GetAttackVariable() == "Normal")
-            {
-                OnDamaged(pc.normalAttackDamage);
-            }
-            else if (pc.GetAttackVariable() == "Charge")
-            {
-                OnDamaged(pc.chargeAttackDamage);
-            }
-            else if (pc.GetAttackVariable() == "FullCharge")
-            {
-                OnDamaged(pc.fullChargeAttackDamage);
-            }
+    // void OnTriggerEnter2D(Collider2D other)
+    // {
+    //     if (other.CompareTag("PlayerAttack"))
+    //     {
+    //         PlayerController pc = FindObjectOfType<PlayerController>();
+    //         if (pc.GetAttackVariable() == "Normal")
+    //         {
+    //             OnDamaged(pc.normalAttackDamage);
+    //         }
+    //         else if (pc.GetAttackVariable() == "Charge")
+    //         {
+    //             OnDamaged(pc.chargeAttackDamage);
+    //         }
+    //         else if (pc.GetAttackVariable() == "FullCharge")
+    //         {
+    //             OnDamaged(pc.fullChargeAttackDamage);
+    //         }
 
-            other.gameObject.SetActive(false);
-        }
-    }
+    //         other.gameObject.SetActive(false);
+    //     }
+    // }
 
     void OnCameraShake()
     {
