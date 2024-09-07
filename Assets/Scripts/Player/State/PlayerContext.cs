@@ -46,6 +46,11 @@ public class PlayerContext
         myState.PlayerAttack(this);
     }
 
+    public void CanPlayerHit()
+    {
+        myState.PlayerHit(this);
+    }
+
     public void CanPlayerMove()
     {
         myState.PlayerMove(this);

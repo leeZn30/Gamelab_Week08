@@ -7,8 +7,8 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
     public PlayerContext playerContext;
-    public int currentHP = 2;
-    private int MaxHp;
+    public float currentHP = 2;
+    private float MaxHp;
     private Vector3 pos;
     public bool usingStamina = false;
     private bool staminaRegain = true;
@@ -19,15 +19,14 @@ public class PlayerController : MonoBehaviour
 
     public float normalAttackDamage = 10f;
     public float chargeAttackDamage = 20f;
-    public float fullChargeAttackDamage = 30f;
+    public float fullChargeAttackDamage = 40f;
 
     private Animator _animator;
     private GameObject _canvas;
     private Vector3 _hpIconInitPos = new Vector3(-900f, 480f, 0f);
     [SerializeField] private GameObject _hammerCollider;
     [SerializeField] private GameObject _StaminaSlider;
-    [SerializeField] private GameObject _HpPrefab;
-    Stack<GameObject> _HpContainer = new Stack<GameObject>();
+    [SerializeField] private GameObject _HpSlider;
     // Start is called before the first frame update
     void Start()
     {
@@ -62,12 +61,8 @@ public class PlayerController : MonoBehaviour
 
     public void ResetPlayerHp()
     {
-        for(int i=0; i<currentHP; i++)
-        {
-            //GameObject instance = Instantiate(_HpPrefab, _canvas.transform);
-            //_HpContainer.Push(instance);
-            //instance.transform.localPosition = _hpIconInitPos + new Vector3(100f * i, 0f, 0f);
-        }
+        _HpSlider.GetComponent<Slider>().value = MaxHp; // slider max value
+        _HpSlider.transform.Find("Fill Area").transform.Find("Fill").gameObject.SetActive(true); // slider active true
     }
 
     public string GetAttackVariable()
@@ -79,15 +74,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(_HpContainer.Count != currentHP)
-        {
-            while(currentHP < _HpContainer.Count)
-            {
-                if (_HpContainer.Count == 0)
-                    break;
-                Destroy(_HpContainer.Pop());
-            }
-        }
+        if (currentHP <= 0f)
+            _HpSlider.transform.Find("Fill Area").transform.Find("Fill").gameObject.SetActive(false);
+
+        if (_HpSlider.transform.Find("Fill Area").transform.Find("Fill").gameObject.activeSelf)
+            _HpSlider.GetComponent<Slider>().value = currentHP;
 
         Debug.Log(GetComponent<Attack>().attackVariable.ToString());
     }
@@ -130,5 +121,10 @@ public class PlayerController : MonoBehaviour
                 playerContext.ChangeState(IdleState.getInstance());
             }
         }
+    }
+
+    public void OnDamaged(float damage)
+    {
+        GetComponent<Damaged>().OnDamaged(damage);
     }
 }
