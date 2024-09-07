@@ -356,6 +356,7 @@ public class Attack : MonoBehaviour
     {
         if (collision.CompareTag("Boss"))
         {
+            _playerController.TurnOffHammerCollider();
             float damage = 0f;
             switch(attackVariable)
             {
@@ -372,7 +373,7 @@ public class Attack : MonoBehaviour
                     damage = 0f;
                     break;
             }
-            //collision.gameObject.GetComponent<Boss>().OnDamaged(damage);
+            collision.gameObject.GetComponent<Boss>().OnDamaged(damage);
         }
     }
 }
