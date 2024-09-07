@@ -264,7 +264,7 @@ MonoBehaviour:
   closeDistCheckFactor: 4
   normalDistCheckFactor: 10
   hpGauge: {fileID: 0}
-  rb: {fileID: 0}
+  rb: {fileID: 826428958402553906}
   objAnimator: {fileID: 2889413984368147371}
   isDead: 0
   isSliding: 0
@@ -1596,7 +1596,7 @@ GameObject:
   - component: {fileID: 6211305107656928107}
   m_Layer: 10
   m_Name: Boss2_Mesh
-  m_TagString: Untagged
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -2349,6 +2349,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2952083789119304091, guid: e97376c76235b3f4b85ff8f23b152531, type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 1881105125}
+    - target: {fileID: 2952083789119304091, guid: e97376c76235b3f4b85ff8f23b152531, type: 3}
+      propertyPath: hpGauge
+      value: 
+      objectReference: {fileID: 740014943}
+    - target: {fileID: 5047121209569259852, guid: e97376c76235b3f4b85ff8f23b152531, type: 3}
+      propertyPath: m_TagString
+      value: Boss
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2362,6 +2374,11 @@ GameObject:
 --- !u!4 &1881105124 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2594738799642801594, guid: e97376c76235b3f4b85ff8f23b152531, type: 3}
+  m_PrefabInstance: {fileID: 1881105122}
+  m_PrefabAsset: {fileID: 0}
+--- !u!50 &1881105125 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 826428958402553906, guid: e97376c76235b3f4b85ff8f23b152531, type: 3}
   m_PrefabInstance: {fileID: 1881105122}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1967327390
