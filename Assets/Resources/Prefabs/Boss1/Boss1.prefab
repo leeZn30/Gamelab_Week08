@@ -349,6 +349,7 @@ GameObject:
   - component: {fileID: 5238424372043922886}
   - component: {fileID: 3849152961355327410}
   - component: {fileID: 7905093595428779239}
+  - component: {fileID: 6194074575905215249}
   m_Layer: 0
   m_Name: Boss1_Hammer_White
   m_TagString: EnemyAttack
@@ -478,6 +479,19 @@ PolygonCollider2D:
       - {x: 0.099291205, y: -0.2999253}
       - {x: 0.074999996, y: 0.935}
   m_UseDelaunayMesh: 0
+--- !u!114 &6194074575905215249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3907059058587877265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f73247f14a7edb949a542b9749d71910, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 0
 --- !u!1 &4146624694402545860
 GameObject:
   m_ObjectHideFlags: 0
