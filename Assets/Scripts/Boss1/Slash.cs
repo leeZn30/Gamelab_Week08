@@ -11,14 +11,14 @@ public class Slash : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(SlashRoutine(Boss1Controller.Instance.transform, 10f));
+        StartCoroutine(SlashRoutine(GameObject.Find("Boss").transform, 10f));
     }
 
     public IEnumerator SlashRoutine(Transform playerTransform, float distance)
     {
         // 슬래시의 초기 설정
         Vector3 startPosition = transform.position;
-        Vector3 direction = -playerTransform.right;  // 플레이어가 바라보는 방향 (x축 방향)
+        Vector3 direction = -playerTransform.right;
         Vector3 targetPosition = startPosition + direction * distance;
 
         float halfDuration = duration / 2f;
