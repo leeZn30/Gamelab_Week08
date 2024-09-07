@@ -37,6 +37,7 @@ public class Boss1Controller : Boss
     [SerializeField] UpSlash upSlash;
     [SerializeField] Transform upSlashPosition;
 
+    PlayerController pc;
     Transform player;
     [SerializeField] Rigidbody2D rigid;
     public Animator anim;
@@ -52,6 +53,7 @@ public class Boss1Controller : Boss
         anim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody2D>();
         player = GameObject.FindWithTag("Player").transform;
+        pc = player.GetComponent<PlayerController>();
         hpGauge = GameObject.Find("BossHp").GetComponent<Slider>();
         hpGauge.maxValue = hp;
         hpGauge.value = hp;
@@ -94,7 +96,8 @@ public class Boss1Controller : Boss
     {
         Debug.Log("Change State");
         Boss1State inputState;
-        // inputState = Boss1State.SequenceAttack;
+        // inputState = Boss1State.SwingAttack;
+        // inputState = phase2[Random.Range(0, phase2.Count)];
 
         if (hp >= 100)
         {
@@ -104,6 +107,7 @@ public class Boss1Controller : Boss
         {
             inputState = phase2[Random.Range(0, phase2.Count)];
         }
+
         switch (inputState)
         {
             case Boss1State.Idle:
@@ -137,7 +141,54 @@ public class Boss1Controller : Boss
                 nowState = Boss1State.SequenceAttack;
                 StartCoroutine(SequenceAttack());
                 break;
+
+            case Boss1State.SwingAttack:
+                nowState = Boss1State.SwingAttack;
+                StartCoroutine(SwingAttack());
+                break;
+
+            case Boss1State.BackAttack:
+                nowState = Boss1State.BackAttack;
+                StartCoroutine(BackAttack());
+                break;
         }
+    }
+
+    public void OnAttack(float dmg = 0)
+    {
+        float damage = dmg;
+
+        if (damage == 0)
+        {
+            switch (nowState)
+            {
+                case Boss1State.Pattern1:
+                    damage = 20f;
+                    break;
+
+                case Boss1State.SequenceAttack:
+                    damage = 25f;
+                    break;
+
+                case Boss1State.Pattern2:
+                    damage = 10f;
+                    break;
+
+                case Boss1State.NormalAttack:
+                    damage = 20f;
+                    break;
+
+                case Boss1State.BackAttack:
+                    damage = 20f;
+                    break;
+
+                case Boss1State.SwingAttack:
+                    damage = 25f;
+                    break;
+            }
+        }
+
+        pc.OnDamaged(damage);
     }
 
     IEnumerator Pattern1()
@@ -205,6 +256,29 @@ public class Boss1Controller : Boss
         isWalk = false;
         anim.SetTrigger("SequenceAttack");
     }
+
+    IEnumerator SwingAttack()
+    {
+        isWalk = true;
+        anim.Play("Walk");
+
+        yield return new WaitUntil(() => Vector2.Distance(player.position, transform.position) <= minDistance);
+
+        isWalk = false;
+        anim.SetTrigger("SwingAttack");
+    }
+
+    IEnumerator BackAttack()
+    {
+        isWalk = true;
+        anim.Play("Walk");
+
+        yield return new WaitUntil(() => Vector2.Distance(player.position, transform.position) <= minDistance);
+
+        isWalk = false;
+        anim.SetTrigger("BackAttack");
+    }
+
 
 
     void CreateSlash()

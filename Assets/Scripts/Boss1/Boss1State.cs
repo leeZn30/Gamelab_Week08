@@ -14,5 +14,7 @@ public enum Boss1State
     RollComboAttack,
     WaveAttack,
     SequenceAttack,
+    BackAttack,
+    SwingAttack,
     Roll
 }
