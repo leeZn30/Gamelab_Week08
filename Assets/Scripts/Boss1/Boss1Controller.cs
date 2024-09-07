@@ -94,16 +94,16 @@ public class Boss1Controller : Singleton<Boss1Controller>
     {
         Debug.Log("Change State");
         Boss1State inputState;
-        inputState = Boss1State.NormalAttack;
+        // inputState = Boss1State.SequenceAttack;
 
-        // if (hp >= 100)
-        // {
-        //     inputState = phase1[Random.Range(0, phase1.Count)];
-        // }
-        // else
-        // {
-        //     inputState = phase2[Random.Range(0, phase2.Count)];
-        // }
+        if (hp >= 100)
+        {
+            inputState = phase1[Random.Range(0, phase1.Count)];
+        }
+        else
+        {
+            inputState = phase2[Random.Range(0, phase2.Count)];
+        }
         switch (inputState)
         {
             case Boss1State.Idle:
@@ -323,6 +323,18 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
     void OnTurn()
     {
-        transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+        // transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+
+        Quaternion targetRotation = Quaternion.Euler(0f, 180f, 0f);
+        float tolerance = 0.0001f; // 허용 오차 범위
+
+        if (Quaternion.Angle(transform.rotation, targetRotation) > tolerance)
+        {
+            transform.rotation = targetRotation;
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        }
     }
 }
