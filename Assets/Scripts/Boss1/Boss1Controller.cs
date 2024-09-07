@@ -4,10 +4,10 @@ using Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Boss1Controller : Singleton<Boss1Controller>
+public class Boss1Controller : Boss
 {
     [Header("정보")]
-    [SerializeField] float hp = 200;
+    // [SerializeField] float hp = 200;
     Slider hpGauge;
     bool isAlive = true;
 
@@ -238,7 +238,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
         ChangeState();
     }
 
-    void OnDamaged(float damage)
+    public override void OnDamaged(float damage)
     {
         if (hp > 0)
         {
@@ -252,8 +252,8 @@ public class Boss1Controller : Singleton<Boss1Controller>
             StopAllCoroutines();
             anim.Play("Dead");
         }
-
     }
+
 
     void OnDead()
     {
