@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Boss2_ai : MonoBehaviour
+public class Boss2_ai : Boss
 {
     [Header("HP")]
     [SerializeField] private float bossHp = 250;
@@ -36,12 +36,14 @@ public class Boss2_ai : MonoBehaviour
 
     [Header("ETC")]
     [SerializeField] private Slider hpGauge;
-    [SerializeField] private PlayerController pc;
     [SerializeField] private Rigidbody2D rb;
     private float speedLerpValue = 1;
     private Vector3 playerCalcualtePosition = Vector3.zero;
     private Coroutine patternCoroutine;
     [SerializeField] private Animator objAnimator;
+
+    private GameObject playerObj;
+    private PlayerController playerController;
     private Transform playerTf;
 
     [Header("Boolean")]
@@ -54,9 +56,13 @@ public class Boss2_ai : MonoBehaviour
             objAnimator = GetComponent<Animator>();
         if (rb == null)
             rb = GetComponent<Rigidbody2D>();
-        playerTf = GameObject.FindWithTag("Player").GetComponent<Transform>();
-        if (pc == null )
-            pc = GetComponent<PlayerController>();
+
+        playerObj = GameObject.FindWithTag("Player");
+        if (playerTf == null)
+            playerTf = playerObj.GetComponent<Transform>();
+        if (playerController == null)
+            playerController = playerObj.GetComponent<PlayerController>();
+
         hpGauge.maxValue = bossHp;
         hpGauge.value = bossHp;
     }
@@ -68,21 +74,45 @@ public class Boss2_ai : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("PlayerAttack"))
+        if (other.CompareTag("Player"))
         {
-            if (pc.GetAttackVariable() == "Normal")
+            float _damage = 0;
+
+            switch (currentPatternName)
             {
-                OnDamaged(pc.normalAttackDamage);
+                case "P1":
+                    _damage = 15;
+                    break;
+                case "P1_1":
+                    _damage = 15;
+                    break;
+                case "P1_2":
+                    _damage = 20;
+                    break;
+                case "P2":
+                    _damage = 30;
+                    break;
+                case "P3_1":
+                    _damage = 20;
+                    break;
+                case "P3_2":
+                    _damage = 25;
+                    break;
+                case "P4_1":
+                    _damage = 25;
+                    break;
+                case "P5":
+                    _damage = 10;
+                    break;
+                case "P6":
+                    _damage = 40;
+                    break;
+                default:
+                    _damage = 0;
+                    break;
             }
-            else if (pc.GetAttackVariable() == "Charge")
-            {
-                OnDamaged(pc.chargeAttackDamage);
-            }
-            else if (pc.GetAttackVariable() == "FullCharge")
-            {
-                OnDamaged(pc.fullChargeAttackDamage);
-            }
-            other.gameObject.SetActive(false);
+
+            playerController.OnDamaged(_damage);
         }
     }
 
@@ -138,7 +168,7 @@ public class Boss2_ai : MonoBehaviour
         }
     }
 
-    void OnDamaged(float damage)
+    public override void OnDamaged(float damage)
     {
         if (bossHp > 0)
         {
@@ -266,14 +296,14 @@ public class Boss2_ai : MonoBehaviour
 
     private void PlayPattern_1_1()
     {
-        currentPatternName = "P1-1";
+        currentPatternName = "P1_1";
         StopAllCoroutines();
         patternCoroutine = StartCoroutine(IE_Pattern1_1());
     }
 
     private void PlayPattern_1_2()
     {
-        currentPatternName = "P1-2";
+        currentPatternName = "P1_2";
         StopAllCoroutines();
         patternCoroutine = StartCoroutine(IE_Pattern1_2());
     }
