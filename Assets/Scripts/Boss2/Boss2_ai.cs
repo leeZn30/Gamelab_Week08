@@ -72,50 +72,6 @@ public class Boss2_ai : Boss
         PlayIntro();
     }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            float _damage = 0;
-
-            switch (currentPatternName)
-            {
-                case "P1":
-                    _damage = 15;
-                    break;
-                case "P1_1":
-                    _damage = 15;
-                    break;
-                case "P1_2":
-                    _damage = 20;
-                    break;
-                case "P2":
-                    _damage = 30;
-                    break;
-                case "P3_1":
-                    _damage = 20;
-                    break;
-                case "P3_2":
-                    _damage = 25;
-                    break;
-                case "P4_1":
-                    _damage = 25;
-                    break;
-                case "P5":
-                    _damage = 10;
-                    break;
-                case "P6":
-                    _damage = 40;
-                    break;
-                default:
-                    _damage = 0;
-                    break;
-            }
-
-            playerController.OnDamaged(_damage);
-        }
-    }
-
     private void Update()
     {
         //CheckPatternConditionState();
@@ -605,3 +561,10 @@ public enum PatternConditionState
     Far,
     Behind,
 }
+
+[Serializable]
+public struct AttackEffectData
+{
+    public Boss2Attack attack;
+    public float damage;
+} 
