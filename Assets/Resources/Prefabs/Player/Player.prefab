@@ -179,6 +179,7 @@ GameObject:
   - component: {fileID: 7700289618307779877}
   - component: {fileID: 4739714874513425991}
   - component: {fileID: 8238391620689387259}
+  - component: {fileID: 2879177260880565301}
   m_Layer: 0
   m_Name: Collider
   m_TagString: PlayerAttack
@@ -233,7 +234,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.024133801, y: -1.1299083}
+  m_Offset: {x: 0.024133801, y: 0.03970182}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -244,7 +245,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.0482675, y: 0.6293098}
+  m_Size: {x: 1.0482675, y: 2.96853}
   m_EdgeRadius: 0
 --- !u!50 &8238391620689387259
 Rigidbody2D:
@@ -273,6 +274,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &2879177260880565301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1593777574002791125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b54752f261e92424386bd06264fda0e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 5556207499356548342}
 --- !u!1 &1714929799339711088
 GameObject:
   m_ObjectHideFlags: 0
@@ -599,7 +613,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.73, y: -0.917, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 297059905042441644}
@@ -864,7 +878,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8ad40be17415f94191bb5aa75aa3a33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DodgeDistance: 6
+  DodgeDistance: 10
   dodgeTimerLimit: 0.5
   dodgeStamina: 20
 --- !u!114 &2414681908965708044
@@ -879,7 +893,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18d33359cced4b6438644d988f4d040d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 3
+  maxSpeed: 6
   maxAcceleration: 52
   maxDecceleration: 52
   maxTurnSpeed: 80
