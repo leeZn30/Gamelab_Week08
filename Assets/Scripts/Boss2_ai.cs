@@ -7,8 +7,8 @@ using UnityEngine.UI;
 public class Boss2_ai : Boss
 {
     [Header("HP")]
-    [SerializeField] private float bossHp = 250;
     [SerializeField] private float phaseSwapHp = 100;
+    
 
     [Header("Speed")]
     [SerializeField] private float walkSpeed = 3;
@@ -63,8 +63,8 @@ public class Boss2_ai : Boss
         if (playerController == null)
             playerController = playerObj.GetComponent<PlayerController>();
 
-        hpGauge.maxValue = bossHp;
-        hpGauge.value = bossHp;
+        hpGauge.maxValue = hp;
+        hpGauge.value = hp;
     }
 
     private void Start()
@@ -170,17 +170,17 @@ public class Boss2_ai : Boss
 
     public override void OnDamaged(float damage)
     {
-        if (bossHp > 0)
+        if (hp > 0)
         {
-            bossHp -= damage;
+            hp -= damage;
         }
 
-        hpGauge.value = bossHp;
+        hpGauge.value = hp;
 
-        if (bossHp < phaseSwapHp)
+        if (hp < phaseSwapHp)
             currentPhase = 1;
 
-        if (bossHp <= 0 && !isDead) 
+        if (hp <= 0 && !isDead) 
         {
             isDead = true;
             PlayDeath();
