@@ -61,16 +61,13 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
     void Start()
     {
-        DoDelay();
-    }
-
-    void Update()
-    {
+        // DoDelay();
+        StartCoroutine(startDelay());
     }
 
     void FixedUpdate()
     {
-        if (isWalk)
+        if (isAlive && isWalk)
         {
             turn();
 
@@ -97,6 +94,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
     {
         Debug.Log("Change State");
         Boss1State inputState;
+        // inputState = Boss1State.SequenceAttack;
 
         if (hp >= 100)
         {
@@ -156,7 +154,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
     IEnumerator Pattern2()
     {
         // 플레이어가 패턴2 distance안에 있으며 minDistance보다 멀리 있다면 그냥 실행
-        if (Vector2.Distance(player.position, transform.position) > 4f && Vector2.Distance(player.position, transform.position) < 8f)
+        if (Vector2.Distance(player.position, transform.position) > 5f && Vector2.Distance(player.position, transform.position) < 8f)
         {
             turn();
             anim.Play("PrePattern2");
@@ -208,6 +206,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
         anim.SetTrigger("SequenceAttack");
     }
 
+
     void CreateSlash()
     {
         Instantiate(slash, slashPosition.position, Quaternion.identity, null);
@@ -232,6 +231,13 @@ public class Boss1Controller : Singleton<Boss1Controller>
         ChangeState();
     }
 
+    IEnumerator startDelay()
+    {
+        yield return new WaitForSeconds(3f);
+
+        ChangeState();
+    }
+
     void OnDamaged(float damage)
     {
         if (hp > 0)
@@ -242,6 +248,7 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
         if (hp <= 0)
         {
+            isAlive = false;
             StopAllCoroutines();
             anim.Play("Dead");
         }
@@ -316,7 +323,18 @@ public class Boss1Controller : Singleton<Boss1Controller>
 
     void OnTurn()
     {
-        transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+        // transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
 
+        Quaternion targetRotation = Quaternion.Euler(0f, 180f, 0f);
+        float tolerance = 0.0001f; // 허용 오차 범위
+
+        if (Quaternion.Angle(transform.rotation, targetRotation) > tolerance)
+        {
+            transform.rotation = targetRotation;
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        }
     }
 }
