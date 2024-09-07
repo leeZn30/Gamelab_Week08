@@ -61,8 +61,8 @@ public class PlayerController : MonoBehaviour
 
     public void ResetPlayerHp()
     {
-        _HpSlider.GetComponent<Slider>().value = MaxHp; // slider max value
-        _HpSlider.transform.Find("Fill Area").transform.Find("Fill").gameObject.SetActive(true); // slider active true
+        
+        _HpSlider.GetComponent<Slider>().value = currentHP = MaxHp; // slider max value
     }
 
     public string GetAttackVariable()
@@ -74,11 +74,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (currentHP <= 0f)
-            _HpSlider.transform.Find("Fill Area").transform.Find("Fill").gameObject.SetActive(false);
-
-        if (_HpSlider.transform.Find("Fill Area").transform.Find("Fill").gameObject.activeSelf)
-            _HpSlider.GetComponent<Slider>().value = currentHP;
+        _HpSlider.GetComponent<Slider>().value = currentHP;
 
         Debug.Log(GetComponent<Attack>().attackVariable.ToString());
     }
