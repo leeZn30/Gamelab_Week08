@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2962198471897440397}
   - component: {fileID: -5757514235750938193}
   - component: {fileID: 9033390284096520997}
+  - component: {fileID: 6509161210178010978}
   m_Layer: 0
   m_Name: Slash
   m_TagString: EnemyAttack
@@ -147,3 +148,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 4}
   m_EdgeRadius: 0
+--- !u!114 &6509161210178010978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6356044164975499679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f73247f14a7edb949a542b9749d71910, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 10

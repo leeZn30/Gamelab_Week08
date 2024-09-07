@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2957879653499766677}
   - component: {fileID: 3470078398529671508}
   - component: {fileID: 424919270041560546}
+  - component: {fileID: 1099851746568395560}
   m_Layer: 0
   m_Name: UpSlash
   m_TagString: EnemyAttack
@@ -145,3 +146,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetHeight: 2
   duration: 0.4
+--- !u!114 &1099851746568395560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3927880711015749141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f73247f14a7edb949a542b9749d71910, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 10
