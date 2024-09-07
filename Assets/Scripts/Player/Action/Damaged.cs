@@ -35,7 +35,7 @@ public class Damaged : MonoBehaviour
         _playerController.playerContext.CanPlayerIdle();
     }
 
-    public void OnDamaged()
+    public void OnDamaged(float damage)
     {
         if (hurtDelay < hurtDelayLimit)
             return; // 피격 쿨타임
@@ -47,7 +47,7 @@ public class Damaged : MonoBehaviour
             return;
         else // 무적이 아니면 일단 맞는다.
         {
-            _playerController.currentHP -= 1;
+            _playerController.currentHP -= damage;
             if (_playerController.currentHP <= 0)
             {
                 _playerController.playerContext.CanPlayerDied();
@@ -93,33 +93,5 @@ public class Damaged : MonoBehaviour
         _animator.SetBool("isDead", false);
         if (_animator.GetCurrentAnimatorStateInfo(0).IsName("die"))
             _animator.SetBool("Corpse", true);
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("EnemyAttack") && _playerController.playerContext.GetState().GetType() != typeof(DeadState))
-            OnDamaged();
-
-        /* // remove rigidbody2d in hammer
-        if(collision.CompareTag("Enemy"))
-        {
-            string attack = _attack.attackVariable.ToString();
-            float damage = 0;
-            switch(attack)
-            {
-                case "Normal":
-                    damage = 10f;
-                    break;
-                case "Charge":
-                    damage = 20f;
-                    break;
-                case "FullCharge":
-                    damage = 40f;
-                    break;
-            }
-            GameObject.Find("Boss").GetComponent<HpManager>().TakeDamage(damage);
-        
-        }
-        */
     }
 }
