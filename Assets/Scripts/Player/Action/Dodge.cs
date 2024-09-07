@@ -81,6 +81,7 @@ public class Dodge : MonoBehaviour
         _animator.SetBool("dodging", true);
         _animator.SetBool("walkToDodge", true);
         _animator.SetBool("isMoving", false);
+        _animator.SetBool("doAttack", false);
         float positiveDirection = _move.lastLookDirection; // (_body.velocity.x == 0 ? _move.lastLookDirection : Mathf.Sign(_body.velocity.x));
         transform.localScale = new Vector3(positiveDirection > 0f ? -_move.playerScale : _move.playerScale, _move.playerScale, _move.playerScale);
         Vector2 destination = new Vector2((positiveDirection > 0f ? _body.position.x + DodgeDistance : _body.position.x - DodgeDistance), _body.position.y);
@@ -121,15 +122,17 @@ public class Dodge : MonoBehaviour
             _playerController.playerContext.CanPlayerDodge();
             pressButton = context.ReadValueAsButton();
 
+            if(!buttonBuffer)
+                _dodgeBuffer = 0f;
             buttonBuffer = true;
-            _dodgeBuffer = 0f;
         }
         else
         {
             if(context.performed)
             {
+                if (!buttonBuffer)
+                    _dodgeBuffer = 0f;
                 buttonBuffer = true;
-                _dodgeBuffer = 0f;
             }
         }
     }
