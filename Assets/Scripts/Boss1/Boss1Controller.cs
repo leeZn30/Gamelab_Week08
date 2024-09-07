@@ -188,8 +188,7 @@ public class Boss1Controller : Boss
             }
         }
 
-
-        // pc.OnDamaged(damage);
+        pc.OnDamaged(damage);
     }
 
     IEnumerator Pattern1()
