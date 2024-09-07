@@ -66,9 +66,12 @@ public class Attack : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (buttonBuffer)
+            _playerController.playerContext.CanPlayerAttack();
+
         if (_playerController.playerContext.GetState().GetType() == typeof(AttackState))
         {
-            if (pressingButton || buttonBuffer)
+            if (!alreadyAttacking && (pressingButton || buttonBuffer))
             {
                 buttonBuffer = false;
 
@@ -349,32 +352,14 @@ public class Attack : MonoBehaviour
             {
                 doNextComboAttack = true;
             }
+            else
+            {
+                if(context.performed)
+                {
+                    buttonBuffer = true;
+                    _attackBuffer = 0f;
+                }
+            }
         }
     }
-
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (collision.CompareTag("Boss"))
-    //    {
-    //        
-    //        float damage = 0f;
-    //        switch(attackVariable)
-    //        {
-    //            case AttackVariable.Normal:
-    //                damage = _playerController.normalAttackDamage;
-    //                break;
-    //            case AttackVariable.Charge:
-    //                damage = _playerController.chargeAttackDamage;
-    //                break;
-    //            case AttackVariable.FullCharge:
-    //                damage = _playerController.fullChargeAttackDamage;
-    //                break;
-    //            default:
-    //                damage = 0f;
-    //                break;
-    //        }
-    //        collision.gameObject.GetComponent<Boss>().OnDamaged(damage);
-    //        _playerController.TurnOffHammerCollider();
-    //    }
-    //}
 }
