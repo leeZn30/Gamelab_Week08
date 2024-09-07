@@ -29,7 +29,7 @@ public class Move : MonoBehaviour
     float sprintVariable = 1f;
     public float sprintConstant = 2f;
     bool shiftPress = false;
-    float sprintStaminaPerFrame = 0.4f; // 20 stamina per second
+    public float sprintStaminaPerFrame = 0.2f; // 20 stamina per second
 
     // Start is called before the first frame update
     void Start()

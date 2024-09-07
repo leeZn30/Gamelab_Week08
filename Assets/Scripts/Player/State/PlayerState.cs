@@ -144,7 +144,7 @@ class AttackState : PlayerState
 
     public void PlayerDodge(PlayerContext pc)
     {
-        // cant dodge while attacking
+        pc.ChangeState(DodgeState.getInstance());
     }
 
     public void PlayerChargeAttack(PlayerContext pc)
