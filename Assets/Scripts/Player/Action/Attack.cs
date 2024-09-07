@@ -11,6 +11,7 @@ public class Attack : MonoBehaviour
     public float pressingTime = 0f;
     public bool pressingButton = false;
     public bool buttonBuffer = false;
+    public bool attackByUsingBuffer = false;
     private bool alreadyAttacking = false;
     private float _attackBuffer = 0f;
     private float _attackBufferLimit = 0.15f;
@@ -73,6 +74,9 @@ public class Attack : MonoBehaviour
         {
             if (!alreadyAttacking && (pressingButton || buttonBuffer))
             {
+                if (buttonBuffer && !pressingButton)
+                    attackByUsingBuffer = true;
+
                 buttonBuffer = false;
 
                 if (_playerController.currentStamina < attackReadyStamina + normalAttackStamina)
@@ -95,14 +99,16 @@ public class Attack : MonoBehaviour
                     
 
                 _body.velocity = Vector2.zero;
+
                 pressingTime += Time.deltaTime;
+
                 _animator.SetBool("doAttack", true);
                 if (pressingTime >= 5f)
                     pressingButton = false;
             }
             else
             {
-                if (!pressStart)
+                if (!pressStart && !attackByUsingBuffer)
                     return;
 
                 _animator.SetBool("isMoving", false);
@@ -133,6 +139,13 @@ public class Attack : MonoBehaviour
                         _playerController.playerContext.CanPlayerIdle();
                 }
             }
+        }
+        else
+        {
+            pressStart = false;
+            //buttonBuffer = false;
+            pressingButton = false;
+            pressingTime = 0f;
         }
     }
 
@@ -341,10 +354,12 @@ public class Attack : MonoBehaviour
                 return;
 
             _playerController.playerContext.CanPlayerAttack();
-            pressingButton = context.ReadValueAsButton();
+            if(_playerController.playerContext.GetState().GetType() == typeof(AttackState))
+                pressingButton = context.ReadValueAsButton();
 
+            if(!buttonBuffer)
+                _attackBuffer = 0f;
             buttonBuffer = true;
-            _attackBuffer = 0f;
         }
         else // already attacking
         {
@@ -356,8 +371,9 @@ public class Attack : MonoBehaviour
             {
                 if(context.performed)
                 {
+                    if(!buttonBuffer)
+                        _attackBuffer = 0f;
                     buttonBuffer = true;
-                    _attackBuffer = 0f;
                 }
             }
         }
