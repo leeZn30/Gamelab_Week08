@@ -1067,10 +1067,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00156404b9a336b43adcc61b6a871bc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 0
+  hp: 150
   nowState: 0
-  phase1: 0300000004000000
-  phase2: 050000000800000004000000
+  phase1: 0300000008000000
+  phase2: 0500000004000000090000000a00000008000000
   minDistance: 4
   moveSpeed: 7
   isPattern2: 0

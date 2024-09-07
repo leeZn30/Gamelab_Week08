@@ -11,7 +11,7 @@ public class Slash : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(SlashRoutine(GameObject.Find("Boss").transform, 10f));
+        StartCoroutine(SlashRoutine(GameObject.FindWithTag("Boss").transform, 10f));
     }
 
     public IEnumerator SlashRoutine(Transform playerTransform, float distance)
