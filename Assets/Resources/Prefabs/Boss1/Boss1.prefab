@@ -980,11 +980,11 @@ GameObject:
   - component: {fileID: 8988460073442742606}
   - component: {fileID: 1587549776574367575}
   - component: {fileID: 2652227353084686912}
-  - component: {fileID: 1275279970268072310}
   - component: {fileID: 4665425854865532948}
+  - component: {fileID: 2572809858766281587}
   m_Layer: 10
   m_Name: Boss1
-  m_TagString: Untagged
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1055,8 +1055,34 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!70 &1275279970268072310
-CapsuleCollider2D:
+--- !u!114 &4665425854865532948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7815281390825326893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00156404b9a336b43adcc61b6a871bc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hp: 0
+  nowState: 0
+  phase1: 0300000004000000
+  phase2: 050000000800000004000000
+  minDistance: 4
+  moveSpeed: 7
+  isPattern2: 0
+  slash: {fileID: -5757514235750938193, guid: b3516e2c819f3c94794d86f76a473174, type: 3}
+  slashPosition: {fileID: 7768145809575455634}
+  upSlash: {fileID: 424919270041560546, guid: 4e7e9ee4da4b71940accc7a3298db04a, type: 3}
+  upSlashPosition: {fileID: 1091385857026689087}
+  rigid: {fileID: 0}
+  anim: {fileID: 0}
+  weaponCollider: {fileID: 7905093595428779239}
+--- !u!61 &2572809858766281587
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1087,35 +1113,19 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.037810802, y: 0.1560936}
-  m_Size: {x: 1.4210997, y: 5.0584393}
-  m_Direction: 0
---- !u!114 &4665425854865532948
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7815281390825326893}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00156404b9a336b43adcc61b6a871bc1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hp: 150
-  nowState: 0
-  phase1: 0300000004000000
-  phase2: 050000000800000004000000
-  minDistance: 4
-  moveSpeed: 7
-  isPattern2: 0
-  slash: {fileID: -5757514235750938193, guid: b3516e2c819f3c94794d86f76a473174, type: 3}
-  slashPosition: {fileID: 7768145809575455634}
-  upSlash: {fileID: 424919270041560546, guid: 4e7e9ee4da4b71940accc7a3298db04a, type: 3}
-  upSlashPosition: {fileID: 1091385857026689087}
-  rigid: {fileID: 0}
-  anim: {fileID: 0}
-  weaponCollider: {fileID: 7905093595428779239}
+  m_Offset: {x: 0.16888785, y: 0.15895319}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.6159444, y: 5.1725264}
+  m_EdgeRadius: 0
 --- !u!1 &8485720074676286114
 GameObject:
   m_ObjectHideFlags: 0
