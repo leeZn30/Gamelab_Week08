@@ -12,6 +12,6 @@ public class SceneChanger : MonoBehaviour
 
     public void GoGameScene()
     {
-        SceneManager.LoadScene("01_Game");
+        SceneManager.LoadScene("01_Game_Boss1");
     }
 }

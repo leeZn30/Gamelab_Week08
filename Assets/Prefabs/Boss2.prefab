@@ -234,8 +234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 230b08a1e1b9bd045b33eed4062d7735, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 0
-  bossHp: 250
+  hp: 250
   phaseSwapHp: 150
   walkSpeed: 4
   runSpeed: 10
@@ -265,7 +264,6 @@ MonoBehaviour:
   closeDistCheckFactor: 4
   normalDistCheckFactor: 10
   hpGauge: {fileID: 0}
-  pc: {fileID: 0}
   rb: {fileID: 0}
   objAnimator: {fileID: 2889413984368147371}
   isDead: 0
