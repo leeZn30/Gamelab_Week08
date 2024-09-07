@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
@@ -115,6 +116,8 @@ public class PlayerController : MonoBehaviour
                 ResetPlayerHp();
                 _animator.Play("idle");
                 playerContext.ChangeState(IdleState.getInstance());
+
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
         }
     }
