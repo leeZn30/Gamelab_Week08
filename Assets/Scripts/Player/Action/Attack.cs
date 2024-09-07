@@ -352,28 +352,29 @@ public class Attack : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Boss"))
-        {
-            _playerController.TurnOffHammerCollider();
-            float damage = 0f;
-            switch(attackVariable)
-            {
-                case AttackVariable.Normal:
-                    damage = _playerController.normalAttackDamage;
-                    break;
-                case AttackVariable.Charge:
-                    damage = _playerController.chargeAttackDamage;
-                    break;
-                case AttackVariable.FullCharge:
-                    damage = _playerController.fullChargeAttackDamage;
-                    break;
-                default:
-                    damage = 0f;
-                    break;
-            }
-            collision.gameObject.GetComponent<Boss>().OnDamaged(damage);
-        }
-    }
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (collision.CompareTag("Boss"))
+    //    {
+    //        
+    //        float damage = 0f;
+    //        switch(attackVariable)
+    //        {
+    //            case AttackVariable.Normal:
+    //                damage = _playerController.normalAttackDamage;
+    //                break;
+    //            case AttackVariable.Charge:
+    //                damage = _playerController.chargeAttackDamage;
+    //                break;
+    //            case AttackVariable.FullCharge:
+    //                damage = _playerController.fullChargeAttackDamage;
+    //                break;
+    //            default:
+    //                damage = 0f;
+    //                break;
+    //        }
+    //        collision.gameObject.GetComponent<Boss>().OnDamaged(damage);
+    //        _playerController.TurnOffHammerCollider();
+    //    }
+    //}
 }
