@@ -596,7 +596,7 @@ GameObject:
   - component: {fileID: 2414681908965708044}
   - component: {fileID: 7224089241381808406}
   - component: {fileID: 6241356505581540738}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -828,6 +828,8 @@ MonoBehaviour:
   currentStamina: 100
   staminaConstant: 10
   normalAttackDamage: 10
+  normalAttackComboDamage: 6
+  normalAttackLastComboDamage: 15
   chargeAttackDamage: 20
   fullChargeAttackDamage: 30
   _hammerCollider: {fileID: 1593777574002791125}
@@ -848,6 +850,7 @@ MonoBehaviour:
   pressingTime: 0
   pressingButton: 0
   buttonBuffer: 0
+  attackByUsingBuffer: 0
   attackReadyStamina: 10
   normalAttackStamina: 10
   chargeAttackStamina: 15
@@ -903,6 +906,7 @@ MonoBehaviour:
   playerScale: 0
   lastLookDirection: 0
   sprintConstant: 2
+  sprintStaminaPerFrame: 0.2
 --- !u!50 &7224089241381808406
 Rigidbody2D:
   serializedVersion: 4
