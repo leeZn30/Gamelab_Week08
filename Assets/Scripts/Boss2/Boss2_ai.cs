@@ -18,6 +18,7 @@ public class Boss2_ai : Boss
     [SerializeField] private float speedLerpFactor_P3;
     [SerializeField] private float speedLerpFactor_P3_1;
     [SerializeField] private float speedLerpFactor_P3_2;
+    [SerializeField] private float speedLerpFactor_P3_3;
     [SerializeField] private float speedLerpFactor_P4_1 = 1;
 
     [Header("Pattern")]
@@ -89,6 +90,16 @@ public class Boss2_ai : Boss
                 PlayRandomPattern(currentPhase);
             }
         }
+        else if (currentPatternName == "WR")
+        {
+            transform.position += Vector3.right * walkSpeed * -lookingDir * Time.fixedDeltaTime;
+            CheckPatternConditionState();
+            if (currentPatternConditionState != PatternConditionState.Close && currentPatternConditionState != PatternConditionState.Normal)
+            {
+                StopAllCoroutines();
+                PlayRandomPattern(currentPhase);
+            }
+        }
         else if (currentPatternName == "P4")
         {
             transform.position += Vector3.right * runSpeed * lookingDir * Time.fixedDeltaTime;
@@ -119,6 +130,13 @@ public class Boss2_ai : Boss
         {
             transform.position = new Vector3(
                 Mathf.Lerp(transform.position.x, playerCalcualtePosition.x, Time.fixedDeltaTime * speedLerpFactor_P3_2),
+                transform.position.y,
+                transform.position.z);
+        }
+        else if (currentPatternName == "P3_3")
+        {
+            transform.position = new Vector3(
+                Mathf.Lerp(transform.position.x, playerCalcualtePosition.x, Time.fixedDeltaTime * speedLerpFactor_P3_3),
                 transform.position.y,
                 transform.position.z);
         }
@@ -231,11 +249,17 @@ public class Boss2_ai : Boss
             case PatternState.pattern6:
                 PlayPattern_6();
                 break;
+            case PatternState.pattern7:
+                PlayPattern_7();
+                break;
             case PatternState.walk:
                 PlayWalk();
                 break;
             case PatternState.turn:
                 Turn();
+                break;
+            case PatternState.walkReverse:
+                PlayWalkReverse();
                 break;
             default:
                 break;
@@ -292,6 +316,13 @@ public class Boss2_ai : Boss
         patternCoroutine = StartCoroutine(IE_Pattern3_2());
     }
 
+    private void PlayPattern_3_3()
+    {
+        currentPatternName = "P3_3";
+        StopAllCoroutines();
+        patternCoroutine = StartCoroutine(IE_Pattern3_3());
+    }
+
     private void PlayPattern_4()
     {
         currentPatternName = "P4";
@@ -322,10 +353,23 @@ public class Boss2_ai : Boss
         patternCoroutine = StartCoroutine(IE_Pattern6());
     }
 
+    private void PlayPattern_7()
+    {
+        currentPatternName = "P7";
+        StopAllCoroutines();
+        patternCoroutine = StartCoroutine(IE_Pattern7());
+    }
+
     private void PlayWalk()
     {
         currentPatternName = "W";
         patternCoroutine = StartCoroutine(IE_Walk(0));
+    }
+
+    private void PlayWalkReverse()
+    {
+        currentPatternName = "WR";
+        patternCoroutine = StartCoroutine(IE_WalkReverse(0));
     }
 
     private void PlayIdle(float waitSec)
@@ -356,6 +400,10 @@ public class Boss2_ai : Boss
             PlayPattern_1_1();
             yield break;
         }
+        else
+        {
+            PlayIdle(0);
+        }
     }
 
     private IEnumerator IE_Pattern1_1()
@@ -370,6 +418,15 @@ public class Boss2_ai : Boss
         {
             PlayPattern_1_2();
             yield break;
+        }
+        else if (currentPatternConditionState == PatternConditionState.RightBehind)
+        {
+            PlayPattern_5();
+            yield break;
+        }
+        else
+        {
+            PlayIdle(0);
         }
     }
 
@@ -407,7 +464,10 @@ public class Boss2_ai : Boss
         }
         else
         {
-            PlayPattern_3_2();
+            if (currentPhase == 0)
+                PlayPattern_3_2();
+            else
+                PlayPattern_3_3();
         }
     }
 
@@ -427,7 +487,19 @@ public class Boss2_ai : Boss
         objAnimator.Play("Boss2_Pattern3_2");
         playerCalcualtePosition = playerTf.position;
 
-        yield return new WaitForSecondsRealtime(2.083f);
+        yield return new WaitForSecondsRealtime(2.9f);
+
+        rb.gravityScale = 1;
+        PlayIdle(0);
+    }
+
+    private IEnumerator IE_Pattern3_3()
+    {
+        rb.gravityScale = 0;
+        objAnimator.Play("Boss2_Pattern3_3");
+        playerCalcualtePosition = playerTf.position;
+
+        yield return new WaitForSecondsRealtime(2.9f);
 
         rb.gravityScale = 1;
         PlayIdle(0);
@@ -464,6 +536,15 @@ public class Boss2_ai : Boss
         objAnimator.Play("Boss2_Pattern6");
 
         yield return new WaitForSecondsRealtime(2.65f);
+
+        PlayIdle(0);
+    }
+
+    private IEnumerator IE_Pattern7()
+    {
+        objAnimator.Play("Boss2_Pattern7");
+
+        yield return new WaitForSecondsRealtime(2.5f);
 
         PlayIdle(0);
     }
@@ -506,6 +587,25 @@ public class Boss2_ai : Boss
         PlayRandomPattern(currentPhase);
     }
 
+    private IEnumerator IE_WalkReverse(float walkSec)
+    {
+        objAnimator.Play("Boss2_WalkReverse");
+
+        if (walkSec == 0)
+        {
+            float randSec = UnityEngine.Random.Range(0.3f, 0.8f);
+            Debug.Log($"Walk Backward For {randSec}sec");
+            yield return new WaitForSecondsRealtime(randSec);
+        }
+        else
+        {
+            Debug.Log($"Walk Backward For {walkSec}sec");
+            yield return new WaitForSecondsRealtime(walkSec);
+        }
+
+        PlayRandomPattern(currentPhase);
+    }
+
     #endregion
 
     private void CheckPatternConditionState()
@@ -538,6 +638,7 @@ public class Boss2_ai : Boss
     {
         idle,
         walk,
+        walkReverse,
         turn,
         pattern1,
         pattern1_1,
@@ -547,9 +648,11 @@ public class Boss2_ai : Boss
         pattern3,
         pattern3_1,
         pattern3_2,
+        pattern3_3,
         pattern4,
         pattern5,
         pattern6,
+        pattern7,
     }
 }
 

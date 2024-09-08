@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PatternName:
   - walk
+  - pattern1
   - pattern2
   - pattern3
-  Probability: 1e0000001e00000028000000
+  - walkReverse
+  Probability: 1400000014000000140000001e0000000a000000
