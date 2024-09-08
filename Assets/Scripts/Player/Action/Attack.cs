@@ -36,7 +36,7 @@ public class Attack : MonoBehaviour
 
     public enum AttackVariable
     {
-        None, Normal, Charge, FullCharge
+        None, Normal, NormalCombo, NormalLastCombo, Charge, FullCharge
     }
 
     public AttackVariable attackVariable { get; set; }
@@ -166,6 +166,7 @@ public class Attack : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         _perlin.m_AmplitudeGain = 0.25f;
         _perlin.m_FrequencyGain = 1f;
+        canDoNextComboAttack = true;
         yield return new WaitForSeconds(0.1f);
         _playerController.TurnOffHammerCollider();
         yield return new WaitForSeconds(0.1f);
@@ -174,7 +175,6 @@ public class Attack : MonoBehaviour
 
         // combo attack 
         float deltaTime = 0f;
-        canDoNextComboAttack = true;
         while(deltaTime < 0.5f)
         {
             if (doNextComboAttack)
@@ -204,27 +204,28 @@ public class Attack : MonoBehaviour
     
     IEnumerator DoBasicAttack_Combo()
     {
+        attackVariable = AttackVariable.NormalCombo;
+
         canDoNextComboAttack = false;
         Debug.Log("State : Basic Attack Combo");
-        //_animator.SetBool("doNormalAttack", true); // must change to "doComboNormalAttack" animation trigger
-        //_animator.SetBool("doAttack", false); //  must change from "doAttack" to "doNormalAttack"
-        _animator.Play("normalAttack", 0, 0f);
+        _animator.SetBool("doNormalAttack", false);
+        _animator.Play("normalAttack_Combo");
         _playerController.playerContext.CanPlayerHit();
 
         yield return new WaitForSeconds(0.1f);
         _playerController.usingStamina = false;
         _hammerCollider.SetActive(true);
         yield return new WaitForSeconds(0.3f);
-        _perlin.m_AmplitudeGain = 0.25f;
-        _perlin.m_FrequencyGain = 1f;
+        //_perlin.m_AmplitudeGain = 0.25f;
+        //_perlin.m_FrequencyGain = 1f;
+        canDoNextComboAttack = true;
         yield return new WaitForSeconds(0.1f);
         _playerController.TurnOffHammerCollider();
         yield return new WaitForSeconds(0.1f);
-        _perlin.m_AmplitudeGain = 0f;
-        _perlin.m_FrequencyGain = 0f;
+        //_perlin.m_AmplitudeGain = 0f;
+        //_perlin.m_FrequencyGain = 0f;
 
         float deltaTime = 0f;
-        canDoNextComboAttack = true;
         while (deltaTime < 0.5f)
         {
             if (doNextComboAttack)
@@ -245,27 +246,30 @@ public class Attack : MonoBehaviour
         //yield return new WaitForSeconds(0.5f);
 
         doNextComboAttack = false;
-        _animator.SetBool("doNormalAttack", false);
+        //_animator.SetBool("doNormalAttack", false);
+        //_animator.SetTrigger("Idle");
         alreadyAttacking = false;
         attackVariable = AttackVariable.None;
         pressStart = false;
         _playerController.playerContext.CanPlayerIdle();
+        _animator.Play("idle");
     }
 
     IEnumerator DoBasicAttack_LastCombo()
     {
+        attackVariable = AttackVariable.NormalLastCombo;
+
         canDoNextComboAttack = false;
         Debug.Log("State : Basic Attack Last");
-        //_animator.SetBool("doNormalAttack", true); // must change to "doLastNormalAttack" animation trigger
-        //_animator.SetBool("doAttack", false); //  must change from "doAttack" to "doComboNormalAttack"
-        _animator.Play("normalAttack", 0, 0f);
+        //_animator.SetTrigger("LastComboTrigger");
+        _animator.Play("normalAttack_LastCombo");
         _playerController.playerContext.CanPlayerHit();
 
         yield return new WaitForSeconds(0.1f);
         _playerController.usingStamina = false;
         _hammerCollider.SetActive(true);
         yield return new WaitForSeconds(0.3f);
-        _perlin.m_AmplitudeGain = 0.25f;
+        _perlin.m_AmplitudeGain = 0.7f;
         _perlin.m_FrequencyGain = 1f;
         yield return new WaitForSeconds(0.1f);
         _playerController.TurnOffHammerCollider();
@@ -274,11 +278,14 @@ public class Attack : MonoBehaviour
         _perlin.m_FrequencyGain = 0f;
         yield return new WaitForSeconds(0.5f);
 
-        _animator.SetBool("doNormalAttack", false);
+        //_animator.SetBool("doNormalAttack", false);
+        //_animator.SetTrigger("Idle");
+        doNextComboAttack = false;
         alreadyAttacking = false;
         attackVariable = AttackVariable.None;
         pressStart = false;
         _playerController.playerContext.CanPlayerIdle();
+        _animator.Play("idle");
     }
 
     IEnumerator DoChargeAttack()
@@ -363,7 +370,8 @@ public class Attack : MonoBehaviour
         }
         else // already attacking
         {
-            if(attackVariable == AttackVariable.Normal && context.started && canDoNextComboAttack) // do normal attack
+            if((attackVariable == AttackVariable.Normal || attackVariable == AttackVariable.NormalCombo || attackVariable == AttackVariable.NormalLastCombo)
+                && context.started && canDoNextComboAttack) // do normal attack
             {
                 doNextComboAttack = true;
             }

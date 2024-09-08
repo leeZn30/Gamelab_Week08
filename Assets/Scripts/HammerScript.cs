@@ -33,6 +33,12 @@ public class HammerScript : MonoBehaviour
                 case AttackVariable.Normal:
                     damage = _playerController.normalAttackDamage;
                     break;
+                case AttackVariable.NormalCombo:
+                    damage = _playerController.normalAttackComboDamage;
+                    break;
+                case AttackVariable.NormalLastCombo:
+                    damage = _playerController.normalAttackLastComboDamage;
+                    break;
                 case AttackVariable.Charge:
                     damage = _playerController.chargeAttackDamage;
                     break;

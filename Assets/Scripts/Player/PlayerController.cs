@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     public float staminaConstant = 10f;
 
     public float normalAttackDamage = 10f;
+    public float normalAttackComboDamage = 6f;
+    public float normalAttackLastComboDamage = 15f;
     public float chargeAttackDamage = 20f;
     public float fullChargeAttackDamage = 40f;
 
@@ -42,18 +44,24 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator StaminaRegainCheck()
     {
+        float deltaTime = 0f;
         while (true)
         {
             if(usingStamina)
             {
                 staminaRegain = false;
+                deltaTime = 0f;
             }
             else
             {
                 if(!staminaRegain) // regain false -> using stamina right before this frame
                 {
-                    yield return new WaitForSeconds(1f);
-                    staminaRegain = true;
+                    deltaTime += Time.deltaTime;
+                    if(deltaTime > 1f)
+                    {
+                        staminaRegain = true;
+                        deltaTime = 0f;
+                    }
                 }
             }
             yield return null;
