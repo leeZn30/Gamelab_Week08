@@ -44,7 +44,7 @@ public class GameManager : Singleton<GameManager>
 
     public void OnBoss2Cleared()
     {
-
+        SceneManager.LoadScene("03_Game_Boss3");
     }
 
     public void showBossInfo(string text)

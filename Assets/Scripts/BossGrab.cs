@@ -17,6 +17,7 @@ public class BossGrab : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            pc.PlayerGrabbed(true);
             hasGrabed = true;
         }
     }

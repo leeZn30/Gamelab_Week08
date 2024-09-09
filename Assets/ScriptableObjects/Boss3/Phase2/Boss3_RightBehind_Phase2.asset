@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PatternName:
   - turn
-  Probability: 64000000
+  - pattern4
+  Probability: 1e00000046000000

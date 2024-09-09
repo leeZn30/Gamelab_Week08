@@ -376,6 +376,7 @@ MonoBehaviour:
   objAnimator: {fileID: 2889413984368147371}
   isDead: 0
   isSliding: 0
+  isCloaking: 0
 --- !u!50 &826428958402553906
 Rigidbody2D:
   serializedVersion: 4
