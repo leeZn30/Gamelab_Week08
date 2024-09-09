@@ -175,16 +175,17 @@ public class Boss2_ai : Boss
     {
         yield return new WaitForSeconds(2f);
 
-        GameManager.Instance.showBossInfo("Game Cleared! \n Congratulations!");
+        if (GameManager.Instance != null)
+            GameManager.Instance.showBossInfo("Boss2 Cleared! \n Let's Go to Next Boss");
 
         yield return new WaitForSeconds(2f);
 
-        GameManager.Instance.hideBossInfo();
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.hideBossInfo();
 
-        // 게임매니저에 알리기
-        //GameManager.Instance.OnBoss2Cleared();
-
-        Destroy(gameObject);
+            GameManager.Instance.OnBoss2Cleared();
+        }
     }
 
     private void PlayRandomPattern(int phase)

@@ -2652,6 +2652,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2120617760}
     - target: {fileID: 4038632353160284503, guid: da84f7dd7ef028347bd6c17513eb0cf5, type: 3}
+      propertyPath: hp
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 4038632353160284503, guid: da84f7dd7ef028347bd6c17513eb0cf5, type: 3}
       propertyPath: hpGauge
       value: 
       objectReference: {fileID: 740014943}
