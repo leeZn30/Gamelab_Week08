@@ -95,6 +95,9 @@ public class Boss1 : Boss
 
         anim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody2D>();
+
+        _virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+        _perlin = _virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
     }
 
     void Start()
@@ -564,7 +567,7 @@ public class Boss1 : Boss
         while (Vector3.Distance(transform.position, targetPosition) > stoppingDistance)
         {
             // 현재 위치에서 목표 지점으로 MoveTowards를 사용해 이동
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, Vector3.Distance(startPosition, targetPosition) * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, Vector3.Distance(startPosition, targetPosition) * Time.deltaTime * 1.5f);
 
             elapsedTime += Time.deltaTime;
             yield return null;  // 한 프레임 대기
