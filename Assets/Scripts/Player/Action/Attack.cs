@@ -84,17 +84,29 @@ public class Attack : MonoBehaviour
                     _playerController.playerContext.ChangeState(IdleState.getInstance());
                     return;
                 }
-                else if(_playerController.currentStamina > attackReadyStamina + normalAttackStamina && _playerController.currentStamina < attackReadyStamina + chargeAttackStamina)
-                    //&& pressingTime > 1f)
+                else if(_playerController.currentStamina > attackReadyStamina + normalAttackStamina && _playerController.currentStamina < attackReadyStamina + chargeAttackStamina
+                    && pressingTime >= 0.75f && pressingTime < 1f )
                 {
-                    pressingButton = false;
+                    //pressingButton = false;
+                    _animator.SetBool("normalAttackMaintain", true);
+                    _animator.SetBool("doAttack", false);
                     pressingTime = 0.5f;
                 }
                 else if(_playerController.currentStamina > attackReadyStamina + chargeAttackStamina && _playerController.currentStamina < attackReadyStamina + fullChargeAttackStamina
-                    && pressingTime > 1f)
+                    && pressingTime >= 1f && pressingTime < 2.5f)
                 {
-                    pressingButton = false;
+                    //pressingButton = false;
+                    _animator.SetBool("chargeAttackMaintain", true);
+                    _animator.SetBool("doAttack", false);
+
+                    
                     pressingTime = 1.5f;
+                }
+                else if(_playerController.currentStamina > attackReadyStamina + fullChargeAttackStamina && pressingTime >= 2.5f)
+                {
+                    _animator.SetBool("fullChargeAttackMaintain", true);
+                    _animator.SetBool("doAttack", false);
+                    pressingTime = 3f;
                 }
                     
 
@@ -104,8 +116,8 @@ public class Attack : MonoBehaviour
                 _playerController.usingStamina = true;
 
                 _animator.SetBool("doAttack", true);
-                if (pressingTime >= 5f)
-                    pressingButton = false;
+                //if (pressingTime >= 5f)
+                //    pressingButton = false;
             }
             else
             {
@@ -113,6 +125,9 @@ public class Attack : MonoBehaviour
                     return;
 
                 _animator.SetBool("isMoving", false);
+                _animator.SetBool("normalAttackMaintain", false);
+                _animator.SetBool("chargeAttackMaintain", false);
+                _animator.SetBool("fullChargeAttackMaintain", false);
                 if (pressingTime > 0f && pressingTime <= 1f)
                 {
                     pressingTime = 0f;
@@ -297,6 +312,7 @@ public class Attack : MonoBehaviour
         alreadyAttacking = true;
         Debug.Log("State : Charge Attack");
         _animator.SetBool("doChargeAttack", true);
+        _animator.SetBool("chargeAttackMaintain", false);
         _animator.SetBool("doAttack", false);
         _playerController.playerContext.CanPlayerHit();
 
@@ -328,6 +344,7 @@ public class Attack : MonoBehaviour
         alreadyAttacking = true;
         Debug.Log("State : Full Charge Attack");
         _animator.SetBool("doFullChargeAttack", true);
+        _animator.SetBool("fullChargeAttackMaintain", false);
         _animator.SetBool("doAttack", false);
         _playerController.playerContext.CanPlayerHit();
 
