@@ -2089,17 +2089,17 @@ MonoBehaviour:
   - state: 3
     weight: 34
   - state: 4
-    weight: 67
+    weight: 33
   - state: 5
-    weight: 100
+    weight: 33
   shortDistance: 4
   longDistance: 4
-  walkSpeed: 5
-  rollSpeed: 15
+  walkSpeed: 3
+  rollSpeed: 10
   rollStandardDistance: 4
   rollCoolTime: 4
   targetRollPosition: {x: 0, y: 0}
-  turnDelayTime: 0.5
+  turnDelayTime: 0.2
   upSlash: {fileID: 424919270041560546, guid: 4e7e9ee4da4b71940accc7a3298db04a, type: 3}
   slash: {fileID: 0}
   slashPosition: {fileID: 224258690}

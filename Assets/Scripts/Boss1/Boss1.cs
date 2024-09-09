@@ -22,6 +22,7 @@ public class Boss1 : Boss
 {
     [Header("상태")]
     Slider hpGauge;
+    bool isTurn = false;
 
     [Header("Player")]
     PlayerController player;
@@ -90,6 +91,9 @@ public class Boss1 : Boss
 
     void Update()
     {
+        if (!anim.GetBool("Attacking"))
+            Turn();
+
         if (currentRollCoolTime > 0f)
         {
             currentRollCoolTime -= Time.deltaTime;
@@ -102,10 +106,8 @@ public class Boss1 : Boss
     void FixedUpdate()
     {
         // 걷기
-        if (anim.GetFloat("Distance") == 1)
+        if (anim.GetFloat("Distance") == 1 && !isTurn)
         {
-            Turn();
-
             int walkDirection;
             if (playerXDirection.x >= 0)
             {
@@ -125,29 +127,33 @@ public class Boss1 : Boss
 
     void Turn()
     {
-        // 턴딜레이 살짝 주기
-        if (playerXDirection.x > 0 && transform.localScale.x == 1)
-        {
-            StartCoroutine(turnDelay(turnDelayTime));
-
-            transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
-        }
-        else if (playerXDirection.x <= 0 && transform.localScale.x == -1)
-        {
-            StartCoroutine(turnDelay(turnDelayTime));
-
-            transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
-        }
+        StartCoroutine(turnDelay(turnDelayTime));
     }
 
     IEnumerator turnDelay(float delayTime)
     {
-        yield return new WaitForSeconds(delayTime);
+        // 턴딜레이 살짝 주기
+        if (playerXDirection.x > 0 && transform.localScale.x == 1)
+        {
+            isTurn = true;
+            yield return new WaitForSeconds(delayTime);
+
+            isTurn = false;
+            transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
+        }
+        else if (playerXDirection.x <= 0 && transform.localScale.x == -1)
+        {
+            isTurn = true;
+            yield return new WaitForSeconds(delayTime);
+
+            isTurn = false;
+            transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
+        }
     }
 
     void CallState(Boss1TState inputState)
     {
-        StopAllCoroutines();
+        // StopAllCoroutines();
         anim.SetFloat("Distance", 0);
         nowState = inputState;
 
@@ -270,10 +276,23 @@ public class Boss1 : Boss
         }
     }
 
-    void OnStateEnd()
+    void OnStateEnd(float delayTime)
     {
+        StartCoroutine(StateChangeDelay(delayTime));
+    }
+
+    IEnumerator StateChangeDelay(float delayTime)
+    {
+        if (anim.GetBool("Attacking"))
+            anim.SetBool("Attacking", false);
+
+        Debug.Log($"스테이트 체인지 시작 {Time.time}");
+        yield return new WaitForSeconds(delayTime);
+
+        Debug.Log($"스테이트 체인지 끝 {Time.time}");
         CallState(ChangeState());
     }
+
 
     void DoIdleState()
     {
@@ -324,22 +343,25 @@ public class Boss1 : Boss
 
     void DoChopAttackState()
     {
-        Turn();
+        // Turn();
         anim.Play("ChopAttack");
+        anim.SetBool("Attacking", true);
         changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1TState.ChopAttack), 20);
     }
 
     void DoSwingAttackState()
     {
-        Turn();
+        // Turn();
         anim.Play("SwingAttack");
+        anim.SetBool("Attacking", true);
         changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1TState.SwingAttack), 20);
     }
 
     void DoSequenceAttackState()
     {
-        Turn();
+        // Turn();
         anim.Play("SequenceAttack");
+        anim.SetBool("Attacking", true);
         changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1TState.SequnceAttack), 20);
     }
 
@@ -360,17 +382,6 @@ public class Boss1 : Boss
             transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
         }
     }
-
-    void CallStateChangeDelay(float delayTime)
-    {
-        StartCoroutine(StateChangeDelay(delayTime));
-    }
-
-    IEnumerator StateChangeDelay(float delayTime)
-    {
-        yield return new WaitForSeconds(delayTime);
-    }
-
 
     Vector2 GetPlayerXDirectionNormalizedAs1()
     {
