@@ -130,37 +130,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3774009050006641194, guid: aa774c78b1d009e4e9106a8efb2f3e32, type: 3}
-      propertyPath: phase2_short.Array.size
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 7815281390825326893, guid: aa774c78b1d009e4e9106a8efb2f3e32, type: 3}
       propertyPath: m_Name
       value: Boss1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7905093595428779239, guid: aa774c78b1d009e4e9106a8efb2f3e32, type: 3}
-      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].x
-      value: -0.27191585
-      objectReference: {fileID: 0}
-    - target: {fileID: 7905093595428779239, guid: aa774c78b1d009e4e9106a8efb2f3e32, type: 3}
-      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].y
-      value: -0.087590456
-      objectReference: {fileID: 0}
-    - target: {fileID: 7905093595428779239, guid: aa774c78b1d009e4e9106a8efb2f3e32, type: 3}
-      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[7].x
-      value: 0.48357043
-      objectReference: {fileID: 0}
-    - target: {fileID: 7905093595428779239, guid: aa774c78b1d009e4e9106a8efb2f3e32, type: 3}
-      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[7].y
-      value: -1.1384604
-      objectReference: {fileID: 0}
-    - target: {fileID: 7905093595428779239, guid: aa774c78b1d009e4e9106a8efb2f3e32, type: 3}
-      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[8].x
-      value: 0.18507442
-      objectReference: {fileID: 0}
-    - target: {fileID: 7905093595428779239, guid: aa774c78b1d009e4e9106a8efb2f3e32, type: 3}
-      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[8].y
-      value: -0.11684501
       objectReference: {fileID: 0}
     - target: {fileID: 8988460073442742606, guid: aa774c78b1d009e4e9106a8efb2f3e32, type: 3}
       propertyPath: m_LocalPosition.x
