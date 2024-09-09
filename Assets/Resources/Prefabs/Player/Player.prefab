@@ -835,6 +835,7 @@ MonoBehaviour:
   _hammerCollider: {fileID: 1593777574002791125}
   _StaminaSlider: {fileID: 0}
   _HpSlider: {fileID: 0}
+  _PlayerWeapon: {fileID: 2405850284944942838}
 --- !u!114 &13467684890913852
 MonoBehaviour:
   m_ObjectHideFlags: 0
