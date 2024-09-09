@@ -415,10 +415,10 @@ public class Boss3_ai : Boss
         yield return new WaitForSecondsRealtime(1.383f);
 
         rb.gravityScale = 1;
-        if (currentPhase == 0)
+        //if (currentPhase == 0)
             PlayPattern_3_1_2();
-        else
-            PlayPattern_3_1_3();
+        //else
+        //    PlayPattern_3_1_3();
     }
 
     private IEnumerator IE_Pattern3_1_2()
