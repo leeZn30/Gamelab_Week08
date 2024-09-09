@@ -664,10 +664,3 @@ public enum PatternConditionState
     Far,
     Behind,
 }
-
-[Serializable]
-public struct AttackEffectData
-{
-    public Boss2Attack attack;
-    public float damage;
-} 
