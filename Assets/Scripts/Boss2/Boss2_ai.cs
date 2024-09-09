@@ -49,7 +49,8 @@ public class Boss2_ai : Boss
 
     [Header("Boolean")]
     [SerializeField] private bool isDead = false;
-    [SerializeField] private bool isSliding = false; 
+    [SerializeField] private bool isSliding = false;
+    [SerializeField] private bool isCloaking = false;
 
     private void Awake()
     {
@@ -144,7 +145,7 @@ public class Boss2_ai : Boss
 
     public override void OnDamaged(float damage)
     {
-        if (hp > 0)
+        if (hp > 0 && !isCloaking)
         {
             hp -= damage;
         }

@@ -11,21 +11,19 @@ public class Boss3_ai : Boss
 
 
     [Header("Speed")]
-    [SerializeField] private float walkSpeed = 3;
-    [SerializeField] private float runSpeed = 6;
-    [SerializeField] private float backStepSpeed = 8;
-    [SerializeField] private float rushPatternSpeed = 15;
-    [SerializeField] private float speedLerpFactor_P3;
+    [SerializeField] private float walkSpeed = 2;
+    [SerializeField] private float rushPatternSpeed;
+    [SerializeField] private float rushPatternLerpValue;
     [SerializeField] private float speedLerpFactor_P3_1;
     [SerializeField] private float speedLerpFactor_P3_2;
-    [SerializeField] private float speedLerpFactor_P3_3;
-    [SerializeField] private float speedLerpFactor_P4_1 = 1;
+    [SerializeField] private float speedLerpFactor_P5_1;
 
     [Header("Pattern")]
     [SerializeField] private int lookingDir;
     [SerializeField] private int currentPhase;
     [SerializeField] private PatternConditionState currentPatternConditionState;
     [SerializeField] private string currentPatternName;
+    [SerializeField] private Transform handTf;
 
     [SerializeField] private PatternProbabilityScriptableObj[] phase1_PatternProbabilities;
     [SerializeField] private PatternProbabilityScriptableObj[] phase2_PatternProbabilities;
@@ -42,6 +40,7 @@ public class Boss3_ai : Boss
     private Vector3 playerCalcualtePosition = Vector3.zero;
     private Coroutine patternCoroutine;
     [SerializeField] private Animator objAnimator;
+    [SerializeField] private BossGrab grab;
 
     private GameObject playerObj;
     private PlayerController playerController;
@@ -49,7 +48,7 @@ public class Boss3_ai : Boss
 
     [Header("Boolean")]
     [SerializeField] private bool isDead = false;
-    [SerializeField] private bool isSliding = false;
+    [SerializeField] private bool isGrab = false;
 
     private void Awake()
     {
@@ -100,45 +99,28 @@ public class Boss3_ai : Boss
                 PlayRandomPattern(currentPhase);
             }
         }
-        else if (currentPatternName == "P4")
+        else if (currentPatternName == "P3_1_1")
         {
-            transform.position += Vector3.right * runSpeed * lookingDir * Time.fixedDeltaTime;
-            CheckPatternConditionState();
-            if (currentPatternConditionState != PatternConditionState.Far)
-            {
-                StopAllCoroutines();
-                PlayPattern_4_1();
-                speedLerpValue = 1.5f;
-            }
+            transform.position = new Vector3(
+                Mathf.Lerp(transform.position.x, playerCalcualtePosition.x, Time.fixedDeltaTime * speedLerpFactor_P3_1),
+                transform.position.y,
+                transform.position.z);
         }
-        else if (currentPatternName == "P4_1")
-        {
-            speedLerpValue = Mathf.Lerp(speedLerpValue, 0, Time.fixedDeltaTime * speedLerpFactor_P4_1);
-            transform.position += Vector3.right * runSpeed * speedLerpValue * lookingDir * Time.fixedDeltaTime;
-        }
-        else if (currentPatternName == "P3")
-        {
-            speedLerpValue = Mathf.Lerp(speedLerpValue, 1, Time.fixedDeltaTime * speedLerpFactor_P3);
-            transform.position += Vector3.right * backStepSpeed * speedLerpValue * -lookingDir * Time.fixedDeltaTime;
-        }
-        else if (currentPatternName == "P3_1")
-        {
-            speedLerpValue = Mathf.Lerp(speedLerpValue, 0, Time.fixedDeltaTime * speedLerpFactor_P3_1);
-            transform.position += Vector3.right * rushPatternSpeed * speedLerpValue * lookingDir * Time.fixedDeltaTime;
-        }
-        else if (currentPatternName == "P3_2")
+        else if (currentPatternName == "P3_1_2" || currentPatternName == "P3_1_3")
         {
             transform.position = new Vector3(
                 Mathf.Lerp(transform.position.x, playerCalcualtePosition.x, Time.fixedDeltaTime * speedLerpFactor_P3_2),
                 transform.position.y,
                 transform.position.z);
         }
-        else if (currentPatternName == "P3_3")
+        else if (currentPatternName == "P5_1")
         {
-            transform.position = new Vector3(
-                Mathf.Lerp(transform.position.x, playerCalcualtePosition.x, Time.fixedDeltaTime * speedLerpFactor_P3_3),
-                transform.position.y,
-                transform.position.z);
+            speedLerpValue = Mathf.Lerp(speedLerpValue, 0, Time.fixedDeltaTime * speedLerpFactor_P5_1);
+            transform.position += Vector3.right * rushPatternSpeed * speedLerpValue * lookingDir * Time.fixedDeltaTime;
+        }
+        else if (grab.hasGrabed)
+        {
+            playerTf.position = handTf.position;
         }
     }
 
@@ -166,7 +148,7 @@ public class Boss3_ai : Boss
         StopAllCoroutines();
         currentPatternName = "None";
         rb.gravityScale = 1;
-        objAnimator.Play("Boss2_Die");
+        objAnimator.Play("Boss3_dead");
         patternCoroutine = StartCoroutine(waitForDeath());
     }
 
@@ -181,7 +163,7 @@ public class Boss3_ai : Boss
         GameManager.Instance.hideBossInfo();
 
         // 게임매니저에 알리기
-        //GameManager.Instance.OnBoss2Cleared();
+        //GameManager.Instance.OnBoss3Cleared();
 
         Destroy(gameObject);
     }
@@ -236,22 +218,31 @@ public class Boss3_ai : Boss
                 PlayPattern_2();
                 break;
             case PatternState.pattern2_1:
-                //PlayPattern_2_1();
+                PlayPattern_2_1();
                 break;
-            case PatternState.pattern3:
-                PlayPattern_3();
+            case PatternState.pattern3_1_1:
+                PlayPattern_3_1_1();
+                break;
+            case PatternState.pattern3_1_2:
+                PlayPattern_3_1_2();
+                break;
+            case PatternState.pattern3_1_3:
+                PlayPattern_3_1_3();
                 break;
             case PatternState.pattern4:
                 PlayPattern_4();
                 break;
+            case PatternState.pattern4_1:
+                PlayPattern_4_1();
+                break;
+            case PatternState.pattern4_f:
+                PlayPattern_4_f();
+                break;
             case PatternState.pattern5:
                 PlayPattern_5();
                 break;
-            case PatternState.pattern6:
-                PlayPattern_6();
-                break;
-            case PatternState.pattern7:
-                PlayPattern_7();
+            case PatternState.pattern5_1:
+                PlayPattern_5_1();
                 break;
             case PatternState.walk:
                 PlayWalk();
@@ -275,20 +266,6 @@ public class Boss3_ai : Boss
         patternCoroutine = StartCoroutine(IE_Pattern1());
     }
 
-    private void PlayPattern_1_1()
-    {
-        currentPatternName = "P1_1";
-        StopAllCoroutines();
-        patternCoroutine = StartCoroutine(IE_Pattern1_1());
-    }
-
-    private void PlayPattern_1_2()
-    {
-        currentPatternName = "P1_2";
-        StopAllCoroutines();
-        patternCoroutine = StartCoroutine(IE_Pattern1_2());
-    }
-
     private void PlayPattern_2()
     {
         currentPatternName = "P2";
@@ -296,32 +273,32 @@ public class Boss3_ai : Boss
         patternCoroutine = StartCoroutine(IE_Pattern2());
     }
 
-    private void PlayPattern_3()
+    private void PlayPattern_2_1()
     {
-        currentPatternName = "P3";
+        currentPatternName = "P2_1";
         StopAllCoroutines();
-        patternCoroutine = StartCoroutine(IE_Pattern3());
+        patternCoroutine = StartCoroutine(IE_Pattern2_1());
     }
 
-    private void PlayPattern_3_1()
+    private void PlayPattern_3_1_1()
     {
-        currentPatternName = "P3_1";
+        currentPatternName = "P3_1_1";
         StopAllCoroutines();
-        patternCoroutine = StartCoroutine(IE_Pattern3_1());
+        patternCoroutine = StartCoroutine(IE_Pattern3_1_1());
     }
 
-    private void PlayPattern_3_2()
+    private void PlayPattern_3_1_2()
     {
-        currentPatternName = "P3_2";
+        currentPatternName = "P3_1_2";
         StopAllCoroutines();
-        patternCoroutine = StartCoroutine(IE_Pattern3_2());
+        patternCoroutine = StartCoroutine(IE_Pattern3_1_2());
     }
 
-    private void PlayPattern_3_3()
+    private void PlayPattern_3_1_3()
     {
-        currentPatternName = "P3_3";
+        currentPatternName = "P3_1_3";
         StopAllCoroutines();
-        patternCoroutine = StartCoroutine(IE_Pattern3_3());
+        patternCoroutine = StartCoroutine(IE_Pattern3_1_3());
     }
 
     private void PlayPattern_4()
@@ -338,27 +315,25 @@ public class Boss3_ai : Boss
         patternCoroutine = StartCoroutine(IE_Pattern4_1());
     }
 
+    private void PlayPattern_4_f()
+    {
+        currentPatternName = "P4_f";
+        StopAllCoroutines();
+        patternCoroutine = StartCoroutine(IE_Pattern4_f());
+    }
+
     private void PlayPattern_5()
     {
         currentPatternName = "P5";
         StopAllCoroutines();
         patternCoroutine = StartCoroutine(IE_Pattern5());
-
-
     }
 
-    private void PlayPattern_6()
+    private void PlayPattern_5_1()
     {
-        currentPatternName = "P6";
+        currentPatternName = "P5_1";
         StopAllCoroutines();
-        patternCoroutine = StartCoroutine(IE_Pattern6());
-    }
-
-    private void PlayPattern_7()
-    {
-        currentPatternName = "P7";
-        StopAllCoroutines();
-        patternCoroutine = StartCoroutine(IE_Pattern7());
+        patternCoroutine = StartCoroutine(IE_Pattern5_1());
     }
 
     private void PlayWalk()
@@ -386,121 +361,89 @@ public class Boss3_ai : Boss
         transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
         PlayRandomPattern(currentPhase);
     }
+
+    private void LookPlayer()
+    {
+        if (transform.position.x < playerTf.position.x)
+        {
+            lookingDir = 1;
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * -1, transform.localScale.y, transform.localScale.z);
+        }
+        else
+        {
+            lookingDir = -1;
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+    }
     #endregion
 
     #region Pattern Coroutine
 
     private IEnumerator IE_Pattern1()
     {
-        objAnimator.Play("Boss2_Pattern1");
+        objAnimator.Play("Boss3_pattern1");
 
-        yield return new WaitForSecondsRealtime(1.27f);
-
-        if (currentPatternConditionState == PatternConditionState.Close)
-        {
-            PlayPattern_1_1();
-            yield break;
-        }
-        else
-        {
-            PlayIdle(0);
-        }
-    }
-
-    private IEnumerator IE_Pattern1_1()
-    {
-        objAnimator.Play("Boss2_Pattern1_1");
-
-        yield return new WaitForSecondsRealtime(1.25f);
-
-        if (currentPhase == 0)
-            PlayIdle(0);
-        else if (currentPatternConditionState == PatternConditionState.Close)
-        {
-            PlayPattern_1_2();
-            yield break;
-        }
-        else if (currentPatternConditionState == PatternConditionState.RightBehind)
-        {
-            PlayPattern_5();
-            yield break;
-        }
-        else
-        {
-            PlayIdle(0);
-        }
-    }
-
-    private IEnumerator IE_Pattern1_2()
-    {
-        objAnimator.Play("Boss2_Pattern1_2");
-
-        yield return new WaitForSecondsRealtime(2f);
+        yield return new WaitForSecondsRealtime(2.633f);
 
         PlayIdle(0);
     }
 
     private IEnumerator IE_Pattern2()
     {
-        objAnimator.Play("Boss2_Pattern2");
+        objAnimator.Play("Boss3_pattern2");
+
+        yield return new WaitForSecondsRealtime(2.033f);
+
+        PlayIdle(0);
+    }
+
+    private IEnumerator IE_Pattern2_1()
+    {
+        objAnimator.Play("Boss3_pattern2_1");
 
         yield return new WaitForSecondsRealtime(2.65f);
 
         PlayIdle(0);
     }
 
-    private IEnumerator IE_Pattern3()
+    private IEnumerator IE_Pattern3_1_1()
     {
-        objAnimator.Play("Boss2_Pattern3");
-        speedLerpValue = 0;
         rb.gravityScale = 0;
+        objAnimator.Play("Boss3_pattern3_1_1");
+        playerCalcualtePosition = playerTf.transform.position;
 
-        yield return new WaitForSecondsRealtime(1.817f);
+        yield return new WaitForSecondsRealtime(1.383f);
 
         rb.gravityScale = 1;
-
-        if (UnityEngine.Random.Range(0, 2) == 0)
-        {
-            PlayPattern_3_1();
-        }
+        if (currentPhase == 0)
+            PlayPattern_3_1_2();
         else
-        {
-            if (currentPhase == 0)
-                PlayPattern_3_2();
-            else
-                PlayPattern_3_3();
-        }
+            PlayPattern_3_1_3();
     }
 
-    private IEnumerator IE_Pattern3_1()
+    private IEnumerator IE_Pattern3_1_2()
     {
-        objAnimator.Play("Boss2_Pattern3_1");
-        speedLerpValue = 3.5f;
+        LookPlayer();
 
-        yield return new WaitForSecondsRealtime(3.6f);
-
-        PlayIdle(0);
-    }
-
-    private IEnumerator IE_Pattern3_2()
-    {
         rb.gravityScale = 0;
-        objAnimator.Play("Boss2_Pattern3_2");
-        playerCalcualtePosition = playerTf.position;
+        objAnimator.Play("Boss3_pattern3_1_2");
+        playerCalcualtePosition = playerTf.transform.position;
 
-        yield return new WaitForSecondsRealtime(2.9f);
+        yield return new WaitForSecondsRealtime(1.5f);
 
         rb.gravityScale = 1;
         PlayIdle(0);
     }
 
-    private IEnumerator IE_Pattern3_3()
+    private IEnumerator IE_Pattern3_1_3()
     {
-        rb.gravityScale = 0;
-        objAnimator.Play("Boss2_Pattern3_3");
-        playerCalcualtePosition = playerTf.position;
+        LookPlayer();
 
-        yield return new WaitForSecondsRealtime(2.9f);
+        rb.gravityScale = 0;
+        objAnimator.Play("Boss3_pattern3_1_3");
+        playerCalcualtePosition = playerTf.transform.position;
+
+        yield return new WaitForSecondsRealtime(1.5f);
 
         rb.gravityScale = 1;
         PlayIdle(0);
@@ -508,55 +451,82 @@ public class Boss3_ai : Boss
 
     private IEnumerator IE_Pattern4()
     {
-        objAnimator.Play("Boss2_Pattern4");
-        yield break;
+        objAnimator.Play("Boss3_pattern4");
+
+        yield return new WaitForSecondsRealtime(1.033f);
+
+        if (grab.hasGrabed)
+        {
+            PlayPattern_4_1();
+        }
+        else
+        {
+            PlayPattern_4_f();
+        }
     }
 
     private IEnumerator IE_Pattern4_1()
     {
-        objAnimator.Play("Boss2_Pattern4_1");
+        objAnimator.Play("Boss3_pattern4_1");
 
-        yield return new WaitForSecondsRealtime(1.2f);
+        yield return new WaitForSecondsRealtime(1.5f);
+
+        grab.hasGrabed = false;
+        playerObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(10 * lookingDir, 0), ForceMode2D.Impulse);
+
+        PlayIdle(0);
+    }
+
+    private IEnumerator IE_Pattern4_f()
+    {
+        objAnimator.Play("Boss3_pattern4_fail");
+
+        yield return new WaitForSecondsRealtime(1f);
 
         PlayIdle(0);
     }
 
     private IEnumerator IE_Pattern5()
     {
-        objAnimator.Play("Boss2_Pattern5");
+        objAnimator.Play("Boss3_pattern5");
 
-        yield return new WaitForSecondsRealtime(1.017f);
-
-        lookingDir *= -1;
-        transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-        PlayIdle(0);
+        yield return new WaitForSecondsRealtime(1.466f);
+        
+        PlayPattern_5_1();
     }
 
-    private IEnumerator IE_Pattern6()
+    private IEnumerator IE_Pattern5_1()
     {
-        objAnimator.Play("Boss2_Pattern6");
-
-        yield return new WaitForSecondsRealtime(2.65f);
-
-        PlayIdle(0);
-    }
-
-    private IEnumerator IE_Pattern7()
-    {
-        objAnimator.Play("Boss2_Pattern7");
-
-        yield return new WaitForSecondsRealtime(2.5f);
-
+        objAnimator.Play("Boss3_pattern5_1");
+        speedLerpValue = rushPatternLerpValue;
+        yield return new WaitForSecondsRealtime(1);
+        LookPlayer();
+        objAnimator.Play("Boss3_idle");
+        objAnimator.Play("Boss3_pattern5_1");
+        speedLerpValue = rushPatternLerpValue;
+        yield return new WaitForSecondsRealtime(1);
+        LookPlayer();
+        objAnimator.Play("Boss3_idle");
+        objAnimator.Play("Boss3_pattern5_1");
+        speedLerpValue = rushPatternLerpValue;
+        yield return new WaitForSecondsRealtime(1);
+        LookPlayer();
+        objAnimator.Play("Boss3_idle");
+        objAnimator.Play("Boss3_pattern5_2");
+        speedLerpValue = 0;
+        yield return new WaitForSecondsRealtime(0.917f);
+        speedLerpValue = rushPatternLerpValue;
+        yield return new WaitForSecondsRealtime(1.583f);
         PlayIdle(0);
     }
 
     private IEnumerator IE_Idle(float waitSec)
     {
-        objAnimator.Play("Boss2_Idle");
+        objAnimator.Play("Boss3_idle");
 
         if (waitSec == 0)
         {
-            float randSec = UnityEngine.Random.Range(0.2f, 0.3f);
+            float randSec = UnityEngine.Random.Range(0.8f, 1.2f);
             Debug.Log($"Wait For {randSec}sec");
             yield return new WaitForSecondsRealtime(randSec);
         }
@@ -571,7 +541,7 @@ public class Boss3_ai : Boss
 
     private IEnumerator IE_Walk(float walkSec)
     {
-        objAnimator.Play("Boss2_Walk");
+        objAnimator.Play("Boss3_walk");
 
         if (walkSec == 0)
         {
@@ -590,11 +560,11 @@ public class Boss3_ai : Boss
 
     private IEnumerator IE_WalkReverse(float walkSec)
     {
-        objAnimator.Play("Boss2_WalkReverse");
+        objAnimator.Play("Boss3_walkReverse");
 
         if (walkSec == 0)
         {
-            float randSec = UnityEngine.Random.Range(0.3f, 0.8f);
+            float randSec = UnityEngine.Random.Range(0.5f, 1.2f);
             Debug.Log($"Walk Backward For {randSec}sec");
             yield return new WaitForSecondsRealtime(randSec);
         }
@@ -649,9 +619,11 @@ public class Boss3_ai : Boss
         pattern3_1_3,
         pattern4,
         pattern4_1,
-        pattern4_fail,
+        pattern4_f,
         pattern5,
         pattern5_1,
         pattern5_2,
+        cloaking,
+        appeared,
     }
 }
