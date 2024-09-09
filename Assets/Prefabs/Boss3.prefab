@@ -385,7 +385,7 @@ GameObject:
   - component: {fileID: 6025487023972489643}
   - component: {fileID: 272640663702158793}
   - component: {fileID: 8920943879628529919}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: collider
   m_TagString: EnemyAttack
   m_Icon: {fileID: 0}
@@ -451,11 +451,8 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.45499998, y: -1.0699999}
-      - {x: 0.515, y: -0.95}
-      - {x: 0.49499997, y: -0.88}
-      - {x: 0.435, y: -0.88}
-      - {x: 0.155, y: -0.69}
+    - - {x: -0.5608437, y: -1.3437408}
+      - {x: 0.28096396, y: -0.8616203}
       - {x: 0.024999999, y: -0.56}
       - {x: -0.085, y: -0.37}
       - {x: -0.114999995, y: -0.19999999}
@@ -490,13 +487,6 @@ PolygonCollider2D:
       - {x: -1.055, y: -1.04}
       - {x: -0.895, y: -1.2099999}
       - {x: -0.805, y: -1.27}
-      - {x: -0.66499996, y: -1.3299999}
-      - {x: -0.555, y: -1.36}
-      - {x: -0.36499998, y: -1.4}
-      - {x: -0.235, y: -1.42}
-      - {x: 0.45499998, y: -1.42}
-      - {x: 0.445, y: -1.3299999}
-      - {x: 0.435, y: -1.14}
   m_UseDelaunayMesh: 0
 --- !u!114 &8920943879628529919
 MonoBehaviour:
@@ -3762,7 +3752,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 421e9a0a7646a4d44bbaaae84408aa8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 300
+  hp: 250
   phaseSwapHp: 150
   walkSpeed: 2.5
   rushPatternSpeed: 15

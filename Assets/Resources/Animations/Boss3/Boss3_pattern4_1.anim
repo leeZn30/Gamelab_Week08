@@ -9526,7 +9526,7 @@ AnimationClip:
     functionName: DoCameraShake
     data: 
     objectReferenceParameter: {fileID: 0}
-    floatParameter: 0.2
+    floatParameter: 0.35
     intParameter: 0
     messageOptions: 0
   - time: 1.1666666
