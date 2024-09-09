@@ -1265,7 +1265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a33c4b53d3c07e042923b23fe81e2185, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 99
+  hp: 200
   isChopCombo: 0
   nowState: 0
   phase1:
@@ -1301,6 +1301,7 @@ MonoBehaviour:
   turnDelayTime: 0.2
   upSlash: {fileID: 424919270041560546, guid: 4e7e9ee4da4b71940accc7a3298db04a, type: 3}
   slash: {fileID: -5757514235750938193, guid: b3516e2c819f3c94794d86f76a473174, type: 3}
+  weaponCollider: {fileID: 7905093595428779239}
   slashPosition: {fileID: 7768145809575455634}
   upSlashPosition: {fileID: 1091385857026689087}
 --- !u!61 &2572809858766281587

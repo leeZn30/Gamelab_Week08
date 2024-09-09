@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Cinemachine;
 
 [Serializable]
 public class patternWeight
@@ -23,6 +24,7 @@ public class Boss1 : Boss
     Slider hpGauge;
     bool isTurn = false;
     public bool isChopCombo = false;
+    bool isAlive = true;
 
     [Header("Player")]
     PlayerController player;
@@ -75,10 +77,13 @@ public class Boss1 : Boss
     [SerializeField] UpSlash upSlash;
     [SerializeField] Slash slash;
 
+    [SerializeField] Collider2D weaponCollider;
     Animator anim;
     Rigidbody2D rigid;
     [SerializeField] Transform slashPosition;
     [SerializeField] Transform upSlashPosition;
+    private CinemachineVirtualCamera _virtualCamera;
+    CinemachineBasicMultiChannelPerlin _perlin;
 
     void Awake()
     {
@@ -94,43 +99,56 @@ public class Boss1 : Boss
 
     void Start()
     {
-        CallState(ChangeState());
+        StartCoroutine(startDelay());
     }
 
     void Update()
     {
-        if (!anim.GetBool("Attacking"))
-            Turn();
-
-        if (currentRollCoolTime > 0f)
+        if (isAlive)
         {
-            currentRollCoolTime -= Time.deltaTime;
+            if (!anim.GetBool("Attacking"))
+                Turn();
 
-            if (currentRollCoolTime < 0f)
-                currentRollCoolTime = 0f;
+            if (currentRollCoolTime > 0f)
+            {
+                currentRollCoolTime -= Time.deltaTime;
+
+                if (currentRollCoolTime < 0f)
+                    currentRollCoolTime = 0f;
+            }
+
         }
     }
 
     void FixedUpdate()
     {
-        // 걷기
-        if (anim.GetFloat("Distance") == 1 && !isTurn)
+        if (isAlive)
         {
-            int walkDirection;
-            if (playerXDirection.x >= 0)
+            // 걷기
+            if (anim.GetFloat("Distance") == 1 && !isTurn)
             {
-                walkDirection = 1;
+                int walkDirection;
+                if (playerXDirection.x >= 0)
+                {
+                    walkDirection = 1;
+                }
+                else
+                {
+                    walkDirection = -1;
+                }
+                rigid.velocity = new Vector2(walkDirection * walkSpeed, rigid.velocity.y);
             }
             else
             {
-                walkDirection = -1;
+                rigid.velocity = Vector2.zero;
             }
-            rigid.velocity = new Vector2(walkDirection * walkSpeed, rigid.velocity.y);
         }
-        else
-        {
-            rigid.velocity = Vector2.zero;
-        }
+    }
+
+    IEnumerator startDelay()
+    {
+        yield return new WaitForSeconds(2f);
+        CallState(ChangeState());
     }
 
     void Turn()
@@ -608,8 +626,50 @@ public class Boss1 : Boss
         if (hp <= 0)
         {
             StopAllCoroutines();
+            isAlive = false;
+            weaponCollider.enabled = false;
             anim.Play("Dead");
         }
+    }
+
+    void OnDead()
+    {
+        StartCoroutine(waitForDeath());
+    }
+
+    IEnumerator waitForDeath()
+    {
+        yield return new WaitForSeconds(2f);
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.showBossInfo("Boss1 Cleared! \n Let's Go to Next Boss");
+
+        yield return new WaitForSeconds(2f);
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.hideBossInfo();
+
+            GameManager.Instance.OnBoss1Cleared();
+        }
+
+        Destroy(gameObject);
+    }
+
+    void OnCameraShake()
+    {
+        StartCoroutine(ShakeCamera());
+    }
+
+    IEnumerator ShakeCamera()
+    {
+        _perlin.m_AmplitudeGain = 0.3f;
+        _perlin.m_FrequencyGain = 1f;
+
+        yield return new WaitForSeconds(1f);
+
+        _perlin.m_AmplitudeGain = 0f;
+        _perlin.m_FrequencyGain = 0f;
     }
 
     public void OnAttack(float dmg = 0)
@@ -625,7 +685,7 @@ public class Boss1 : Boss
                     break;
 
                 case Boss1TState.SwingAttack:
-                    damage = 20;
+                    damage = 10;
                     break;
 
                 case Boss1TState.SequnceAttack:
@@ -633,7 +693,11 @@ public class Boss1 : Boss
                     break;
 
                 case Boss1TState.JumpAttack:
-                    damage = 25;
+                    damage = 30;
+                    break;
+
+                case Boss1TState.BackAttack:
+                    damage = 15;
                     break;
 
                 case Boss1TState.WaveAttack:
@@ -641,15 +705,13 @@ public class Boss1 : Boss
                     break;
 
                 case Boss1TState.UppercutAttack:
-                    damage = 25;
+                    damage = 15;
                     break;
             }
 
             player.OnDamaged(damage);
         }
     }
-
-
 
 
 }
