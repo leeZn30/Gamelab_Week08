@@ -16,4 +16,5 @@ MonoBehaviour:
   - pattern1
   - pattern2
   - pattern3
-  Probability: 140000002800000028000000
+  - walkReverse
+  Probability: 140000001e000000280000000a000000
