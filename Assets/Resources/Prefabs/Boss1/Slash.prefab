@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  maxLength: 2
+  maxLength: 1
   duration: 1
   flickerInterval: 0.1
 --- !u!61 &9033390284096520997

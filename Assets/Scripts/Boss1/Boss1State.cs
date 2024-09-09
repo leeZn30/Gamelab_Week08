@@ -28,4 +28,8 @@ public enum Boss1TState
     ChopAttack,
     SwingAttack,
     SequnceAttack,
+    JumpAttack,
+    BackAttack,
+    WaveAttack,
+    UppercutAttack,
 }

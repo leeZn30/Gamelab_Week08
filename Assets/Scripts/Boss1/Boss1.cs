@@ -9,7 +9,6 @@ public class patternWeight
 {
     public Boss1TState state;
     public int weight;
-
     // 생성자 추가
     public patternWeight(Boss1TState state, int weight)
     {
@@ -23,6 +22,7 @@ public class Boss1 : Boss
     [Header("상태")]
     Slider hpGauge;
     bool isTurn = false;
+    public bool isChopCombo = false;
 
     [Header("Player")]
     PlayerController player;
@@ -37,19 +37,27 @@ public class Boss1 : Boss
     [SerializeField]
     List<patternWeight> phase1 = new List<patternWeight>
     {
-        new patternWeight(Boss1TState.ChopAttack, 100),
-        // new patternWeight(Boss1TState.SwingAttack, 67),
-        // new patternWeight(Boss1TState.SequnceAttack, 100),
-    };
-
-    List<patternWeight> phase2 = new List<patternWeight>
-    {
         new patternWeight(Boss1TState.ChopAttack, 34),
-        new patternWeight(Boss1TState.SwingAttack, 67),
-        new patternWeight(Boss1TState.SequnceAttack, 100),
+        new patternWeight(Boss1TState.SwingAttack, 33),
+        new patternWeight(Boss1TState.SequnceAttack, 33),
     };
 
-    List<patternWeight> nowPhase => hp < 100f ? phase2 : phase1;
+    [SerializeField]
+    List<patternWeight> phase2_short = new List<patternWeight>
+    {
+        new patternWeight(Boss1TState.ChopAttack, 20),
+        new patternWeight(Boss1TState.SwingAttack, 20),
+        new patternWeight(Boss1TState.SequnceAttack, 20),
+    };
+
+    [SerializeField]
+    List<patternWeight> phase2_long = new List<patternWeight>
+    {
+        new patternWeight(Boss1TState.WaveAttack, 50),
+        new patternWeight(Boss1TState.UppercutAttack, 50),
+    };
+
+    List<patternWeight> nowPhase => hp < 100f ? (playerDistance > shortDistance ? phase2_long : phase2_short) : phase1;
 
 
     [Header("변수")]
@@ -183,30 +191,116 @@ public class Boss1 : Boss
                 DoSequenceAttackState();
                 break;
 
+            case Boss1TState.JumpAttack:
+                DoJumpAttackState();
+                break;
+
+
+            case Boss1TState.BackAttack:
+                DoBackAttackState();
+                break;
+
+
+            case Boss1TState.WaveAttack:
+                DoWaveAttackState();
+                break;
+
+
+            case Boss1TState.UppercutAttack:
+                DoUppercutAttackState();
+                break;
+
         }
     }
 
     Boss1TState ChangeState()
     {
-        if (playerDistance > shortDistance)
+        // 연속 공격
+        if (isChopCombo)
         {
-            if (nowState == Boss1TState.Walk)
+            // 후방 공격
+            if (isPlayerBehind())
             {
-                int pick = UnityEngine.Random.Range(0, 2);
+                return Boss1TState.BackAttack;
+            }
+            // 점프 공격
+            else
+            {
+                return Boss1TState.JumpAttack;
+            }
+        }
 
-                // 플레이어 가까이로 구르기
-                if (pick == 0 && currentRollCoolTime == 0f)
+        if (nowPhase == phase1)
+        {
+            if (playerDistance > shortDistance)
+            {
+                if (nowState == Boss1TState.Walk)
                 {
-                    return Boss1TState.Roll;
+                    int pick = UnityEngine.Random.Range(0, 2);
+
+                    // 플레이어 가까이로 구르기
+                    if (pick == 0 && currentRollCoolTime == 0f)
+                    {
+                        return Boss1TState.Roll;
+                    }
+                    else
+                    {
+                        return Boss1TState.Walk;
+                    }
                 }
                 else
                 {
                     return Boss1TState.Walk;
                 }
             }
-            else
+        }
+        else
+        {
+            // 너무 멀면 걸어가기
+            if (playerDistance > longDistance)
             {
-                return Boss1TState.Walk;
+                if (nowState == Boss1TState.Walk)
+                {
+                    int pick = UnityEngine.Random.Range(0, 2);
+
+                    // 플레이어 가까이로 구르기
+                    if (pick == 0 && currentRollCoolTime == 0f)
+                    {
+                        return Boss1TState.Roll;
+                    }
+                    else
+                    {
+                        return Boss1TState.Walk;
+                    }
+                }
+                else
+                {
+                    return Boss1TState.Walk;
+                }
+            }
+
+            // 적당히 멀면 원거리 공격
+            if (playerDistance > shortDistance)
+            {
+                // 0~100, 101~120
+                int pick = UnityEngine.Random.Range(0, 101);
+                int sum = 0;
+
+                foreach (patternWeight pw in nowPhase)
+                {
+                    if (pick <= pw.weight + sum)
+                    {
+                        if (pw.state == Boss1TState.Roll)
+                        {
+                            if (rollCoolTime != 0f)
+                                return Boss1TState.Walk;
+                            else return Boss1TState.Roll;
+                        }
+                        return pw.state;
+                    }
+
+                    sum += pw.weight;
+                }
             }
         }
 
@@ -214,7 +308,7 @@ public class Boss1 : Boss
         {
             if (currentRollCoolTime == 0f)
                 return Boss1TState.Roll;
-            else return Boss1TState.Idle;
+            else return Boss1TState.ChopAttack;
         }
 
 
@@ -234,7 +328,7 @@ public class Boss1 : Boss
             }
         }
 
-        // return Boss1TState.Roll;
+        // return Boss1TState.ChopAttack;
         return Boss1TState.Idle;
     }
 
@@ -286,10 +380,8 @@ public class Boss1 : Boss
         if (anim.GetBool("Attacking"))
             anim.SetBool("Attacking", false);
 
-        Debug.Log($"스테이트 체인지 시작 {Time.time}");
         yield return new WaitForSeconds(delayTime);
 
-        Debug.Log($"스테이트 체인지 끝 {Time.time}");
         CallState(ChangeState());
     }
 
@@ -302,6 +394,11 @@ public class Boss1 : Boss
     void DoWalkState()
     {
         anim.SetFloat("Distance", 1);
+
+        if (nowPhase == phase2_long)
+        {
+            changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1TState.Walk), 10);
+        }
     }
 
     void DoRollState()
@@ -309,6 +406,11 @@ public class Boss1 : Boss
         anim.Play("Roll");
         currentRollCoolTime = rollCoolTime;
         StartCoroutine(RollMovement());
+
+        if (nowPhase == phase2_long)
+        {
+            changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1TState.Roll), 10);
+        }
     }
 
     IEnumerator RollMovement()
@@ -343,15 +445,39 @@ public class Boss1 : Boss
 
     void DoChopAttackState()
     {
-        // Turn();
         anim.Play("ChopAttack");
         anim.SetBool("Attacking", true);
         changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1TState.ChopAttack), 20);
     }
 
+    void CheckCombo()
+    {
+        // 콤보를 할 것인가
+        if (nowPhase != phase1 && playerDistance < shortDistance + 2f)
+        {
+            isChopCombo = true;
+        }
+    }
+
+    bool isPlayerBehind()
+    {
+        if (transform.localScale.x == 1)
+        {
+            if (playerXDirection.x == 1)
+                return true;
+            else return false;
+        }
+        else
+        {
+            if (playerXDirection.x == -1)
+                return true;
+            else return false;
+        }
+    }
+
+
     void DoSwingAttackState()
     {
-        // Turn();
         anim.Play("SwingAttack");
         anim.SetBool("Attacking", true);
         changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1TState.SwingAttack), 20);
@@ -359,7 +485,6 @@ public class Boss1 : Boss
 
     void DoSequenceAttackState()
     {
-        // Turn();
         anim.Play("SequenceAttack");
         anim.SetBool("Attacking", true);
         changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1TState.SequnceAttack), 20);
@@ -368,6 +493,69 @@ public class Boss1 : Boss
     void onCreateUpSlash()
     {
         Instantiate(upSlash, upSlashPosition.position, Quaternion.identity, null);
+    }
+
+    void DoJumpAttackState()
+    {
+        isChopCombo = false;
+        anim.SetTrigger("JumpAttack");
+        anim.SetBool("Attacking", true);
+    }
+
+    void DoBackAttackState()
+    {
+        isChopCombo = false;
+        anim.SetTrigger("BackAttack");
+        anim.SetBool("Attacking", true);
+    }
+
+    void DoWaveAttackState()
+    {
+        anim.Play("WaveAttack");
+        anim.SetBool("Attacking", true);
+        changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1TState.WaveAttack), 10);
+    }
+
+    void CreateSlash()
+    {
+        Instantiate(slash, slashPosition.position, Quaternion.identity, null);
+    }
+
+    void DoUppercutAttackState()
+    {
+        anim.SetBool("Attacking", true);
+        anim.Play("UppercutMoving");
+        StartCoroutine(UppercutMovement());
+        changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1TState.UppercutAttack), 10);
+    }
+
+    IEnumerator UppercutMovement()
+    {
+        // 애니메이터의 현재 상태 정보를 가져오기 위해 대기
+        yield return new WaitForEndOfFrame();  // 애니메이션이 시작되도록 한 프레임 대기
+
+        // 애니메이션 실행 시간 동안 방향으로 이동
+        float elapsedTime = 0f;
+
+        Vector3 startPosition = transform.position;
+        Vector3 targetPosition = new Vector3(player.transform.position.x + (-playerXDirection.x * 2f), transform.position.y, transform.position.z);
+        float stoppingDistance = 0.1f;  // 오차 범위 (목표와의 최소 거리)
+
+
+        // 이동이 완료될 때까지 실행
+        while (Vector3.Distance(transform.position, targetPosition) > stoppingDistance)
+        {
+            // 현재 위치에서 목표 지점으로 MoveTowards를 사용해 이동
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, Vector3.Distance(startPosition, targetPosition) * Time.deltaTime);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;  // 한 프레임 대기
+        }
+
+        // 마지막으로 목표 지점에 정확히 도달시키기
+        transform.position = targetPosition;
+
+        anim.SetTrigger("UppercutAttack");
     }
 
 
@@ -423,6 +611,45 @@ public class Boss1 : Boss
             anim.Play("Dead");
         }
     }
+
+    public void OnAttack(float dmg = 0)
+    {
+        float damage = dmg;
+
+        if (damage == 0)
+        {
+            switch (nowState)
+            {
+                case Boss1TState.ChopAttack:
+                    damage = 20;
+                    break;
+
+                case Boss1TState.SwingAttack:
+                    damage = 20;
+                    break;
+
+                case Boss1TState.SequnceAttack:
+                    damage = 10;
+                    break;
+
+                case Boss1TState.JumpAttack:
+                    damage = 25;
+                    break;
+
+                case Boss1TState.WaveAttack:
+                    damage = 10;
+                    break;
+
+                case Boss1TState.UppercutAttack:
+                    damage = 25;
+                    break;
+            }
+
+            player.OnDamaged(damage);
+        }
+    }
+
+
 
 
 }
