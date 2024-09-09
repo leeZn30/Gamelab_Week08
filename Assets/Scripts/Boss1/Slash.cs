@@ -18,12 +18,15 @@ public class Slash : MonoBehaviour
     {
         // 슬래시의 초기 설정
         Vector3 startPosition = transform.position;
-        Vector3 direction = -playerTransform.right;
+        Vector3 direction;
+        if (playerTransform.localScale.x == -1)
+            direction = Vector3.right;
+        else
+            direction = Vector3.left;
         Vector3 targetPosition = startPosition + direction * distance;
 
         float halfDuration = duration / 2f;
         float elapsedTime = 0f;
-        float initialLength = 0.1f;
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
 
         while (elapsedTime < duration)

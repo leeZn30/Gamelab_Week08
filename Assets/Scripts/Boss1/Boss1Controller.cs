@@ -380,10 +380,6 @@ public class Boss1Controller : Boss
         StartCoroutine(ShakeCamera());
     }
 
-    void OnCameraShakeEnd()
-    {
-    }
-
     IEnumerator ShakeCamera()
     {
         _perlin.m_AmplitudeGain = 0.3f;

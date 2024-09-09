@@ -18,3 +18,18 @@ public enum Boss1State
     SwingAttack,
     Roll
 }
+
+
+public enum Boss1TState
+{
+    Idle,
+    Walk,
+    Roll,
+    ChopAttack,
+    SwingAttack,
+    SequnceAttack,
+    JumpAttack,
+    BackAttack,
+    WaveAttack,
+    UppercutAttack,
+}
