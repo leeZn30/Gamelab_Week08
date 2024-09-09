@@ -21089,6 +21089,13 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
+  - time: 0.9166667
+    functionName: OnCameraShake
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 1.3333334
     functionName: JustTurn
     data: 
@@ -21098,6 +21105,13 @@ AnimationClip:
     messageOptions: 0
   - time: 1.6666666
     functionName: onCreateUpSlash
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 1.6666666
+    functionName: OnCameraShake
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -21117,6 +21131,13 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
+  - time: 2.3333333
+    functionName: OnCameraShake
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 2.5833333
     functionName: JustTurn
     data: 
@@ -21126,6 +21147,13 @@ AnimationClip:
     messageOptions: 0
   - time: 2.9166667
     functionName: onCreateUpSlash
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 2.9166667
+    functionName: OnCameraShake
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -21145,6 +21173,13 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
+  - time: 3.4166667
+    functionName: OnCameraShake
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 3.55
     functionName: JustTurn
     data: 
@@ -21154,6 +21189,13 @@ AnimationClip:
     messageOptions: 0
   - time: 3.8833334
     functionName: onCreateUpSlash
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 3.8833334
+    functionName: OnCameraShake
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
