@@ -2049,17 +2049,9 @@ PrefabInstance:
       propertyPath: _StaminaSlider
       value: 
       objectReference: {fileID: 1882554034}
-    - target: {fileID: 1588757934191394853, guid: b6a41d4fb5ee6be428193aaa1aff8daa, type: 3}
-      propertyPath: staminaConstant
-      value: 100
-      objectReference: {fileID: 0}
     - target: {fileID: 5556207499356548342, guid: b6a41d4fb5ee6be428193aaa1aff8daa, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 5556207499356548342, guid: b6a41d4fb5ee6be428193aaa1aff8daa, type: 3}
-      propertyPath: m_Layer
-      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7349299024732863239, guid: b6a41d4fb5ee6be428193aaa1aff8daa, type: 3}
       propertyPath: m_LocalPosition.x

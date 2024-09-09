@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject _hammerCollider;
     [SerializeField] private GameObject _StaminaSlider;
     [SerializeField] private GameObject _HpSlider;
+    [SerializeField] private GameObject _PlayerWeapon;
+    private PlayerInput _PlayerInput;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +42,7 @@ public class PlayerController : MonoBehaviour
         MaxHp = currentHP;
         ResetPlayerHp();
         StartCoroutine(StaminaRegainCheck());
+        _PlayerInput = GetComponent<PlayerInput>();
     }
 
     IEnumerator StaminaRegainCheck()
@@ -133,5 +136,19 @@ public class PlayerController : MonoBehaviour
     public void OnDamaged(float damage)
     {
         GetComponent<Damaged>().OnDamaged(damage);
+    }
+
+    public void PlayerGrabbed(bool grabStart)
+    {
+        if(grabStart)
+        {
+            _PlayerInput.enabled = false;
+            _PlayerWeapon.SetActive(false);
+        }
+        else
+        {
+            _PlayerInput.enabled = true;
+            _PlayerWeapon.SetActive(true);
+        }
     }
 }
