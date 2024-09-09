@@ -8,10 +8,10 @@ using Cinemachine;
 [Serializable]
 public class patternWeight
 {
-    public Boss1TState state;
+    public Boss1State state;
     public int weight;
     // 생성자 추가
-    public patternWeight(Boss1TState state, int weight)
+    public patternWeight(Boss1State state, int weight)
     {
         this.state = state;
         this.weight = weight;
@@ -32,31 +32,31 @@ public class Boss1 : Boss
     Vector2 playerXDirection => GetPlayerXDirectionNormalizedAs1();
 
     [Header("패턴")]
-    [SerializeField] Boss1TState nowState = Boss1TState.Idle;
+    [SerializeField] Boss1State nowState = Boss1State.Idle;
     Coroutine nowStateCoroutine;
 
     [Header("페이즈")]
     [SerializeField]
     List<patternWeight> phase1 = new List<patternWeight>
     {
-        new patternWeight(Boss1TState.ChopAttack, 34),
-        new patternWeight(Boss1TState.SwingAttack, 33),
-        new patternWeight(Boss1TState.SequnceAttack, 33),
+        new patternWeight(Boss1State.ChopAttack, 34),
+        new patternWeight(Boss1State.SwingAttack, 33),
+        new patternWeight(Boss1State.SequnceAttack, 33),
     };
 
     [SerializeField]
     List<patternWeight> phase2_short = new List<patternWeight>
     {
-        new patternWeight(Boss1TState.ChopAttack, 20),
-        new patternWeight(Boss1TState.SwingAttack, 20),
-        new patternWeight(Boss1TState.SequnceAttack, 20),
+        new patternWeight(Boss1State.ChopAttack, 20),
+        new patternWeight(Boss1State.SwingAttack, 20),
+        new patternWeight(Boss1State.SequnceAttack, 20),
     };
 
     [SerializeField]
     List<patternWeight> phase2_long = new List<patternWeight>
     {
-        new patternWeight(Boss1TState.WaveAttack, 50),
-        new patternWeight(Boss1TState.UppercutAttack, 50),
+        new patternWeight(Boss1State.WaveAttack, 50),
+        new patternWeight(Boss1State.UppercutAttack, 50),
     };
 
     List<patternWeight> nowPhase => hp < 100f ? (playerDistance > shortDistance ? phase2_long : phase2_short) : phase1;
@@ -102,7 +102,7 @@ public class Boss1 : Boss
 
     void Start()
     {
-        StartCoroutine(startDelay());
+        // StartCoroutine(startDelay());
     }
 
     void Update()
@@ -180,7 +180,7 @@ public class Boss1 : Boss
         }
     }
 
-    void CallState(Boss1TState inputState)
+    void CallState(Boss1State inputState)
     {
         // StopAllCoroutines();
         anim.SetFloat("Distance", 0);
@@ -188,53 +188,53 @@ public class Boss1 : Boss
 
         switch (inputState)
         {
-            case Boss1TState.Idle:
+            case Boss1State.Idle:
                 DoIdleState();
                 break;
 
-            case Boss1TState.Walk:
+            case Boss1State.Walk:
                 DoWalkState();
                 break;
 
-            case Boss1TState.Roll:
+            case Boss1State.Roll:
                 DoRollState();
                 break;
 
-            case Boss1TState.ChopAttack:
+            case Boss1State.ChopAttack:
                 DoChopAttackState();
                 break;
 
-            case Boss1TState.SwingAttack:
+            case Boss1State.SwingAttack:
                 DoSwingAttackState();
                 break;
 
-            case Boss1TState.SequnceAttack:
+            case Boss1State.SequnceAttack:
                 DoSequenceAttackState();
                 break;
 
-            case Boss1TState.JumpAttack:
+            case Boss1State.JumpAttack:
                 DoJumpAttackState();
                 break;
 
 
-            case Boss1TState.BackAttack:
+            case Boss1State.BackAttack:
                 DoBackAttackState();
                 break;
 
 
-            case Boss1TState.WaveAttack:
+            case Boss1State.WaveAttack:
                 DoWaveAttackState();
                 break;
 
 
-            case Boss1TState.UppercutAttack:
+            case Boss1State.UppercutAttack:
                 DoUppercutAttackState();
                 break;
 
         }
     }
 
-    Boss1TState ChangeState()
+    Boss1State ChangeState()
     {
         // 연속 공격
         if (isChopCombo)
@@ -242,12 +242,12 @@ public class Boss1 : Boss
             // 후방 공격
             if (isPlayerBehind())
             {
-                return Boss1TState.BackAttack;
+                return Boss1State.BackAttack;
             }
             // 점프 공격
             else
             {
-                return Boss1TState.JumpAttack;
+                return Boss1State.JumpAttack;
             }
         }
 
@@ -255,23 +255,23 @@ public class Boss1 : Boss
         {
             if (playerDistance > shortDistance)
             {
-                if (nowState == Boss1TState.Walk)
+                if (nowState == Boss1State.Walk)
                 {
                     int pick = UnityEngine.Random.Range(0, 2);
 
                     // 플레이어 가까이로 구르기
                     if (pick == 0 && currentRollCoolTime == 0f)
                     {
-                        return Boss1TState.Roll;
+                        return Boss1State.Roll;
                     }
                     else
                     {
-                        return Boss1TState.Walk;
+                        return Boss1State.Walk;
                     }
                 }
                 else
                 {
-                    return Boss1TState.Walk;
+                    return Boss1State.Walk;
                 }
             }
         }
@@ -280,23 +280,23 @@ public class Boss1 : Boss
             // 너무 멀면 걸어가기
             if (playerDistance > longDistance)
             {
-                if (nowState == Boss1TState.Walk)
+                if (nowState == Boss1State.Walk)
                 {
                     int pick = UnityEngine.Random.Range(0, 2);
 
                     // 플레이어 가까이로 구르기
                     if (pick == 0 && currentRollCoolTime == 0f)
                     {
-                        return Boss1TState.Roll;
+                        return Boss1State.Roll;
                     }
                     else
                     {
-                        return Boss1TState.Walk;
+                        return Boss1State.Walk;
                     }
                 }
                 else
                 {
-                    return Boss1TState.Walk;
+                    return Boss1State.Walk;
                 }
             }
 
@@ -311,11 +311,11 @@ public class Boss1 : Boss
                 {
                     if (pick <= pw.weight + sum)
                     {
-                        if (pw.state == Boss1TState.Roll)
+                        if (pw.state == Boss1State.Roll)
                         {
                             if (rollCoolTime != 0f)
-                                return Boss1TState.Walk;
-                            else return Boss1TState.Roll;
+                                return Boss1State.Walk;
+                            else return Boss1State.Roll;
                         }
                         return pw.state;
                     }
@@ -328,8 +328,8 @@ public class Boss1 : Boss
         if (playerDistance < 1f)
         {
             if (currentRollCoolTime == 0f)
-                return Boss1TState.Roll;
-            else return Boss1TState.ChopAttack;
+                return Boss1State.Roll;
+            else return Boss1State.ChopAttack;
         }
 
 
@@ -349,8 +349,8 @@ public class Boss1 : Boss
             }
         }
 
-        // return Boss1TState.ChopAttack;
-        return Boss1TState.Idle;
+        // return Boss1State.ChopAttack;
+        return Boss1State.Idle;
     }
 
     void changePatternWeight(int index, int decreaseAmount)
@@ -418,7 +418,7 @@ public class Boss1 : Boss
 
         if (nowPhase == phase2_long)
         {
-            changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1TState.Walk), 10);
+            changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1State.Walk), 10);
         }
     }
 
@@ -430,7 +430,7 @@ public class Boss1 : Boss
 
         if (nowPhase == phase2_long)
         {
-            changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1TState.Roll), 10);
+            changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1State.Roll), 10);
         }
     }
 
@@ -468,7 +468,7 @@ public class Boss1 : Boss
     {
         anim.Play("ChopAttack");
         anim.SetBool("Attacking", true);
-        changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1TState.ChopAttack), 20);
+        changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1State.ChopAttack), 20);
     }
 
     void CheckCombo()
@@ -501,14 +501,14 @@ public class Boss1 : Boss
     {
         anim.Play("SwingAttack");
         anim.SetBool("Attacking", true);
-        changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1TState.SwingAttack), 20);
+        changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1State.SwingAttack), 20);
     }
 
     void DoSequenceAttackState()
     {
         anim.Play("SequenceAttack");
         anim.SetBool("Attacking", true);
-        changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1TState.SequnceAttack), 20);
+        changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1State.SequnceAttack), 20);
     }
 
     void onCreateUpSlash()
@@ -534,7 +534,7 @@ public class Boss1 : Boss
     {
         anim.Play("WaveAttack");
         anim.SetBool("Attacking", true);
-        changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1TState.WaveAttack), 10);
+        changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1State.WaveAttack), 10);
     }
 
     void CreateSlash()
@@ -547,7 +547,7 @@ public class Boss1 : Boss
         anim.SetBool("Attacking", true);
         anim.Play("UppercutMoving");
         StartCoroutine(UppercutMovement());
-        changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1TState.UppercutAttack), 10);
+        changePatternWeight(nowPhase.FindIndex(e => e.state == Boss1State.UppercutAttack), 10);
     }
 
     IEnumerator UppercutMovement()
@@ -683,37 +683,36 @@ public class Boss1 : Boss
         {
             switch (nowState)
             {
-                case Boss1TState.ChopAttack:
+                case Boss1State.ChopAttack:
                     damage = 20;
                     break;
 
-                case Boss1TState.SwingAttack:
+                // case Boss1State.SwingAttack:
+                //     damage = 10;
+                //     break;
+
+                case Boss1State.SequnceAttack:
                     damage = 10;
                     break;
 
-                case Boss1TState.SequnceAttack:
-                    damage = 10;
-                    break;
-
-                case Boss1TState.JumpAttack:
+                case Boss1State.JumpAttack:
                     damage = 30;
                     break;
 
-                case Boss1TState.BackAttack:
+                case Boss1State.BackAttack:
                     damage = 15;
                     break;
 
-                case Boss1TState.WaveAttack:
+                case Boss1State.WaveAttack:
                     damage = 10;
                     break;
 
-                case Boss1TState.UppercutAttack:
-                    damage = 15;
-                    break;
+                    // case Boss1State.UppercutAttack:
+                    //     damage = 15;
+                    //     break;
             }
-
-            player.OnDamaged(damage);
         }
+        player.OnDamaged(damage);
     }
 
 

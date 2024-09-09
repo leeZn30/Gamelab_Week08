@@ -130,6 +130,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1940393618846404035, guid: aa774c78b1d009e4e9106a8efb2f3e32, type: 3}
+      propertyPath: damage
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 7815281390825326893, guid: aa774c78b1d009e4e9106a8efb2f3e32, type: 3}
       propertyPath: m_Name
       value: Boss1

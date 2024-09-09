@@ -15,6 +15,8 @@ public class Boss1Attack : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
+        {
             boss.OnAttack(damage);
+        }
     }
 }
