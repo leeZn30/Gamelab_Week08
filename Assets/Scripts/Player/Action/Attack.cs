@@ -84,23 +84,24 @@ public class Attack : MonoBehaviour
                     _playerController.playerContext.ChangeState(IdleState.getInstance());
                     return;
                 }
-                else if(_playerController.currentStamina > attackReadyStamina + normalAttackStamina && _playerController.currentStamina < attackReadyStamina + chargeAttackStamina
+                else if(_playerController.currentStamina > attackReadyStamina + normalAttackStamina && _playerController.currentStamina < attackReadyStamina + chargeAttackStamina)
+                    //&& pressingTime > 1f)
+                {
+                    pressingButton = false;
+                    pressingTime = 0.5f;
+                }
+                else if(_playerController.currentStamina > attackReadyStamina + chargeAttackStamina && _playerController.currentStamina < attackReadyStamina + fullChargeAttackStamina
                     && pressingTime > 1f)
                 {
                     pressingButton = false;
-                    pressingTime = 1f;
-                }
-                else if(_playerController.currentStamina > attackReadyStamina + chargeAttackStamina && _playerController.currentStamina < attackReadyStamina + fullChargeAttackStamina
-                    && pressingTime > 2.5f)
-                {
-                    pressingButton = false;
-                    pressingTime = 2.5f;
+                    pressingTime = 1.5f;
                 }
                     
 
                 _body.velocity = Vector2.zero;
 
                 pressingTime += Time.deltaTime;
+                _playerController.usingStamina = true;
 
                 _animator.SetBool("doAttack", true);
                 if (pressingTime >= 5f)
@@ -179,10 +180,10 @@ public class Attack : MonoBehaviour
         {
             if (doNextComboAttack)
             {
-                if (_playerController.currentStamina >= normalAttackStamina)
+                doNextComboAttack = false; // if you want to remove combo attack buffer, take this code in front of the this "if" code;
+                if (_playerController.currentStamina >= attackReadyStamina + normalAttackStamina)
                 {
-                    doNextComboAttack = false; // if you want to remove combo attack buffer, take this code in front of the this "if" code;
-                    _playerController.currentStamina -= normalAttackStamina * 1.2f;
+                    _playerController.currentStamina -= attackReadyStamina + normalAttackStamina;
                     _playerController.usingStamina = true;
                     StartCoroutine(DoBasicAttack_Combo());
                     yield break;
@@ -230,10 +231,10 @@ public class Attack : MonoBehaviour
         {
             if (doNextComboAttack)
             {
-                if(_playerController.currentStamina >= normalAttackStamina)
+                doNextComboAttack = false; // if you want to remove combo attack buffer, take this code in front of the this "if" code;
+                if(_playerController.currentStamina >= attackReadyStamina + normalAttackStamina)
                 {
-                    doNextComboAttack = false; // if you want to remove combo attack buffer, take this code in front of the this "if" code;
-                    _playerController.currentStamina -= normalAttackStamina * 1.2f;
+                    _playerController.currentStamina -= attackReadyStamina + normalAttackStamina;
                     _playerController.usingStamina = true;
                     StartCoroutine(DoBasicAttack_LastCombo());
                     yield break;

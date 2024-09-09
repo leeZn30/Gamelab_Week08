@@ -826,12 +826,12 @@ MonoBehaviour:
   usingStamina: 0
   maxStamina: 100
   currentStamina: 100
-  staminaConstant: 10
+  staminaConstant: 50
   normalAttackDamage: 10
   normalAttackComboDamage: 6
   normalAttackLastComboDamage: 15
-  chargeAttackDamage: 20
-  fullChargeAttackDamage: 30
+  chargeAttackDamage: 25
+  fullChargeAttackDamage: 50
   _hammerCollider: {fileID: 1593777574002791125}
   _StaminaSlider: {fileID: 0}
   _HpSlider: {fileID: 0}
@@ -854,8 +854,8 @@ MonoBehaviour:
   attackByUsingBuffer: 0
   attackReadyStamina: 10
   normalAttackStamina: 10
-  chargeAttackStamina: 15
-  fullChargeAttackStamina: 20
+  chargeAttackStamina: 35
+  fullChargeAttackStamina: 60
   pressStart: 0
   _hammerCollider: {fileID: 1593777574002791125}
 --- !u!114 &5192798174603766178
@@ -884,7 +884,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DodgeDistance: 10
   dodgeTimerLimit: 0.5
-  dodgeStamina: 20
+  dodgeStamina: 25
 --- !u!114 &2414681908965708044
 MonoBehaviour:
   m_ObjectHideFlags: 0
