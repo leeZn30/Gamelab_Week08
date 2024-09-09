@@ -472,7 +472,7 @@ public class Boss3_ai : Boss
         yield return new WaitForSecondsRealtime(1.3f);
 
         grab.hasGrabed = false;
-        playerObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(10 * lookingDir, -10), ForceMode2D.Impulse);
+        playerObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(100 * lookingDir, 0), ForceMode2D.Impulse);
 
         yield return new WaitForSecondsRealtime(0.2f);
         playerController.PlayerGrabbed(false);
@@ -502,17 +502,19 @@ public class Boss3_ai : Boss
     {
         objAnimator.Play("Boss3_pattern5_1");
         speedLerpValue = rushPatternLerpValue;
-        yield return new WaitForSecondsRealtime(1);
+        yield return new WaitForSecondsRealtime(1.05f);
         LookPlayer();
         objAnimator.Play("Boss3_idle");
+        yield return new WaitForSecondsRealtime(0.01f);
         objAnimator.Play("Boss3_pattern5_1");
         speedLerpValue = rushPatternLerpValue;
-        yield return new WaitForSecondsRealtime(1);
+        yield return new WaitForSecondsRealtime(1.05f);
         LookPlayer();
         objAnimator.Play("Boss3_idle");
+        yield return new WaitForSecondsRealtime(0.01f);
         objAnimator.Play("Boss3_pattern5_1");
         speedLerpValue = rushPatternLerpValue;
-        yield return new WaitForSecondsRealtime(1);
+        yield return new WaitForSecondsRealtime(1.05f);
         LookPlayer();
         objAnimator.Play("Boss3_idle");
         objAnimator.Play("Boss3_pattern5_2");
