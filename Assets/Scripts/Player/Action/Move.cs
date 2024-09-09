@@ -75,11 +75,15 @@ public class Move : MonoBehaviour
                 maxSpeedChange = maxDecceleration * 0.02f;
 
             velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange);
-            //velocity.y = -9.81f;
+            velocity.y = _body.velocity.y;
             _body.velocity = velocity;
         }
         else
-            _body.velocity = Vector2.zero;
+        {
+            velocity.x = 0f;
+            velocity.y = _body.velocity.y;
+            _body.velocity = velocity;
+        }
 
         if(_body.velocity.x != 0f) // moving right now
             transform.localScale = new Vector3(lastLookDirection > 0f ? -playerScale : playerScale, playerScale, playerScale);
