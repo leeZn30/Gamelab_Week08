@@ -51,9 +51,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Respawn",
+                    "name": "Sprint",
                     "type": "Button",
-                    "id": "0eff4652-39a5-4c17-b741-f4f189d5163d",
+                    "id": "299372bf-79e7-42b0-b888-84d47261091a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Reload",
+                    "type": "Button",
+                    "id": "6a1a9c75-18d1-415f-94c8-aac08db88100",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -86,7 +95,7 @@
                 {
                     "name": "Negative",
                     "id": "d2581a9b-1d11-4566-b27d-b92aff5fabbc",
-                    "path": "<Keyboard>/a",
+                    "path": "<Keyboard>/leftArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
@@ -97,7 +106,7 @@
                 {
                     "name": "Positive",
                     "id": "2e46982e-44cc-431b-9f0b-c11910bf467a",
-                    "path": "<Keyboard>/d",
+                    "path": "<Keyboard>/rightArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
@@ -174,7 +183,7 @@
                 {
                     "name": "",
                     "id": "05f6913d-c316-48b2-a6bb-e225f14c7960",
-                    "path": "<Mouse>/leftButton",
+                    "path": "<Keyboard>/x",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
@@ -218,7 +227,7 @@
                 {
                     "name": "",
                     "id": "8403b565-2e1f-4956-88ae-7a6cc573c53f",
-                    "path": "<Keyboard>/shift",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -239,12 +248,23 @@
                 },
                 {
                     "name": "",
-                    "id": "ed8aa27a-71f8-4cb5-a848-6bb91aa70c09",
+                    "id": "c0ae0b9f-a31e-4b10-b234-8f6e8577cb1e",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c7366cf7-7a19-4d98-8a1e-61e030dd929a",
                     "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Respawn",
+                    "action": "Reload",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

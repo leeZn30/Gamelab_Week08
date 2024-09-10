@@ -7,15 +7,17 @@ public class Damaged : MonoBehaviour
 {
     private PlayerController _playerController;
     private Animator _animator;
+    private Attack _attack;
 
     private float hurtDelay = 0f;
-    private float hurtDelayLimit = 0.55f;
+    private float hurtDelayLimit = 0.6f;
 
     // Start is called before the first frame update
     void Start()
     {
         _animator = GetComponent<Animator>();
         _playerController = GetComponent<PlayerController>();
+        _attack = GetComponent<Attack>();
     }
 
     // Update is called once per frame
@@ -27,25 +29,28 @@ public class Damaged : MonoBehaviour
 
     IEnumerator DamageDelay()
     {
-        hurtDelay = 0f;
         _playerController.playerContext.ChangeState(DamagedState.getInstance()); // 강제 데미지 상태로 변경
         yield return new WaitForSeconds(0.5f);
         _animator.SetBool("beDamaged", false);
         _playerController.playerContext.CanPlayerIdle();
     }
 
-    public void OnDamaged()
+    public void OnDamaged(float damage)
     {
+        if (_playerController.playerContext.GetState().GetType() == typeof(DeadState))
+            return;
+
         if (hurtDelay < hurtDelayLimit)
             return; // 피격 쿨타임
-        
+        hurtDelay = 0f;
+
         _playerController.playerContext.CanPlayerDamaged();
 
         if (_playerController.playerContext.GetInvincible()) 
             return;
         else // 무적이 아니면 일단 맞는다.
         {
-            _playerController.currentHP -= 1;
+            _playerController.currentHP -= damage;
             if (_playerController.currentHP <= 0)
             {
                 _playerController.playerContext.CanPlayerDied();
@@ -68,6 +73,11 @@ public class Damaged : MonoBehaviour
 
             if (_playerController.playerContext.GetHurtEffect()) // 피격 이펙트가 있어야 한다.
             {
+                _attack.pressingButton = false;
+                _attack.pressingTime = 0f;
+                _attack.buttonBuffer = false;
+                _attack.pressStart = false;
+
                 _animator.SetBool("isMoving", false);
                 _animator.SetBool("dodging", false);
                 _animator.SetBool("walkToDodge", false);
@@ -91,11 +101,5 @@ public class Damaged : MonoBehaviour
         _animator.SetBool("isDead", false);
         if (_animator.GetCurrentAnimatorStateInfo(0).IsName("die"))
             _animator.SetBool("Corpse", true);
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("EnemyAttack") && _playerController.playerContext.GetState().GetType() != typeof(DeadState))
-            OnDamaged();
     }
 }

@@ -1,14 +1,17 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static Attack;
 
 public class Attack : MonoBehaviour
 {
-    private float pressingTime = 0f;
-    private bool pressingButton = false;
-    private bool buttonBuffer = false;
+    public float pressingTime = 0f;
+    public bool pressingButton = false;
+    public bool buttonBuffer = false;
+    public bool attackByUsingBuffer = false;
     private bool alreadyAttacking = false;
     private float _attackBuffer = 0f;
     private float _attackBufferLimit = 0.15f;
@@ -17,6 +20,10 @@ public class Attack : MonoBehaviour
     public float normalAttackStamina = 10f;
     public float chargeAttackStamina = 15f;
     public float fullChargeAttackStamina = 20f;
+
+    public bool pressStart = false;
+    private bool canDoNextComboAttack = false;
+    private bool doNextComboAttack = false;
 
     private Animator _animator;
     private Rigidbody2D _body;
@@ -29,7 +36,7 @@ public class Attack : MonoBehaviour
 
     public enum AttackVariable
     {
-        None, Normal, Charge, FullCharge
+        None, Normal, NormalCombo, NormalLastCombo, Charge, FullCharge
     }
 
     public AttackVariable attackVariable { get; set; }
@@ -60,10 +67,16 @@ public class Attack : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (buttonBuffer)
+            _playerController.playerContext.CanPlayerAttack();
+
         if (_playerController.playerContext.GetState().GetType() == typeof(AttackState))
         {
-            if (pressingButton || buttonBuffer)
+            if (!alreadyAttacking && (pressingButton || buttonBuffer))
             {
+                if (buttonBuffer && !pressingButton)
+                    attackByUsingBuffer = true;
+
                 buttonBuffer = false;
 
                 if (_playerController.currentStamina < attackReadyStamina + normalAttackStamina)
@@ -72,44 +85,68 @@ public class Attack : MonoBehaviour
                     return;
                 }
                 else if(_playerController.currentStamina > attackReadyStamina + normalAttackStamina && _playerController.currentStamina < attackReadyStamina + chargeAttackStamina
-                    && pressingTime > 1f)
+                    && pressingTime >= 0.75f && pressingTime < 1f )
                 {
-                    pressingButton = false;
-                    pressingTime = 1f;
+                    //pressingButton = false;
+                    _animator.SetBool("normalAttackMaintain", true);
+                    _animator.SetBool("doAttack", false);
+                    pressingTime = 0.5f;
                 }
                 else if(_playerController.currentStamina > attackReadyStamina + chargeAttackStamina && _playerController.currentStamina < attackReadyStamina + fullChargeAttackStamina
-                    && pressingTime > 2.5f)
+                    && pressingTime >= 1f && pressingTime < 2.5f)
                 {
-                    pressingButton = false;
-                    pressingTime = 2.5f;
+                    //pressingButton = false;
+                    _animator.SetBool("chargeAttackMaintain", true);
+                    _animator.SetBool("doAttack", false);
+
+                    
+                    pressingTime = 1.5f;
+                }
+                else if(_playerController.currentStamina > attackReadyStamina + fullChargeAttackStamina && pressingTime >= 2.5f)
+                {
+                    _animator.SetBool("fullChargeAttackMaintain", true);
+                    _animator.SetBool("doAttack", false);
+                    pressingTime = 3f;
                 }
                     
 
                 _body.velocity = Vector2.zero;
+
                 pressingTime += Time.deltaTime;
+                _playerController.usingStamina = true;
+
                 _animator.SetBool("doAttack", true);
-                if (pressingTime >= 3f)
-                    pressingButton = false;
+                //if (pressingTime >= 5f)
+                //    pressingButton = false;
             }
             else
             {
+                if (!pressStart && !attackByUsingBuffer)
+                    return;
+
                 _animator.SetBool("isMoving", false);
+                _animator.SetBool("normalAttackMaintain", false);
+                _animator.SetBool("chargeAttackMaintain", false);
+                _animator.SetBool("fullChargeAttackMaintain", false);
                 if (pressingTime > 0f && pressingTime <= 1f)
                 {
                     pressingTime = 0f;
                     _playerController.currentStamina -= attackReadyStamina + normalAttackStamina;
+                    _playerController.usingStamina = true;
                     StartCoroutine(DoBasicAttack());
                 }
                 else if (pressingTime > 1f && pressingTime <= 2.5f)
                 {
                     pressingTime = 0f;
                     _playerController.currentStamina -= attackReadyStamina + chargeAttackStamina;
+                    _playerController.usingStamina = true;
                     StartCoroutine(DoChargeAttack());
                 }
                 else if (pressingTime > 2.5f)
                 {
                     pressingTime = 0f;
                     _playerController.currentStamina -= attackReadyStamina + fullChargeAttackStamina;
+                    _playerController.usingStamina = true;
                     StartCoroutine(DoFullChargeAttack());
                 }
                 else
@@ -118,7 +155,14 @@ public class Attack : MonoBehaviour
                         _playerController.playerContext.CanPlayerIdle();
                 }
             }
-        } 
+        }
+        else
+        {
+            pressStart = false;
+            //buttonBuffer = false;
+            pressingButton = false;
+            pressingTime = 0f;
+        }
     }
 
     IEnumerator DoBasicAttack()
@@ -130,23 +174,134 @@ public class Attack : MonoBehaviour
         Debug.Log("State : Basic Attack");
         _animator.SetBool("doNormalAttack", true);
         _animator.SetBool("doAttack", false);
+        _playerController.playerContext.CanPlayerHit();
 
         yield return new WaitForSeconds(0.1f);
+        _playerController.usingStamina = false;
         _hammerCollider.SetActive(true);
         yield return new WaitForSeconds(0.3f);
-        _perlin.m_AmplitudeGain = 0.3f;
+        _perlin.m_AmplitudeGain = 0.25f;
         _perlin.m_FrequencyGain = 1f;
-        yield return new WaitForSeconds(0.2f);
+        canDoNextComboAttack = true;
+        yield return new WaitForSeconds(0.1f);
         _playerController.TurnOffHammerCollider();
+        yield return new WaitForSeconds(0.1f);
         _perlin.m_AmplitudeGain = 0f;
         _perlin.m_FrequencyGain = 0f;
 
-        yield return new WaitForSeconds(0.9f);
-        _playerController.playerContext.CanPlayerIdle();
+        // combo attack 
+        float deltaTime = 0f;
+        while(deltaTime < 0.5f)
+        {
+            if (doNextComboAttack)
+            {
+                doNextComboAttack = false; // if you want to remove combo attack buffer, take this code in front of the this "if" code;
+                if (_playerController.currentStamina >= attackReadyStamina + normalAttackStamina)
+                {
+                    _playerController.currentStamina -= attackReadyStamina + normalAttackStamina;
+                    _playerController.usingStamina = true;
+                    StartCoroutine(DoBasicAttack_Combo());
+                    yield break;
+                }
+            }
+            deltaTime += Time.deltaTime;
+            yield return null;
+        }
+        canDoNextComboAttack = false;
+        //yield return new WaitForSeconds(0.5f);
+        
+        doNextComboAttack = false;
         _animator.SetBool("doNormalAttack", false);
         alreadyAttacking = false;
-
         attackVariable = AttackVariable.None;
+        pressStart = false;
+        _playerController.playerContext.CanPlayerIdle();
+    }
+    
+    IEnumerator DoBasicAttack_Combo()
+    {
+        attackVariable = AttackVariable.NormalCombo;
+
+        canDoNextComboAttack = false;
+        Debug.Log("State : Basic Attack Combo");
+        _animator.SetBool("doNormalAttack", false);
+        _animator.Play("normalAttack_Combo");
+        _playerController.playerContext.CanPlayerHit();
+
+        yield return new WaitForSeconds(0.1f);
+        _playerController.usingStamina = false;
+        _hammerCollider.SetActive(true);
+        yield return new WaitForSeconds(0.3f);
+        //_perlin.m_AmplitudeGain = 0.25f;
+        //_perlin.m_FrequencyGain = 1f;
+        canDoNextComboAttack = true;
+        yield return new WaitForSeconds(0.1f);
+        _playerController.TurnOffHammerCollider();
+        yield return new WaitForSeconds(0.1f);
+        //_perlin.m_AmplitudeGain = 0f;
+        //_perlin.m_FrequencyGain = 0f;
+
+        float deltaTime = 0f;
+        while (deltaTime < 0.5f)
+        {
+            if (doNextComboAttack)
+            {
+                doNextComboAttack = false; // if you want to remove combo attack buffer, take this code in front of the this "if" code;
+                if(_playerController.currentStamina >= attackReadyStamina + normalAttackStamina)
+                {
+                    _playerController.currentStamina -= attackReadyStamina + normalAttackStamina;
+                    _playerController.usingStamina = true;
+                    StartCoroutine(DoBasicAttack_LastCombo());
+                    yield break;
+                }
+            }
+            deltaTime += Time.deltaTime;
+            yield return null;
+        }
+        canDoNextComboAttack = false;
+        //yield return new WaitForSeconds(0.5f);
+
+        doNextComboAttack = false;
+        //_animator.SetBool("doNormalAttack", false);
+        //_animator.SetTrigger("Idle");
+        alreadyAttacking = false;
+        attackVariable = AttackVariable.None;
+        pressStart = false;
+        _playerController.playerContext.CanPlayerIdle();
+        _animator.Play("idle");
+    }
+
+    IEnumerator DoBasicAttack_LastCombo()
+    {
+        attackVariable = AttackVariable.NormalLastCombo;
+
+        canDoNextComboAttack = false;
+        Debug.Log("State : Basic Attack Last");
+        //_animator.SetTrigger("LastComboTrigger");
+        _animator.Play("normalAttack_LastCombo");
+        _playerController.playerContext.CanPlayerHit();
+
+        yield return new WaitForSeconds(0.1f);
+        _playerController.usingStamina = false;
+        _hammerCollider.SetActive(true);
+        yield return new WaitForSeconds(0.3f);
+        _perlin.m_AmplitudeGain = 0.7f;
+        _perlin.m_FrequencyGain = 1f;
+        yield return new WaitForSeconds(0.1f);
+        _playerController.TurnOffHammerCollider();
+        yield return new WaitForSeconds(0.1f);
+        _perlin.m_AmplitudeGain = 0f;
+        _perlin.m_FrequencyGain = 0f;
+        yield return new WaitForSeconds(0.5f);
+
+        //_animator.SetBool("doNormalAttack", false);
+        //_animator.SetTrigger("Idle");
+        doNextComboAttack = false;
+        alreadyAttacking = false;
+        attackVariable = AttackVariable.None;
+        pressStart = false;
+        _playerController.playerContext.CanPlayerIdle();
+        _animator.Play("idle");
     }
 
     IEnumerator DoChargeAttack()
@@ -157,22 +312,28 @@ public class Attack : MonoBehaviour
         alreadyAttacking = true;
         Debug.Log("State : Charge Attack");
         _animator.SetBool("doChargeAttack", true);
+        _animator.SetBool("chargeAttackMaintain", false);
         _animator.SetBool("doAttack", false);
+        _playerController.playerContext.CanPlayerHit();
+
         _hammerCollider.SetActive(true);
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.1f);
+        _playerController.usingStamina = false;
+        yield return new WaitForSeconds(0.3f);
         _perlin.m_AmplitudeGain = 0.6f;
         _perlin.m_FrequencyGain = 1f;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
         _playerController.TurnOffHammerCollider();
+        yield return new WaitForSeconds(0.1f);
         _perlin.m_AmplitudeGain = 0f;
         _perlin.m_FrequencyGain = 0f;
+        yield return new WaitForSeconds(0.7f);
 
-        yield return new WaitForSeconds(0.9f);
-        _playerController.playerContext.CanPlayerIdle();
         _animator.SetBool("doChargeAttack", false);
         alreadyAttacking = false;
-
         attackVariable = AttackVariable.None;
+        pressStart = false;
+        _playerController.playerContext.CanPlayerIdle();
     }
 
     IEnumerator DoFullChargeAttack()
@@ -183,33 +344,64 @@ public class Attack : MonoBehaviour
         alreadyAttacking = true;
         Debug.Log("State : Full Charge Attack");
         _animator.SetBool("doFullChargeAttack", true);
+        _animator.SetBool("fullChargeAttackMaintain", false);
         _animator.SetBool("doAttack", false);
+        _playerController.playerContext.CanPlayerHit();
+
         _hammerCollider.SetActive(true);
-        yield return new WaitForSeconds(0.4f);
-        _perlin.m_AmplitudeGain = 0.9f;
+        yield return new WaitForSeconds(0.1f);
+        _playerController.usingStamina = false;
+        yield return new WaitForSeconds(0.3f);
+        _perlin.m_AmplitudeGain = 1f;
         _perlin.m_FrequencyGain = 1f;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
         _playerController.TurnOffHammerCollider();
+        yield return new WaitForSeconds(0.1f);
         _perlin.m_AmplitudeGain = 0f;
         _perlin.m_FrequencyGain = 0f;
 
         yield return new WaitForSeconds(0.9f);
-        _playerController.playerContext.CanPlayerIdle();
         _animator.SetBool("doFullChargeAttack", false);
         alreadyAttacking = false;
-
         attackVariable = AttackVariable.None;
+        pressStart = false;
+        _playerController.playerContext.CanPlayerIdle();
     }
 
     public void OnAttack(InputAction.CallbackContext context)
     {
-        _playerController.playerContext.CanPlayerAttack();
-        if(!alreadyAttacking)
+        if(!alreadyAttacking) // start to Attack
         {
-            pressingButton = context.ReadValueAsButton();
+            doNextComboAttack = false;
+            if (context.started || context.performed)
+                pressStart = true;
+            if (context.canceled && !pressStart)
+                return;
 
+            _playerController.playerContext.CanPlayerAttack();
+            if(_playerController.playerContext.GetState().GetType() == typeof(AttackState))
+                pressingButton = context.ReadValueAsButton();
+
+            if(!buttonBuffer)
+                _attackBuffer = 0f;
             buttonBuffer = true;
-            _attackBuffer = 0f;
+        }
+        else // already attacking
+        {
+            if((attackVariable == AttackVariable.Normal || attackVariable == AttackVariable.NormalCombo || attackVariable == AttackVariable.NormalLastCombo)
+                && context.started && canDoNextComboAttack) // do normal attack
+            {
+                doNextComboAttack = true;
+            }
+            else
+            {
+                if(context.performed)
+                {
+                    if(!buttonBuffer)
+                        _attackBuffer = 0f;
+                    buttonBuffer = true;
+                }
+            }
         }
     }
 }

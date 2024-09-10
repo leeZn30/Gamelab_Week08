@@ -7,12 +7,12 @@ public enum Boss1State
 {
     Idle,
     Walk,
-    Jump,
-    Pattern1,
-    Pattern2,
-    NormalAttack,
-    ComboAttack,
+    Roll,
+    ChopAttack,
+    SwingAttack,
+    SequnceAttack,
+    JumpAttack,
+    BackAttack,
     WaveAttack,
-    SequenceAttack,
-    Roll
+    UppercutAttack,
 }

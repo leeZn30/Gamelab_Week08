@@ -18,12 +18,18 @@ public class Move : MonoBehaviour
     public Vector2 velocity;
     private float maxSpeedChange;
 
+    public float playerScale;
+
     private Animator _animator;
     private Rigidbody2D _body;
     private PlayerController _playerController;
 
     bool pressingKey = false;
     public float lastLookDirection;
+    float sprintVariable = 1f;
+    public float sprintConstant = 2f;
+    bool shiftPress = false;
+    public float sprintStaminaPerFrame = 0.2f; // 20 stamina per second
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +37,7 @@ public class Move : MonoBehaviour
         _animator = GetComponent<Animator>();
         _body = GetComponent<Rigidbody2D>();
         _playerController = GetComponent<PlayerController>();
+        playerScale = transform.localScale.x;
     }
 
     // Update is called once per frame
@@ -41,7 +48,7 @@ public class Move : MonoBehaviour
         else
             pressingKey = false;
 
-        desiredVelocity = new Vector2(direction, 0f) * Mathf.Max(maxSpeed - friction, 0f);
+        desiredVelocity = new Vector2(direction, 0f) * Mathf.Max(maxSpeed * sprintVariable - friction, 0f);
     }
 
     private void FixedUpdate()
@@ -57,9 +64,6 @@ public class Move : MonoBehaviour
             else if (_playerController.playerContext.GetState().GetType() == typeof(IdleState))
                 _animator.SetBool("isMoving", false);
 
-            // transform.localScale = new Vector3(lastLookDirection > 0f ? -0.5f : 0.5f, 0.5f, 0.5f);
-            transform.localScale = new Vector3(lastLookDirection > 0f ? -2f : 2, 2, 2f);
-
             if (pressingKey)
             {
                 if (Mathf.Sign(direction) != Mathf.Sign(velocity.x))
@@ -71,26 +75,64 @@ public class Move : MonoBehaviour
                 maxSpeedChange = maxDecceleration * 0.02f;
 
             velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange);
-            //velocity.y = -9.81f;
+            velocity.y = _body.velocity.y;
             _body.velocity = velocity;
         }
         else
-            _body.velocity = Vector2.zero;
+        {
+            velocity.x = 0f;
+            velocity.y = _body.velocity.y;
+            _body.velocity = velocity;
+        }
+
+        if(_body.velocity.x != 0f) // moving right now
+            transform.localScale = new Vector3(lastLookDirection > 0f ? -playerScale : playerScale, playerScale, playerScale);
+
+        if (shiftPress) // sprint state
+        {
+            if (_playerController.currentStamina > sprintStaminaPerFrame && _playerController.usingStamina)
+            {
+                _playerController.currentStamina -= sprintStaminaPerFrame;
+                sprintVariable = sprintConstant;
+            }
+            else
+            {
+                _playerController.usingStamina = false;
+                sprintVariable = 1f;
+            }
+        }
+        else
+            sprintVariable = 1f;
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if (!context.canceled)
+        if (context.started || context.performed)
         {
+            Debug.Log("Move Input");
             _playerController.playerContext.CanPlayerMove(); // MoveState�� ���� �������� Ȯ��
             direction = context.ReadValue<float>();
             lastLookDirection = Mathf.Sign(direction);
         }
-        else
+        else if (context.canceled)
         {
             direction = 0f;
             if (_playerController.playerContext.GetState().GetType() == typeof(MoveState))
                 _playerController.playerContext.CanPlayerIdle();
+        }
+    }
+
+    public void OnSprint(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            shiftPress = true;
+            _playerController.usingStamina = true;
+        }
+        else if (context.canceled)
+        {
+            shiftPress = false;
+            _playerController.usingStamina = false;
         }
     }
 }

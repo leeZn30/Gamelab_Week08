@@ -178,6 +178,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7700289618307779877}
   - component: {fileID: 4739714874513425991}
+  - component: {fileID: 8238391620689387259}
+  - component: {fileID: 2879177260880565301}
   m_Layer: 0
   m_Name: Collider
   m_TagString: PlayerAttack
@@ -232,7 +234,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.024133801, y: -1.1299083}
+  m_Offset: {x: 0.024133801, y: 0.03970182}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -243,8 +245,48 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.0482675, y: 0.6293098}
+  m_Size: {x: 1.0482675, y: 2.96853}
   m_EdgeRadius: 0
+--- !u!50 &8238391620689387259
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1593777574002791125}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!114 &2879177260880565301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1593777574002791125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b54752f261e92424386bd06264fda0e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 5556207499356548342}
 --- !u!1 &1714929799339711088
 GameObject:
   m_ObjectHideFlags: 0
@@ -554,7 +596,7 @@ GameObject:
   - component: {fileID: 2414681908965708044}
   - component: {fileID: 7224089241381808406}
   - component: {fileID: 6241356505581540738}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -571,7 +613,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.73, y: -0.917, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 297059905042441644}
@@ -733,6 +775,22 @@ MonoBehaviour:
     m_ActionName: Player/Damage[/Keyboard/e]
   - m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 2414681908965708044}
+        m_TargetAssemblyTypeName: Move, Assembly-CSharp
+        m_MethodName: OnSprint
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 299372bf-79e7-42b0-b888-84d47261091a
+    m_ActionName: Player/Sprint[/Keyboard/shift]
+  - m_PersistentCalls:
+      m_Calls:
       - m_Target: {fileID: 1588757934191394853}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
         m_MethodName: OnRespawn
@@ -745,8 +803,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 0eff4652-39a5-4c17-b741-f4f189d5163d
-    m_ActionName: Player/Respawn[/Keyboard/r]
+    m_ActionId: 6a1a9c75-18d1-415f-94c8-aac08db88100
+    m_ActionName: Player/Reload[/Keyboard/r]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -764,13 +822,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0605f1fdbe3ebe4287633cdf3bd3111, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHP: 5
+  currentHP: 100
+  usingStamina: 0
   maxStamina: 100
   currentStamina: 100
-  staminaConstant: 10
+  staminaConstant: 50
+  normalAttackDamage: 10
+  normalAttackComboDamage: 6
+  normalAttackLastComboDamage: 15
+  chargeAttackDamage: 25
+  fullChargeAttackDamage: 50
   _hammerCollider: {fileID: 1593777574002791125}
   _StaminaSlider: {fileID: 0}
-  _HpPrefab: {fileID: 9201929418238652806, guid: 9094a618ef88bef4097e030e75808a8c, type: 3}
+  _HpSlider: {fileID: 0}
+  _PlayerWeapon: {fileID: 2405850284944942838}
 --- !u!114 &13467684890913852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -783,10 +848,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fe9c4a510c81cd4595cadcb7cb158f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pressingTime: 0
+  pressingButton: 0
+  buttonBuffer: 0
+  attackByUsingBuffer: 0
   attackReadyStamina: 10
   normalAttackStamina: 10
-  chargeAttackStamina: 15
-  fullChargeAttackStamina: 20
+  chargeAttackStamina: 35
+  fullChargeAttackStamina: 60
+  pressStart: 0
   _hammerCollider: {fileID: 1593777574002791125}
 --- !u!114 &5192798174603766178
 MonoBehaviour:
@@ -812,9 +882,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8ad40be17415f94191bb5aa75aa3a33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DodgeDistance: 6
-  dodgeTimerLimit: 0.8
-  dodgeStamina: 20
+  DodgeDistance: 10
+  dodgeTimerLimit: 0.5
+  dodgeStamina: 25
 --- !u!114 &2414681908965708044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -827,14 +897,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18d33359cced4b6438644d988f4d040d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 3
+  maxSpeed: 6
   maxAcceleration: 52
   maxDecceleration: 52
   maxTurnSpeed: 80
   friction: 0
   direction: 0
   velocity: {x: 0, y: 0}
+  playerScale: 0
   lastLookDirection: 0
+  sprintConstant: 2
+  sprintStaminaPerFrame: 0.2
 --- !u!50 &7224089241381808406
 Rigidbody2D:
   serializedVersion: 4
@@ -851,7 +924,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: e5d8951047ec68545892b46a3097d3db, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

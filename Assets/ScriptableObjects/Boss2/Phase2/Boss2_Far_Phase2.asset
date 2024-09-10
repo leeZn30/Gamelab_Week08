@@ -17,4 +17,5 @@ MonoBehaviour:
   - pattern3
   - pattern4
   - pattern6
-  Probability: 1e000000140000001e00000014000000
+  - pattern7
+  Probability: 1e0000000a0000001e0000000a00000014000000

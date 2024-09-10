@@ -22,6 +22,8 @@ public interface PlayerState
 
     void PlayerAttack(PlayerContext pc);
 
+    void PlayerHit(PlayerContext pc);
+
     void PlayerChargeAttack(PlayerContext pc);
 
     void PlayerFullChargeAttack(PlayerContext pc);
@@ -96,6 +98,11 @@ class IdleState : PlayerState
     {
         pc.ChangeState(DeadState.getInstance());
     }
+
+    public void PlayerHit(PlayerContext pc)
+    {
+        
+    }
 }
 
 class AttackState : PlayerState
@@ -116,6 +123,75 @@ class AttackState : PlayerState
     }
 
     public static AttackState getInstance()
+    {
+        return SingleInstanceHolder.Instance;
+    }
+
+    public void PlayerMove(PlayerContext pc)
+    {
+        // Can't move while attacking
+    }
+
+    public void PlayerAttack(PlayerContext pc)
+    {
+        // Can't attack while attacking
+    }
+
+    public void PlayerIdle(PlayerContext pc)
+    {
+        //pc.ChangeState(IdleState.getInstance());
+    }
+
+    public void PlayerDodge(PlayerContext pc)
+    {
+        pc.ChangeState(DodgeState.getInstance());
+    }
+
+    public void PlayerChargeAttack(PlayerContext pc)
+    {
+
+    }
+
+    public void PlayerFullChargeAttack(PlayerContext pc)
+    {
+        // cant go full charge attack state from attack state
+    }
+
+    public void PlayerDamaged(PlayerContext pc)
+    {
+        // no behaviour canceling, but damaged
+        pc.SetEffect(false, true);
+    }
+
+    public void PlayerDied(PlayerContext pc)
+    {
+        pc.ChangeState(DeadState.getInstance());
+    }
+
+    public void PlayerHit(PlayerContext pc)
+    {
+        pc.ChangeState(HitState.getInstance());
+    }
+}
+
+class HitState : PlayerState
+{
+    private static class SingleInstanceHolder
+    {
+        private static HitState _instance;
+        public static HitState Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new HitState();
+
+                return _instance;
+            }
+        }
+    }
+
+    public static HitState getInstance()
     {
         return SingleInstanceHolder.Instance;
     }
@@ -159,6 +235,11 @@ class AttackState : PlayerState
     public void PlayerDied(PlayerContext pc)
     {
         pc.ChangeState(DeadState.getInstance());
+    }
+
+    public void PlayerHit(PlayerContext pc)
+    {
+        
     }
 }
 
@@ -226,6 +307,11 @@ class MoveState : PlayerState
     {
         pc.ChangeState(DeadState.getInstance());
     }
+
+    public void PlayerHit(PlayerContext pc)
+    {
+        
+    }
 }
 
 class DodgeState : PlayerState
@@ -289,6 +375,11 @@ class DodgeState : PlayerState
     public void PlayerDied(PlayerContext pc)
     {
         // invincible while dodging
+    }
+
+    public void PlayerHit(PlayerContext pc)
+    {
+        
     }
 }
 
@@ -355,6 +446,11 @@ class ChargeState : PlayerState
     {
         pc.ChangeState(DeadState.getInstance());
     }
+
+    public void PlayerHit(PlayerContext pc)
+    {
+        
+    }
 }
 
 class FullChargeState : PlayerState
@@ -419,6 +515,11 @@ class FullChargeState : PlayerState
     {
         pc.ChangeState(DeadState.getInstance());
     }
+
+    public void PlayerHit(PlayerContext pc)
+    {
+        
+    }
 }
 
 class DamagedState : PlayerState
@@ -482,6 +583,11 @@ class DamagedState : PlayerState
     {
         pc.ChangeState(DeadState.getInstance());
     }
+
+    public void PlayerHit(PlayerContext pc)
+    {
+        
+    }
 }
 
 class DeadState : PlayerState
@@ -544,5 +650,10 @@ class DeadState : PlayerState
     public void PlayerDied(PlayerContext pc)
     {
 
+    }
+
+    public void PlayerHit(PlayerContext pc)
+    {
+        
     }
 }
